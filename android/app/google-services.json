@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "920082789436",
+    "project_id": "ur-turn-bad6b",
+    "storage_bucket": "ur-turn-bad6b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:920082789436:android:f6fd26d76f65b1b9e2ff39",
+        "android_client_info": {
+          "package_name": "com.devu.hwilo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxItvjEJolPgKzJ0uBnIfD6a-GOzJXePo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:920082789436:android:17e4aaa830de2090e2ff39",
+        "android_client_info": {
+          "package_name": "com.devu.hwilo_user"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxItvjEJolPgKzJ0uBnIfD6a-GOzJXePo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
