@@ -57,7 +57,7 @@ class _TripsWidgetState extends State<TripsWidget>
                 tabAlignment: TabAlignment.start,
                 isScrollable: true,
                 labelColor: Get.isDarkMode
-                    ? Theme.of(context).primaryColorDark
+                    ? Theme.of(context).primaryColor
                     : Theme.of(context).primaryColor,
                 labelStyle: textSemiBold.copyWith(),
                 indicator: UnderlineTabIndicator(

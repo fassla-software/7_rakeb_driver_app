@@ -50,7 +50,7 @@ class ProfileStatusCardWidget extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: textBold.copyWith(
-                            color: Theme.of(context).primaryColorDark,
+                            color: Theme.of(context).primaryColor,
                             fontSize: Dimensions.fontSizeLarge,
                           ),
                         ),
@@ -76,7 +76,7 @@ class ProfileStatusCardWidget extends StatelessWidget {
                                         .profileInfo!.level!.name!
                                     : '',
                                 style: textRegular.copyWith(
-                                    color: Theme.of(context).primaryColorDark),
+                                    color: Theme.of(context).primaryColor),
                               ),
                             ),
                           ),
@@ -89,14 +89,13 @@ class ProfileStatusCardWidget extends StatelessWidget {
                     value: profileController.isOnline == "1",
                     borderRadius: 30.0,
                     padding: 3,
-                    activeColor:
-                        Theme.of(context).primaryColorDark.withOpacity(.1),
+                    activeColor: Theme.of(context).primaryColor.withOpacity(.1),
                     toggleBorder: Border.all(
                         width: 5, color: Colors.white.withOpacity(.75)),
                     activeText: 'online'.tr,
                     inactiveText: 'offline'.tr,
                     activeTextColor: Get.isDarkMode
-                        ? Theme.of(context).primaryColorDark
+                        ? Theme.of(context).scaffoldBackgroundColor
                         : Theme.of(context).primaryColor,
                     showOnOff: true,
                     activeTextFontWeight: FontWeight.w700,

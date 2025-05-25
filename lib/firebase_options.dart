@@ -55,20 +55,20 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCxItvjEJolPgKzJ0uBnIfD6a-GOzJXePo',
-    appId: '1:920082789436:android:f6fd26d76f65b1b9e2ff39',
-    messagingSenderId: '920082789436',
-    projectId: 'ur-turn-bad6b',
-    storageBucket: 'ur-turn-bad6b.firebasestorage.app',
+    apiKey: 'AIzaSyBOihWpOQ_DCdQV-E_2gu3VZ-Kexebi6YE',
+    appId: '1:783703710679:android:3b0e88636635e513dc0992',
+    messagingSenderId: '783703710679',
+    projectId: 'rakeb-d70ee',
+    storageBucket: 'rakeb-d70ee.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBwvq3N2cXanseiRkKCase_W2_K5JBlm1c',
-    appId: '1:920082789436:ios:a147752cf0aae9c1e2ff39',
-    messagingSenderId: '920082789436',
-    projectId: 'ur-turn-bad6b',
-    storageBucket: 'ur-turn-bad6b.firebasestorage.app',
-    iosBundleId: 'com.devu.hwiloDriver',
+    apiKey: 'AIzaSyCSuEl3zEKRYwiIMwDrDKPvuCHudh8ucm4',
+    appId: '1:783703710679:ios:79eab4e657126d18dc0992',
+    messagingSenderId: '783703710679',
+    projectId: 'rakeb-d70ee',
+    storageBucket: 'rakeb-d70ee.firebasestorage.app',
+    iosBundleId: 'com.rakebdriver.hwiloDriver',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(

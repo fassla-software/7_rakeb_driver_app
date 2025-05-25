@@ -284,7 +284,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: CustomMenuButtonWidget(
                 openForegroundColor: Colors.white,
                 closedBackgroundColor: Theme.of(context).primaryColor,
-                openBackgroundColor: Theme.of(context).primaryColorDark,
+                openBackgroundColor: Theme.of(context).primaryColor,
                 labelsBackgroundColor: Theme.of(context).cardColor,
                 speedDialChildren: <CustomMenuWidget>[
                   CustomMenuWidget(

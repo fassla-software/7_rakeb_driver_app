@@ -41,8 +41,8 @@ class ProfileLevelWidgetWidget extends StatelessWidget {
                   '${profileController.profileInfo?.firstName}  ${profileController.profileInfo?.lastName}',
                   style: textBold.copyWith(
                       color: Get.isDarkMode
-                          ? Theme.of(context).primaryColorDark
-                          : Theme.of(context).primaryColorDark,
+                          ? Theme.of(context).scaffoldBackgroundColor
+                          : Theme.of(context).primaryColor,
                       fontSize: Dimensions.fontSizeLarge),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
