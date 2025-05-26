@@ -1,4 +1,4 @@
-package com.devu.hwilo
+package com.rakebdriver.hwilo
 
 import io.flutter.embedding.android.FlutterActivity
 
