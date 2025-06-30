@@ -44,6 +44,7 @@ class AccessLocationScreen extends StatelessWidget {
                                         Image.asset(
                                           Images.mapLocationIcon,
                                           height: 240,
+                                          color: Theme.of(context).primaryColor,
                                         ),
                                         const SizedBox(
                                             height:
