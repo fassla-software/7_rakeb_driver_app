@@ -42,7 +42,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver{
   _findingCurrentRoute(){
     
     Get.find<RideController>().updateRoute(false, notify: false);
-    Get.find<RiderMapController>().setSheetHeight(Get.find<RiderMapController>().currentRideState == RideState.initial ? 300 : 270, false);
+    Get.find<RiderMapController>().setSheetHeight(Get.find<RiderMapController>().currentRideState == RideState.initial ? 1360 : 1360, false);
     Get.find<RideController>().getPendingRideRequestList(1);
     if(Get.find<RideController>().ongoingTrip != null
         && Get.find<RideController>().ongoingTrip!.isNotEmpty
@@ -52,6 +52,11 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver{
                 && Get.find<RideController>().ongoingTrip![0].paymentStatus == 'unpaid'))  ){
       // Get.find<RideController>().getCurrentRideStatus(froDetails: true, isUpdate: false);
       Get.find<RiderMapController>().setMarkersInitialPosition();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        print("Bottom sheet state: ${key.currentState}");
+        key.currentState?.expand();
+      });
+
     }
     getCurrentLocation();
   }
@@ -283,7 +288,8 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver{
               ],
               )),
               expandableContent: Builder(builder: (context) {
-                return Column(mainAxisSize: MainAxisSize.min,children: [
+                return
+                  Column(mainAxisSize: MainAxisSize.max,children: [
                   RiderBottomSheetWidget(expandableKey: key),
 
                   SizedBox(height: MediaQuery.of(context).viewInsets.bottom),

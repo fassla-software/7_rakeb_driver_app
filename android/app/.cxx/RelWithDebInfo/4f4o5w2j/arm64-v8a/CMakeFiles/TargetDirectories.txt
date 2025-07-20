@@ -1,0 +1,2 @@
+C:/Users/Romuo/StudioProjects/7_rakeb_driver_app/android/app/.cxx/RelWithDebInfo/4f4o5w2j/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/Romuo/StudioProjects/7_rakeb_driver_app/android/app/.cxx/RelWithDebInfo/4f4o5w2j/arm64-v8a/CMakeFiles/rebuild_cache.dir

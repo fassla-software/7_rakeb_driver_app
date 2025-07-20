@@ -44,6 +44,7 @@ class RouteCalculationWidget extends StatelessWidget {
             Row(children: [
               Expanded(
                   child: Column(
+                      mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                     Container(

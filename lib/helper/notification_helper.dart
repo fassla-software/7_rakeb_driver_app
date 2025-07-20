@@ -430,6 +430,10 @@ class NotificationHelper {
   }
 
   static Future<void> notificationToRoute(Map<String,dynamic> data, {bool formSplash = false, String? userName}) async {
+    if (Get.find<ProfileController>().subscriptionStatus == 0 ||
+        Get.find<ProfileController>().subscriptionStatus == null) {
+      return;
+    }
     if (data['action'] == "new_message_arrived") {
       Get.find<ChatController>().getConversation(data['type'], 1);
       _toRoute(formSplash, MessageScreen(channelId: data['type'], tripId: data['ride_request_id'], userName: userName ?? data['user_name']));

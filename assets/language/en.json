@@ -776,5 +776,6 @@
   "permanently_delete_confirm_msg": "Are you sure? You want to permanently delete your account. You cant retrieve this account in future",
   "for_demo_purpose_use": "For demo purpose use 000000 as OTP",
   "denied_note": "Denied Note",
+  "please_contact_us_to_renew_your_subscription": "Please contact us to renew your subscription.",
   "approval_note": "Approval Note"
 }

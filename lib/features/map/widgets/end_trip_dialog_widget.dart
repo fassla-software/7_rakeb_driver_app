@@ -21,7 +21,9 @@ class EndTripWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<RideController>(
       builder: (rideController) {
-        return Column(children: [
+        return Column(
+
+          children: [
 
           const RouteCalculationWidget(fromEnd: true),
 
@@ -33,7 +35,8 @@ class EndTripWidget extends StatelessWidget {
                TextSpan(text: 'your_destination'.tr,style: textMedium.copyWith(color: Theme.of(context).primaryColor))]))),
 
 
-          Padding(padding: const EdgeInsets.fromLTRB(Dimensions.paddingSizeDefault, Dimensions.paddingSizeSmall, Dimensions.paddingSizeDefault,Dimensions.paddingSizeDefault),
+          Padding(padding: const EdgeInsets.fromLTRB(Dimensions.paddingSizeDefault, Dimensions.paddingSizeSmall,
+              Dimensions.paddingSizeDefault,Dimensions.paddingSizeDefault),
             child: SizedBox(width: 250,
               child: Row(children: [
                 Expanded(child: ButtonWidget(buttonText: 'continue'.tr,
