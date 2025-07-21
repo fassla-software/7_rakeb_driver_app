@@ -67,6 +67,7 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
           }
         },
         child: Padding(
+
           padding: const EdgeInsets.symmetric(
             horizontal: Dimensions.paddingSizeDefault,
             vertical: Dimensions.paddingSizeExtraSmall,

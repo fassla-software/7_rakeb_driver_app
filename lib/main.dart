@@ -23,6 +23,7 @@ import 'package:ride_sharing_user_app/theme/light_theme.dart';
 import 'package:ride_sharing_user_app/theme/theme_controller.dart';
 import 'package:ride_sharing_user_app/util/app_constants.dart';
 import 'features/map/controllers/map_controller.dart';
+import 'features/profile/controllers/profile_controller.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -72,6 +73,7 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   final Map<String, Map<String, String>> languages;
   final Map<String, dynamic>? notificationData;
+
   const MyApp({super.key, required this.languages, this.notificationData});
 
   @override
@@ -137,60 +139,73 @@ class MyApp extends StatelessWidget {
                                             1) ||
                                     Get.find<SplashController>()
                                         .haveOngoingRides()) ...[
-                                  Positioned(
-                                    top: Get.height * 0.3,
-                                    right: 0,
-                                    child: GestureDetector(
-                                      onTap: () async {
-                                        Response res =
-                                            await rideController.getRideDetails(
-                                                rideController.rideId ?? '1',
-                                                fromHomeScreen: true);
-                                        if (res.statusCode == 403 ||
-                                            rideController.tripDetail
-                                                    ?.currentStatus ==
-                                                'returning' ||
-                                            rideController.tripDetail
-                                                    ?.currentStatus ==
-                                                'returned') {
-                                          Get.find<RiderMapController>()
-                                              .setRideCurrentState(
-                                                  RideState.initial);
-                                        }
-                                        Get.to(() => const MapScreen());
-                                      },
-                                      onHorizontalDragEnd:
-                                          (DragEndDetails details) {
-                                        _onHorizontalDrag(details);
-                                        Get.to(() => const MapScreen());
-                                      },
-                                      child: Stack(children: [
-                                        SizedBox(
-                                            width:
-                                                Dimensions.iconSizeExtraLarge,
-                                            child: Image.asset(
-                                                Images.homeToMapIcon,
-                                                color: Theme.of(context)
-                                                    .primaryColor)),
-                                        Positioned(
-                                            top: 0,
-                                            bottom: 0,
-                                            left: 5,
-                                            right: 5,
-                                            child: SizedBox(
-                                                width: 15,
-                                                child: Image.asset(Images.map,
-                                                    color: Get.isDarkMode
-                                                        ? Theme.of(context)
-                                                            .textTheme
-                                                            .bodyMedium!
-                                                            .color
-                                                        : Theme.of(context)
-                                                            .colorScheme
-                                                            .shadow)))
-                                      ]),
-                                    ),
-                                  ),
+                                  Get.find<ProfileController>()
+                                                  .subscriptionStatus ==
+                                              0 ||
+                                          Get.find<ProfileController>()
+                                                  .subscriptionStatus ==
+                                              null
+                                      ? SizedBox.shrink()
+                                      : Positioned(
+                                          top: Get.height * 0.3,
+                                          right: 0,
+                                          child: GestureDetector(
+                                            onTap: () async {
+                                              Response res =
+                                                  await rideController
+                                                      .getRideDetails(
+                                                          rideController
+                                                                  .rideId ??
+                                                              '1',
+                                                          fromHomeScreen: true);
+                                              if (res.statusCode == 403 ||
+                                                  rideController.tripDetail
+                                                          ?.currentStatus ==
+                                                      'returning' ||
+                                                  rideController.tripDetail
+                                                          ?.currentStatus ==
+                                                      'returned') {
+                                                Get.find<RiderMapController>()
+                                                    .setRideCurrentState(
+                                                        RideState.initial);
+                                              }
+                                              Get.to(() => const MapScreen());
+                                            },
+                                            onHorizontalDragEnd:
+                                                (DragEndDetails details) {
+                                              _onHorizontalDrag(details);
+                                              Get.to(() => const MapScreen());
+                                            },
+                                            child: Stack(children: [
+                                              SizedBox(
+                                                  width: Dimensions
+                                                      .iconSizeExtraLarge,
+                                                  child: Image.asset(
+                                                      Images.homeToMapIcon,
+                                                      color: Theme.of(context)
+                                                          .primaryColor)),
+                                              Positioned(
+                                                  top: 0,
+                                                  bottom: 0,
+                                                  left: 5,
+                                                  right: 5,
+                                                  child: SizedBox(
+                                                      width: 15,
+                                                      child: Image.asset(
+                                                          Images.map,
+                                                          color: Get.isDarkMode
+                                                              ? Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodyMedium!
+                                                                  .color
+                                                              : Theme.of(
+                                                                      context)
+                                                                  .colorScheme
+                                                                  .shadow)))
+                                            ]),
+                                          ),
+                                        ),
                                 ]
                               ]
                             ],

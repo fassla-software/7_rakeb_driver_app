@@ -35,7 +35,8 @@ class _RideCancellationListState extends State<RideCancellationList> {
               return CustomRadioButton(text: widget.isOngoing ? tripController.rideCancellationCauseList!.data!.ongoingRide![index] :
               tripController.rideCancellationCauseList!.data!.acceptedRide![index], isSelected: tripController.rideCancellationCurrentIndex == index,
                   onTap: (){
-                 tripController.setCancellationCurrentIndex(index);
+
+                tripController.setCancellationCurrentIndex(index);
                 setState(() {});},
                 length: length,index: index,);
             },

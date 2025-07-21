@@ -1,6 +1,10 @@
+import 'dart:io';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ride_sharing_user_app/common_widgets/app_bar_widget.dart';
+import 'package:ride_sharing_user_app/common_widgets/custom_alart_dialog_shape.dart';
 import 'package:ride_sharing_user_app/common_widgets/sliver_delegate.dart';
 import 'package:ride_sharing_user_app/common_widgets/zoom_drawer_context_widget.dart';
 import 'package:ride_sharing_user_app/features/home/widgets/add_vehicle_design_widget.dart';
@@ -52,6 +56,7 @@ class HomeMenu extends GetView<ProfileController> {
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -62,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
     WidgetsFlutterBinding.ensureInitialized();
     loadData();
     super.initState();
+    checkSubscriptionStatus();
   }
 
   Future<void> loadData() async {
@@ -94,6 +100,58 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     HomeScreenHelper().checkMaintanenceMode();
+  }
+
+  void checkSubscriptionStatus() {
+    final subscriptionStatus =
+        Get.find<ProfileController>().profileInfo?.subscriptionStatus;
+    if (subscriptionStatus == null || subscriptionStatus == 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (context) => PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (result, __) => {
+              exit(0),
+            },
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: Dialog(
+                child: Container(
+                  height: context.height * 0.25,
+                  width: context.width * 0.8,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    children: [
+                      SizedBox(height: context.height * 0.02),
+                      Icon(
+                        Icons.error,
+                        color: Theme.of(context).primaryColor,
+                        size: 50,
+                      ),
+                      SizedBox(height: context.height * 0.04),
+                      Text(
+                        textAlign: TextAlign.center,
+                        'please_contact_us_to_renew_your_subscription'.tr,
+                        style: textBold.copyWith(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w900,
+                          fontSize: context.width * 0.06,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      });
+    }
   }
 
   Future loadOngoingList() async {

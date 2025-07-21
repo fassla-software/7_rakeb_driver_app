@@ -42,6 +42,14 @@ class _RideOngoingWidgetState extends State<RideOngoingWidget> {
   bool isFinished = false;
   int currentState = 0;
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      print('00widget.expandableKey.currentState?.expand();');
+      widget.expandableKey.currentState?.expand();
+    });
+  }
+  @override
   Widget build(BuildContext context) {
     return GetBuilder<RideController>(builder: (rideController) {
       String firstRoute = '';
@@ -363,10 +371,17 @@ class _RideOngoingWidgetState extends State<RideOngoingWidget> {
               borderColor: Theme.of(context).primaryColor,
               textColor: Theme.of(context).cardColor,
               radius: Dimensions.paddingSizeSmall,
-              onPressed: (){
-                currentState = 0;
-                setState(() {});
-              },
+                onPressed: () {
+                  print('00000000000000000000');
+                  currentState = 0;
+                  setState(() {});
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    print('Trying to expand...');
+                    widget.expandableKey.currentState?.expand();
+                  });
+                }
+
+
             )),
             const SizedBox(width: Dimensions.paddingSizeSmall),
 

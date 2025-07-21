@@ -43,7 +43,7 @@ class RiderBottomSheetWidget extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               child: Padding(
                   padding:  const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeDefault),
-                  child : Column(mainAxisSize: MainAxisSize.min, children: [
+                  child : Column(mainAxisSize: MainAxisSize.max, children: [
                     Container(height: 5, width: 30, decoration: BoxDecoration(
                       color: Theme.of(context).primaryColor.withOpacity(.25),
                       borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
@@ -54,13 +54,17 @@ class RiderBottomSheetWidget extends StatelessWidget {
 
                     if(riderController.currentRideState == RideState.pending)
                       GetBuilder<RideController>(builder: (rideController) {
-                        return  CustomerRideRequestCardWidget(rideRequest: rideController.tripDetail!);
+
+                        return  CustomerRideRequestCardWidget(
+
+                            rideRequest: rideController.tripDetail!);
                       }),
 
                     if(riderController.currentRideState == RideState.accepted)
                       RideAcceptedWidget(expandableKey: expandableKey),
 
                     if(riderController.currentRideState == RideState.ongoing)
+                    ////////////////////////
                       RideOngoingWidget(tripId: rideController.tripDetail?.id ?? '',expandableKey: expandableKey),
 
                     if(riderController.currentRideState == RideState.end)
