@@ -632,12 +632,12 @@ class _MessageScreenState extends State<MessageScreen> {
                 )
               : InkWell(
                   onTap: () {
-                    if (messageController.conversationKey.currentState!
-                        .validate()) {
-                      messageController
-                          .sendMessage(widget.channelId, widget.tripId)
-                          .then((value) {});
-                    }
+                    // if (messageController.conversationKey.currentState!
+                    //     .validate()) {
+                    messageController
+                        .sendMessage(widget.channelId, widget.tripId)
+                        .then((value) {});
+                    // }
                     messageController.conversationController.clear();
                   },
                   child: Center(
