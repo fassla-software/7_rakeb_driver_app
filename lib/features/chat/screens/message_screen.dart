@@ -424,185 +424,189 @@ class _MessageScreenState extends State<MessageScreen> {
   Widget _buildWhatsAppStyleChatBar(ChatController messageController) {
     if (messageController.isRecording) {
       // WhatsApp-style recording mode
-      return Container(
+      return SafeArea(
+        child: Container(
+          width: Get.width,
+          margin: const EdgeInsets.only(
+            left: Dimensions.paddingSizeSmall,
+            right: Dimensions.paddingSizeSmall,
+            bottom: Dimensions.paddingSizeSmall,
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(25),
+            border: Border.all(color: Theme.of(context).primaryColor),
+          ),
+          child: Row(
+            children: [
+              // Cancel button
+              GestureDetector(
+                onTap: () => messageController.cancelRecording(),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  child: Icon(
+                    Icons.close,
+                    color: Colors.red,
+                    size: 24,
+                  ),
+                ),
+              ),
+
+              // Recording animation and timer
+              Expanded(
+                child: Row(
+                  children: [
+                    // Recording dot animation
+                    Container(
+                      width: 12,
+                      height: 12,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+
+                    // Recording text and timer
+                    Text(
+                      'recording_in_progress'.tr,
+                      style: textRegular.copyWith(
+                        color: Colors.red,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      messageController.formattedRecordingDuration,
+                      style: textMedium.copyWith(
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 14,
+                      ),
+                    ),
+
+                    const Spacer(),
+                  ],
+                ),
+              ),
+
+              // Send button
+              GestureDetector(
+                onTap: () async {
+                  messageController.stopRecording();
+                  // Wait a moment for the recording to be processed
+                  await Future.delayed(Duration(milliseconds: 500));
+                  // Send the message if we have voice recordings
+                  if (messageController.hasVoiceRecordings) {
+                    await messageController.sendMessage(
+                        widget.channelId, widget.tripId);
+                  }
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.send,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    // Normal chat bar mode
+    return SafeArea(
+      child: Container(
         width: Get.width,
         margin: const EdgeInsets.only(
           left: Dimensions.paddingSizeSmall,
           right: Dimensions.paddingSizeSmall,
           bottom: Dimensions.paddingSizeSmall,
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(25),
-          border: Border.all(color: Theme.of(context).primaryColor),
-        ),
         child: Row(
           children: [
-            // Cancel button
-            GestureDetector(
-              onTap: () => messageController.cancelRecording(),
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                child: Icon(
-                  Icons.close,
-                  color: Colors.red,
-                  size: 24,
-                ),
-              ),
-            ),
-
-            // Recording animation and timer
+            // Chat input container
             Expanded(
-              child: Row(
-                children: [
-                  // Recording dot animation
-                  Container(
-                    width: 12,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-
-                  // Recording text and timer
-                  Text(
-                    'recording_in_progress'.tr,
-                    style: textRegular.copyWith(
-                      color: Colors.red,
-                      fontSize: 14,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    messageController.formattedRecordingDuration,
-                    style: textMedium.copyWith(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 14,
-                    ),
-                  ),
-
-                  const Spacer(),
-                ],
-              ),
-            ),
-
-            // Send button
-            GestureDetector(
-              onTap: () async {
-                messageController.stopRecording();
-                // Wait a moment for the recording to be processed
-                await Future.delayed(Duration(milliseconds: 500));
-                // Send the message if we have voice recordings
-                if (messageController.hasVoiceRecordings) {
-                  await messageController.sendMessage(
-                      widget.channelId, widget.tripId);
-                }
-              },
               child: Container(
-                padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  shape: BoxShape.circle,
+                  border: Border.all(color: Theme.of(context).primaryColor),
+                  color: Theme.of(context).cardColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(25)),
                 ),
-                child: Icon(
-                  Icons.send,
-                  color: Colors.white,
-                  size: 20,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+                child: Row(
+                  children: [
+                    const SizedBox(width: Dimensions.paddingSizeDefault),
 
-    // Normal chat bar mode
-    return Container(
-      width: Get.width,
-      margin: const EdgeInsets.only(
-        left: Dimensions.paddingSizeSmall,
-        right: Dimensions.paddingSizeSmall,
-        bottom: Dimensions.paddingSizeSmall,
-      ),
-      child: Row(
-        children: [
-          // Chat input container
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Theme.of(context).primaryColor),
-                color: Theme.of(context).cardColor,
-                borderRadius: const BorderRadius.all(Radius.circular(25)),
-              ),
-              child: Row(
-                children: [
-                  const SizedBox(width: Dimensions.paddingSizeDefault),
-
-                  // Text input field
-                  Expanded(
-                    child: TextField(
-                      minLines: 1,
-                      maxLines: 4,
-                      controller: messageController.conversationController,
-                      textCapitalization: TextCapitalization.sentences,
-                      style: textMedium.copyWith(
-                        fontSize: Dimensions.fontSizeLarge,
-                        color: Theme.of(context)
-                            .textTheme
-                            .bodyMedium!
-                            .color!
-                            .withOpacity(0.8),
-                      ),
-                      keyboardType: TextInputType.multiline,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "type_here".tr,
-                        hintStyle: textRegular.copyWith(
+                    // Text input field
+                    Expanded(
+                      child: TextField(
+                        minLines: 1,
+                        maxLines: 4,
+                        controller: messageController.conversationController,
+                        textCapitalization: TextCapitalization.sentences,
+                        style: textMedium.copyWith(
+                          fontSize: Dimensions.fontSizeLarge,
                           color: Theme.of(context)
                               .textTheme
                               .bodyMedium!
                               .color!
                               .withOpacity(0.8),
-                          fontSize: 16,
+                        ),
+                        keyboardType: TextInputType.multiline,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "type_here".tr,
+                          hintStyle: textRegular.copyWith(
+                            color: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .color!
+                                .withOpacity(0.8),
+                            fontSize: 16,
+                          ),
+                        ),
+                        onChanged: (String newText) {
+                          messageController.update();
+                        },
+                      ),
+                    ),
+
+                    // Image picker button
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: Dimensions.paddingSizeSmall),
+                      child: InkWell(
+                        onTap: () => messageController.pickMultipleImage(false),
+                        child: Image.asset(
+                          Images.pickImage,
+                          width: 24,
+                          height: 24,
+                          color: Get.isDarkMode ? Colors.white : Colors.black,
                         ),
                       ),
-                      onChanged: (String newText) {
-                        messageController.update();
-                      },
                     ),
-                  ),
 
-                  // Image picker button
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Dimensions.paddingSizeSmall),
-                    child: InkWell(
-                      onTap: () => messageController.pickMultipleImage(false),
-                      child: Image.asset(
-                        Images.pickImage,
-                        width: 24,
-                        height: 24,
-                        color: Get.isDarkMode ? Colors.white : Colors.black,
-                      ),
-                    ),
-                  ),
+                    // Voice recorder button
+                    _buildVoiceRecorderButton(messageController),
 
-                  // Voice recorder button
-                  _buildVoiceRecorderButton(messageController),
-
-                  const SizedBox(width: 4),
-                ],
+                    const SizedBox(width: 4),
+                  ],
+                ),
               ),
             ),
-          ),
 
-          // Send button (show when there's content)
-          const SizedBox(width: 8),
-          _buildSendButton(messageController),
-        ],
+            // Send button (show when there's content)
+            const SizedBox(width: 8),
+            _buildSendButton(messageController),
+          ],
+        ),
       ),
     );
   }
@@ -632,12 +636,12 @@ class _MessageScreenState extends State<MessageScreen> {
                 )
               : InkWell(
                   onTap: () {
-                    if (messageController.conversationKey.currentState!
-                        .validate()) {
-                      messageController
-                          .sendMessage(widget.channelId, widget.tripId)
-                          .then((value) {});
-                    }
+                    // if (messageController.conversationKey.currentState!
+                    //     .validate()) {
+                    messageController
+                        .sendMessage(widget.channelId, widget.tripId)
+                        .then((value) {});
+                    // }
                     messageController.conversationController.clear();
                   },
                   child: Center(
