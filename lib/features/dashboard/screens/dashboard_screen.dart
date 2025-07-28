@@ -8,6 +8,7 @@ import 'package:ride_sharing_user_app/features/profile/controllers/profile_contr
 import 'package:ride_sharing_user_app/features/ride/controllers/ride_controller.dart';
 import 'package:ride_sharing_user_app/features/trip/screens/trip_screen.dart';
 import 'package:ride_sharing_user_app/features/wallet/screens/wallet_screen.dart';
+import 'package:ride_sharing_user_app/features/schedule/screens/schedule_screen.dart';
 import 'package:ride_sharing_user_app/util/dimensions.dart';
 import 'package:ride_sharing_user_app/util/images.dart';
 import 'package:ride_sharing_user_app/util/styles.dart';
@@ -35,6 +36,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
           activeIcon: Images.activityActive,
           inactiveIcon: Images.activityOutline,
           screen: const TripHistoryMenu()),
+      NavigationModel(
+          name: 'schedule'.tr,
+          activeIcon: Images.calender,
+          inactiveIcon: Images.calender,
+          screen: const ScheduleScreen()),
       NavigationModel(
           name: 'notification'.tr,
           activeIcon: Images.notificationActive,
