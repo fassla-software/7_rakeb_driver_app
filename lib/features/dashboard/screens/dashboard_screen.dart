@@ -38,8 +38,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           screen: const TripHistoryMenu()),
       NavigationModel(
           name: 'schedule'.tr,
-          activeIcon: Images.calender,
-          inactiveIcon: Images.calender,
+          activeIcon: Images.calenderIcon,
+          inactiveIcon: Images.calenderOutline,
           screen: const ScheduleScreen()),
       NavigationModel(
           name: 'notification'.tr,

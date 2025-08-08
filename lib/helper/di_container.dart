@@ -143,13 +143,12 @@ Future<Map<String, Map<String, String>>> init() async {
   LeaderBoardServiceInterface leaderBoardServiceInterface =
       LeaderBoardService(leaderBoardRepositoryInterface: Get.find());
   Get.lazyPut(() => leaderBoardServiceInterface);
-  ScheduleRepositoriesInterface scheduleRepositoryInterface =
-      ScheduleRepositories(Get.find());
-  Get.lazyPut(() => scheduleRepositoryInterface);
-  ScheduleServiceInterface scheduleServiceInterface =
-      ScheduleService(Get.find());
-  Get.lazyPut(() => scheduleServiceInterface);
-  Get.lazyPut(() => ScheduleController(Get.find()));
+  Get.lazyPut<ScheduleRepositoriesInterface>(
+      () => ScheduleRepositories(apiClient: Get.find()));
+
+  Get.lazyPut<ScheduleServiceInterface>(() =>
+      ScheduleService(repository: Get.find<ScheduleRepositoriesInterface>()));
+
   WalletRepositoryInterface walletRepositoryInterface =
       WalletRepository(apiClient: Get.find());
   Get.lazyPut(() => walletRepositoryInterface);
@@ -205,6 +204,7 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut(() => RideService(rideRepositoryInterface: Get.find()));
   Get.lazyPut(() => ProfileService(profileRepositoryInterface: Get.find()));
   Get.lazyPut(() => ChatService(chatRepositoryInterface: Get.find()));
+  Get.lazyPut(() => ScheduleService(repository: Get.find()));
   Get.lazyPut(() => ReviewService(reviewRepositoryInterface: Get.find()));
   Get.lazyPut(
       () => LeaderBoardService(leaderBoardRepositoryInterface: Get.find()));
@@ -226,6 +226,7 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut(() => RideRepository(apiClient: Get.find()));
   Get.lazyPut(() => ProfileRepository(apiClient: Get.find()));
   Get.lazyPut(() => ChatRepository(apiClient: Get.find()));
+  Get.lazyPut(() => ScheduleRepositories(apiClient: Get.find()));
   Get.lazyPut(() => ReviewRepository(apiClient: Get.find()));
   Get.lazyPut(() => LeaderBoardRepository(apiClient: Get.find()));
   Get.lazyPut(() => WalletRepository(apiClient: Get.find()));
@@ -245,6 +246,7 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut(() => RideController(rideServiceInterface: Get.find()));
   Get.lazyPut(() => ProfileController(profileServiceInterface: Get.find()));
   Get.lazyPut(() => ChatController(chatServiceInterface: Get.find()));
+  Get.lazyPut(() => ScheduleController(service: Get.find()));
   Get.lazyPut(() => ReviewController(reviewServiceInterface: Get.find()));
   Get.lazyPut(
       () => LeaderBoardController(leaderBoardServiceInterface: Get.find()));

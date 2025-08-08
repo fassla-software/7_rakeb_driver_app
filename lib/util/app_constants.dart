@@ -39,6 +39,8 @@ class AppConstants {
   static const String tripAcceptOrReject = '/api/driver/ride/trip-action';
   static const String matchOtp = '/api/driver/ride/match-otp';
   static const String remainDistance = '/api/driver/get-routes';
+  static const String scheduleTrips = '/api/driver/ride/pending-ride-list';
+  static const String acceptScheduleTrips = '/api/driver/ride/accept-scheduled';
   static const String tripStatusUpdate = '/api/driver/ride/update-status';
   static const String rideRequestList = '/api/driver/ride/pending-ride-list';
   static const String activityList = '/api/driver/my-activity';
