@@ -28,8 +28,13 @@ class ScheduleRepositories implements ScheduleRepositoriesInterface {
     return await apiClient.getData(AppConstants.scheduleTrips, query: {
       "limit": 10,
       "offset": 1,
-      "scheduled": 1,
       "driver_status": "driver_schedule_accept"
     });
+  }
+
+  @override
+  Future<Response> cancelScheduleTrip(String scheduleTripId) async {
+    return await apiClient
+        .postData("${AppConstants.scheduleTripCancel}/$scheduleTripId", {});
   }
 }

@@ -146,66 +146,67 @@ class MyApp extends StatelessWidget {
                                                   .subscriptionStatus ==
                                               null
                                       ? SizedBox.shrink()
-                                      : Positioned(
-                                          top: Get.height * 0.3,
-                                          right: 0,
-                                          child: GestureDetector(
-                                            onTap: () async {
-                                              Response res =
-                                                  await rideController
-                                                      .getRideDetails(
-                                                          rideController
-                                                                  .rideId ??
-                                                              '1',
-                                                          fromHomeScreen: true);
-                                              if (res.statusCode == 403 ||
-                                                  rideController.tripDetail
-                                                          ?.currentStatus ==
-                                                      'returning' ||
-                                                  rideController.tripDetail
-                                                          ?.currentStatus ==
-                                                      'returned') {
-                                                Get.find<RiderMapController>()
-                                                    .setRideCurrentState(
-                                                        RideState.initial);
-                                              }
-                                              Get.to(() => const MapScreen());
-                                            },
-                                            onHorizontalDragEnd:
-                                                (DragEndDetails details) {
-                                              _onHorizontalDrag(details);
-                                              Get.to(() => const MapScreen());
-                                            },
-                                            child: Stack(children: [
-                                              SizedBox(
-                                                  width: Dimensions
-                                                      .iconSizeExtraLarge,
-                                                  child: Image.asset(
-                                                      Images.homeToMapIcon,
-                                                      color: Theme.of(context)
-                                                          .primaryColor)),
-                                              Positioned(
-                                                  top: 0,
-                                                  bottom: 0,
-                                                  left: 5,
-                                                  right: 5,
-                                                  child: SizedBox(
-                                                      width: 15,
-                                                      child: Image.asset(
-                                                          Images.map,
-                                                          color: Get.isDarkMode
-                                                              ? Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .bodyMedium!
-                                                                  .color
-                                                              : Theme.of(
-                                                                      context)
-                                                                  .colorScheme
-                                                                  .shadow)))
-                                            ]),
-                                          ),
-                                        ),
+                                      :SizedBox.shrink()
+                                      //  Positioned(
+                                      //     top: Get.height * 0.3,
+                                      //     right: 0,
+                                      //     child: GestureDetector(
+                                      //       onTap: () async {
+                                      //         Response res =
+                                      //             await rideController
+                                      //                 .getRideDetails(
+                                      //                     rideController
+                                      //                             .rideId ??
+                                      //                         '1',
+                                      //                     fromHomeScreen: true);
+                                      //         if (res.statusCode == 403 ||
+                                      //             rideController.tripDetail
+                                      //                     ?.currentStatus ==
+                                      //                 'returning' ||
+                                      //             rideController.tripDetail
+                                      //                     ?.currentStatus ==
+                                      //                 'returned') {
+                                      //           Get.find<RiderMapController>()
+                                      //               .setRideCurrentState(
+                                      //                   RideState.initial);
+                                      //         }
+                                      //         Get.to(() => const MapScreen());
+                                      //       },
+                                      //       onHorizontalDragEnd:
+                                      //           (DragEndDetails details) {
+                                      //         _onHorizontalDrag(details);
+                                      //         Get.to(() => const MapScreen());
+                                      //       },
+                                      //       child: Stack(children: [
+                                      //         SizedBox(
+                                      //             width: Dimensions
+                                      //                 .iconSizeExtraLarge,
+                                      //             child: Image.asset(
+                                      //                 Images.homeToMapIcon,
+                                      //                 color: Theme.of(context)
+                                      //                     .primaryColor)),
+                                      //         Positioned(
+                                      //             top: 0,
+                                      //             bottom: 0,
+                                      //             left: 5,
+                                      //             right: 5,
+                                      //             child: SizedBox(
+                                      //                 width: 15,
+                                      //                 child: Image.asset(
+                                      //                     Images.map,
+                                      //                     color: Get.isDarkMode
+                                      //                         ? Theme.of(
+                                      //                                 context)
+                                      //                             .textTheme
+                                      //                             .bodyMedium!
+                                      //                             .color
+                                      //                         : Theme.of(
+                                      //                                 context)
+                                      //                             .colorScheme
+                                      //                             .shadow)))
+                                      //       ]),
+                                      //     ),
+                                      //   ),
                                 ]
                               ]
                             ],

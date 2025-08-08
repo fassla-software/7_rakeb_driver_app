@@ -317,6 +317,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     : const NotificationShimmerWidget();
               }))
             ]),
+         
             Positioned(
               top: GetPlatform.isIOS ? 120 : 90,
               left: 0,
@@ -398,7 +399,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             );
-          })),
+          })
+          ),
     );
   }
 }

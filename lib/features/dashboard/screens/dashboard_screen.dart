@@ -14,13 +14,22 @@ import 'package:ride_sharing_user_app/util/images.dart';
 import 'package:ride_sharing_user_app/util/styles.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+  final int? initialScreen;
+  const DashboardScreen({super.key, this.initialScreen});
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
   final PageStorageBucket bucket = PageStorageBucket();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialScreen != null) {
+      Get.find<BottomMenuController>().setTabIndex(widget.initialScreen!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +179,7 @@ class CustomMenuItem extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: textRegular.copyWith(
-                            color: Colors.white,
+                            color:Theme.of(context).cardColor,
                             fontSize: Dimensions.fontSizeExtraSmall))
                     : const SizedBox(),
               ]),

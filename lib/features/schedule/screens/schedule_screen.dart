@@ -6,25 +6,26 @@ import 'package:ride_sharing_user_app/common_widgets/no_data_widget.dart';
 import 'package:ride_sharing_user_app/common_widgets/type_button_widget.dart';
 import 'package:ride_sharing_user_app/common_widgets/zoom_drawer_context_widget.dart';
 import 'package:ride_sharing_user_app/features/profile/screens/profile_menu_screen.dart';
+import 'package:ride_sharing_user_app/features/schedule/widgets/accept_schedule_card.dart';
 import 'package:ride_sharing_user_app/features/schedule/widgets/schedule_card.dart';
 import 'package:ride_sharing_user_app/localization/localization_controller.dart';
 import '../controllers/schedule_controller.dart';
-import '../domain/models/schedule_model.dart';
 import 'package:ride_sharing_user_app/util/dimensions.dart';
 import 'package:ride_sharing_user_app/util/styles.dart';
 
 import 'package:ride_sharing_user_app/features/profile/controllers/profile_controller.dart';
 
 class ScheduleScreenMenu extends GetView<ScheduleController> {
-  const ScheduleScreenMenu({super.key});
+  final int? initialIndex;
+  const ScheduleScreenMenu({this.initialIndex, super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ProfileController>(
-      builder: (_) => ZoomDrawer(
-        controller: _.zoomDrawerController,
+      builder: (profileController) => ZoomDrawer(
+        controller: profileController.zoomDrawerController,
         menuScreen: const ProfileMenuScreen(),
-        mainScreen: const ScheduleScreen(),
+        mainScreen: ScheduleScreen(initialIndex: initialIndex),
         borderRadius: 24.0,
         angle: -5.0,
         isRtl: !Get.find<LocalizationController>().isLtr,
@@ -36,8 +37,10 @@ class ScheduleScreenMenu extends GetView<ScheduleController> {
     );
   }
 }
+
 class ScheduleScreen extends StatefulWidget {
-  const ScheduleScreen({super.key});
+  final int? initialIndex;
+  const ScheduleScreen({this.initialIndex, super.key});
 
   @override
   State<ScheduleScreen> createState() => _ScheduleScreenState();
@@ -47,9 +50,26 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   ScrollController scrollController = ScrollController();
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.initialIndex != null) {
+        Get.find<ScheduleController>().setWalletTypeIndex(widget.initialIndex!);
+      }
+      if (widget.initialIndex == 1) {
+        Get.find<ScheduleController>().getAcceptedSchedules();
+      } else {
+        Get.find<ScheduleController>().getSchedules();
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GetBuilder<ScheduleController>(
       builder: (controller) {
+        print(
+            "schedule: ${controller.schedules}   accepts: ${controller.acceptedSchedules}");
         return Stack(
           children: [
             Scaffold(
@@ -82,15 +102,26 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                   size: 40.0)
                               : controller.schedules.isEmpty
                                   ? const NoDataWidget(title: 'no_trip_found')
-                                  : ListView.builder(
-                                      padding: const EdgeInsets.all(
-                                          Dimensions.paddingSizeDefault),
-                                      itemCount: controller.schedules.length,
-                                      itemBuilder: (context, index) {
-                                        final schedule =
-                                            controller.schedules[index];
-                                        return ScheduleCard(schedule: schedule);
-                                      },
+                                  : Column(
+                                      children: [
+                                        Expanded(
+                                          child: ListView.builder(
+                                            padding: const EdgeInsets.all(
+                                                Dimensions.paddingSizeDefault),
+                                            itemCount:
+                                                controller.schedules.length,
+                                            itemBuilder: (context, index) {
+                                              final schedule =
+                                                  controller.schedules[index];
+                                              return ScheduleCard(
+                                                  schedule: schedule);
+                                            },
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: Dimensions.paddingSizeOver,
+                                        )
+                                      ],
                                     ),
                         )
                       : SliverFillRemaining(
@@ -100,17 +131,29 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                   size: 40.0)
                               : controller.acceptedSchedules.isEmpty
                                   ? const NoDataWidget(title: 'no_trip_found')
-                                  : ListView.builder(
-                                      padding: const EdgeInsets.all(
-                                          Dimensions.paddingSizeDefault),
-                                      itemCount: controller.acceptedSchedules.length,
-                                      itemBuilder: (context, index) {
-                                        final acceptingSchedule =
-                                            controller.acceptedSchedules[index];
-                                        return ScheduleCard(schedule: acceptingSchedule);
-                                      },
+                                  : Column(
+                                      children: [
+                                        Expanded(
+                                          child: ListView.builder(
+                                            padding: const EdgeInsets.all(
+                                                Dimensions.paddingSizeDefault),
+                                            itemCount: controller
+                                                .acceptedSchedules.length,
+                                            itemBuilder: (context, index) {
+                                              final acceptingSchedule =
+                                                  controller
+                                                      .acceptedSchedules[index];
+                                              return AcceptScheduleCard(
+                                                  schedule: acceptingSchedule);
+                                            },
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: Dimensions.paddingSizeOver,
+                                        )
+                                      ],
                                     ),
-                        )
+                        ),
                 ],
               ),
             ),
@@ -141,7 +184,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                               if (index == 0) {
                                 scheduleController.getSchedules();
                               } else {
-                                scheduleController.getAAcceptedSchedules();
+                                scheduleController.getAcceptedSchedules();
                               }
                             },
                           ),

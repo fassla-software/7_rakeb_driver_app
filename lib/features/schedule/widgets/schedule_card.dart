@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
+import 'package:ride_sharing_user_app/common_widgets/snackbar_widget.dart';
 import 'package:ride_sharing_user_app/features/schedule/controllers/schedule_controller.dart';
-import 'package:ride_sharing_user_app/features/schedule/domain/models/schedule_model.dart';
+import 'package:ride_sharing_user_app/features/schedule/domain/models/accept_schedule_%20model.dart';
 import 'package:ride_sharing_user_app/util/dimensions.dart';
 import 'package:ride_sharing_user_app/util/styles.dart';
 
@@ -44,7 +44,7 @@ class ScheduleCard extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    schedule.pickupAddress ?? 'No pickup address',
+                    schedule.coordinate?.pickupAddress ?? 'No pickup address',
                     style: textRegular,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -59,7 +59,8 @@ class ScheduleCard extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    schedule.destinationAddress ?? 'No destination address',
+                    schedule.coordinate?.destinationAddress ??
+                        'No destination address',
                     style: textRegular,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -75,7 +76,7 @@ class ScheduleCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Distance: ${schedule.actualDistance ?? 0} km',
+                      'Distance: ${schedule.estimatedDistance ?? 0} km',
                       style: textRegular,
                     ),
                     Text(
@@ -88,14 +89,17 @@ class ScheduleCard extends StatelessWidget {
             ),
             GetBuilder<ScheduleController>(
               builder: (controller) => Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   controller.loadingTripId == schedule.id
                       ? SpinKitCircle(
                           color: Theme.of(context).primaryColor, size: 40.0)
                       : ElevatedButton.icon(
                           onPressed: () {
-                            controller.acceptTrip(schedule.id!);
+                            controller.acceptScheduleTrip(schedule.id!).then((value){
+                                  SnackBarWidget("schedule_trip_accepted_and_added_to_your_list".tr, isError: false);
+
+                            });
                           },
                           icon: const Icon(Icons.check_circle,
                               color: Colors.white),
@@ -105,16 +109,6 @@ class ScheduleCard extends StatelessWidget {
                             foregroundColor: Colors.white,
                           ),
                         ),
-                  const SizedBox(width: 8),
-                  ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.map, color: Colors.white),
-                    label: Text('View Map'.tr),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      foregroundColor: Colors.white,
-                    ),
-                  ),
                 ],
               ),
             ),
