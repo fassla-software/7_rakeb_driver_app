@@ -3,7 +3,7 @@
 <plist version="1.0">
 	<dict>
 		<key>CADisableMinimumFrameDurationOnPhone</key>
-		<true />
+		<true/>
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
@@ -36,7 +36,7 @@
 		<key>CFBundleVersion</key>
 		<string>$(FLUTTER_BUILD_NUMBER)</string>
 		<key>LSRequiresIPhoneOS</key>
-		<true />
+		<true/>
 		<key>NSCameraUsageDescription</key>
 		<string>This app need camera access for taking photo for user profile picture.</string>
 		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
@@ -50,7 +50,7 @@
 		<key>NSPrivacyAccessedAPITypes</key>
 		<string>This app need location permission for tracking driver start to destination trip.</string>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
-		<true />
+		<true/>
 		<key>UIBackgroundModes</key>
 		<array>
 			<string>remote-notification</string>
@@ -74,7 +74,7 @@
 			<string>UIInterfaceOrientationLandscapeRight</string>
 		</array>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
-		<false />
+		<false/>
 		<key>CFBundleURLTypes</key>
 		<array>
 			<dict>
@@ -86,5 +86,7 @@
 				</array>
 			</dict>
 		</array>
+		<key>UIStatusBarHidden</key>
+		<false/>
 	</dict>
 </plist>

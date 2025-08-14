@@ -197,8 +197,8 @@ class _SplashScreenState extends State<SplashScreen>
                                   opacity: _animation.value,
                                   child: Image.asset(
                                       Get.isDarkMode
-                                          ? Images.logoNameWhite
-                                          : Images.logoNameBlack,
+                                          ? Images.logo
+                                          : Images.logo,
                                       width: 160),
                                 ),
                               ],
