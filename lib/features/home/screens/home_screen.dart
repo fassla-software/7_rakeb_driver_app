@@ -317,7 +317,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     : const NotificationShimmerWidget();
               }))
             ]),
-         
             Positioned(
               top: GetPlatform.isIOS ? 120 : 90,
               left: 0,
@@ -336,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
           floatingActionButton:
               GetBuilder<RideController>(builder: (rideController) {
             int ridingCount = rideController.getOnGoingRideCount();
-
+            print("ride count : ${ridingCount}");
             int parcelCount = rideController.parcelListModel?.totalSize ?? 0;
             return Padding(
               padding: const EdgeInsets.only(bottom: 80),
@@ -399,8 +398,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             );
-          })
-          ),
+          })),
     );
   }
 }

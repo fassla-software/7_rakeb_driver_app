@@ -439,7 +439,6 @@ class RideController extends GetxController implements GetxService {
       pendingRideRequestModel?.offset = '1';
       if (response.body['data'] != null && response.body['data'] != '') {
         if (offset == 1) {
-          
           pendingRideRequestModel =
               PendingRideRequestModel.fromJson(response.body);
         } else {
@@ -621,9 +620,11 @@ class RideController extends GetxController implements GetxService {
     }
 
     final trip = ongoingTrip![0];
-
+    print("length ${ongoingTrip?.length.toString()}");
     bool isOngoingOrAccepted() =>
         trip.currentStatus == 'ongoing' || trip.currentStatus == 'accepted';
+    bool isDriverScheduleAccept() =>
+        trip.currentStatus == 'driver_schedule_accept';
 
     bool isUnpaidCompleted() =>
         trip.currentStatus == 'completed' && trip.paymentStatus == 'unpaid';
@@ -632,13 +633,12 @@ class RideController extends GetxController implements GetxService {
         trip.currentStatus == 'cancelled' &&
         trip.paymentStatus == 'unpaid' &&
         trip.cancelledBy == 'customer';
-
+    print("type ${trip.currentStatus}");
     if (isOngoingOrAccepted() ||
         isUnpaidCompleted() ||
         (isUnpaidCancelledByCustomer() && trip.type != 'parcel')) {
       return 1;
     }
-
     return 0;
   }
 }

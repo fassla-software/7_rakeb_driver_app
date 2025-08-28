@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:ride_sharing_user_app/common_widgets/expandable_bottom_sheet.dart';
 import 'package:ride_sharing_user_app/features/map/controllers/otp_time_count_Controller.dart';
 import 'package:ride_sharing_user_app/features/ride/controllers/ride_controller.dart';
 import 'package:ride_sharing_user_app/helper/display_helper.dart';
@@ -12,7 +13,9 @@ import 'dart:math' as math;
 
 class OtpVerificationWidget extends StatefulWidget {
   final bool fromOtp;
-  const OtpVerificationWidget({super.key, this.fromOtp = true});
+  final GlobalKey<ExpandableBottomSheetState> expandableKey;
+  const OtpVerificationWidget(
+      {super.key, this.fromOtp = true, required this.expandableKey});
 
   @override
   State<OtpVerificationWidget> createState() => _OtpVerificationWidgetState();
@@ -137,6 +140,7 @@ class _OtpVerificationWidgetState extends State<OtpVerificationWidget> {
                           rideController.matchOtp(
                               rideController.tripDetail!.id!,
                               rideController.verificationCode);
+                          widget.expandableKey.currentState?.contract();
                         } else {
                           showCustomSnackBar("pin_code_is_required".tr);
                         }
@@ -157,10 +161,7 @@ class _OtpVerificationWidgetState extends State<OtpVerificationWidget> {
                                   width: Dimensions.iconSizeLarge,
                                   child: Transform(
                                     alignment: Alignment.center,
-                                    transform:
-                                        Get.find<LocalizationController>().isLtr
-                                            ? Matrix4.rotationY(0)
-                                            : Matrix4.rotationY(math.pi),
+                                    transform: Matrix4.rotationY(0), // Force LTR
                                     child: Image.asset(Images.arrowRight),
                                   )),
                             ),

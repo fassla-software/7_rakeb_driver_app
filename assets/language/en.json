@@ -12,6 +12,7 @@
   "home": "Home",
   "rides": "Rides",
   "notifications": "Notifications",
+  "not_at_time":"Trip can only be started within 1 hour of scheduled time",
   "profile": "Profile",
   "welcome_to": "Welcome to",
   "log_in": "Log In",

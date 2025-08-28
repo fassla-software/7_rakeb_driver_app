@@ -2,16 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:ride_sharing_user_app/common_widgets/image_widget.dart';
 import 'package:ride_sharing_user_app/common_widgets/snackbar_widget.dart';
 import 'package:ride_sharing_user_app/features/auth/controllers/auth_controller.dart';
+import 'package:ride_sharing_user_app/features/chat/controllers/chat_controller.dart';
 import 'package:ride_sharing_user_app/features/dashboard/screens/dashboard_screen.dart';
 import 'package:ride_sharing_user_app/features/map/controllers/map_controller.dart';
 import 'package:ride_sharing_user_app/features/map/screens/map_screen.dart';
 import 'package:ride_sharing_user_app/features/ride/controllers/ride_controller.dart';
 import 'package:ride_sharing_user_app/features/schedule/controllers/schedule_controller.dart';
 import 'package:ride_sharing_user_app/features/schedule/domain/models/accept_schedule_%20model.dart';
+import 'package:ride_sharing_user_app/features/splash/controllers/splash_controller.dart';
 import 'package:ride_sharing_user_app/helper/pusher_helper.dart';
+import 'package:ride_sharing_user_app/localization/localization_controller.dart';
 import 'package:ride_sharing_user_app/util/dimensions.dart';
+import 'package:ride_sharing_user_app/util/images.dart';
 import 'package:ride_sharing_user_app/util/styles.dart';
 import 'package:intl/intl.dart';
 
@@ -114,8 +120,114 @@ class AcceptScheduleCard extends StatelessWidget {
           ),
 
           const SizedBox(height: 20),
-
-          // Action Buttons
+          GetBuilder<RideController>(builder: (rideController) {
+            return Container(
+              width: Get.width,
+              decoration: BoxDecoration(
+                borderRadius:
+                    BorderRadius.circular(Dimensions.paddingSizeSmall),
+                border: Border.all(
+                    width: .75,
+                    color: Theme.of(context).hintColor.withOpacity(0.25)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(children: [
+                        Stack(children: [
+                          Container(
+                            transform: Matrix4.translationValues(
+                                Get.find<LocalizationController>().isLtr
+                                    ? -3
+                                    : 3,
+                                -3,
+                                0),
+                            child: CircularPercentIndicator(
+                              radius: 28,
+                              percent: .75,
+                              lineWidth: 1,
+                              backgroundColor: Colors.transparent,
+                              progressColor:
+                                  Theme.of(Get.context!).primaryColor,
+                            ),
+                          ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: ImageWidget(
+                              width: 50,
+                              height: 50,
+                              image: schedule.customer?.profileImage??"",
+                            ),
+                          ),
+                        ]),
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (schedule.customer!.firstName !=
+                                      null &&
+                                  schedule.customer!.lastName !=
+                                      null)
+                                SizedBox(
+                                    width: 100,
+                                    child: Text(
+                                      '${schedule.customer!.firstName!} ${schedule.customer!.lastName!}',
+                                    )),
+                              if (schedule.customer != null)
+                                Row(children: [
+                                  Icon(
+                                    Icons.star_rate_rounded,
+                                    color: Theme.of(Get.context!).primaryColor,
+                                    size: Dimensions.iconSizeMedium,
+                                  ),
+                                  Text(
+                                   "0",
+                                    style: textRegular.copyWith(),
+                                  ),
+                                ]),
+                            ]),
+                      ]),
+                      Container(
+                          width: 1,
+                          height: 25,
+                          color:
+                              Theme.of(context).primaryColor.withOpacity(0.15)),
+                      InkWell(
+                        onTap: () => Get.find<ChatController>().createChannel(
+                          schedule.customerId!,
+                          tripId: schedule.id,
+                        ),
+                        child: SizedBox(
+                          width: Dimensions.iconSizeLarge,
+                          child: Image.asset(Images.customerMessage),
+                        ),
+                      ),
+                      Container(
+                          width: 1,
+                          height: 25,
+                          color:
+                              Theme.of(context).primaryColor.withOpacity(0.15)),
+                      InkWell(
+                        onTap: () =>
+                            Get.find<SplashController>().sendMailOrCall(
+                          "tel:${rideController.tripDetail!.customer!.phone}",
+                          false,
+                        ),
+                        child: SizedBox(
+                          width: Dimensions.iconSizeLarge,
+                          child: Image.asset(Images.customerCall),
+                        ),
+                      ),
+                      const SizedBox()
+                    ]),
+              ),
+            );
+          }),
+          SizedBox(
+            height: 16,
+          ),
+          // Action ButtonsSized
           GetBuilder<ScheduleController>(
             builder: (controller) => controller.loadingTripId == schedule.id
                 ? Container(
@@ -137,6 +249,23 @@ class AcceptScheduleCard extends StatelessWidget {
                         child: _buildActionButton(
                           context: context,
                           onPressed: () {
+                            // Check if scheduled time is within 1 hour from now
+                            if (schedule.createdAt != null) {
+                              final now = DateTime.now();
+                              final scheduledTime = schedule.createdAt!;
+                              final timeDifference =
+                                  scheduledTime.difference(now);
+
+                              // If scheduled time is more than 1 hour in the future
+                              if (timeDifference.inHours >= 1) {
+                                SnackBarWidget(
+                                  'not_at_time'.tr,
+                                  isError: true,
+                                );
+                                return;
+                              }
+                            }
+
                             controller
                                 .acceptOrRejectTrip(schedule.id!, "accepted")
                                 .then((value) async {

@@ -206,6 +206,7 @@ class ScheduleTrip {
     final dynamic mapScreenshot;
     final dynamic tripCancellationReason;
     final Coordinate? coordinate;
+    final Customer? customer;
 
     ScheduleTrip({
         this.id,
@@ -251,6 +252,7 @@ class ScheduleTrip {
         this.mapScreenshot,
         this.tripCancellationReason,
         this.coordinate,
+        this.customer
     });
 
     ScheduleTrip copyWith({
@@ -297,6 +299,7 @@ class ScheduleTrip {
         dynamic mapScreenshot,
         dynamic tripCancellationReason,
         Coordinate? coordinate,
+        Customer? customer,
     }) => 
         ScheduleTrip(
             id: id ?? this.id,
@@ -342,6 +345,7 @@ class ScheduleTrip {
             mapScreenshot: mapScreenshot ?? this.mapScreenshot,
             tripCancellationReason: tripCancellationReason ?? this.tripCancellationReason,
             coordinate: coordinate ?? this.coordinate,
+            customer: customer ?? this.customer,
         );
 
     factory ScheduleTrip.fromJson(Map<String, dynamic> json) => ScheduleTrip(
@@ -388,6 +392,7 @@ class ScheduleTrip {
         mapScreenshot: json["map_screenshot"],
         tripCancellationReason: json["trip_cancellation_reason"],
         coordinate: json["coordinate"] == null ? null : Coordinate.fromJson(json["coordinate"]),
+        customer: json["customer"] == null ? null : Customer.fromJson(json["customer"]),
     );
 
     Map<String, dynamic> toJson() => {
@@ -434,6 +439,7 @@ class ScheduleTrip {
         "map_screenshot": mapScreenshot,
         "trip_cancellation_reason": tripCancellationReason,
         "coordinate": coordinate?.toJson(),
+        "customer": customer?.toJson(),
     };
 }
 
@@ -630,4 +636,144 @@ class Link {
         "label": label,
         "active": active,
     };
+}
+
+class Customer {
+  final String? id;
+  final String? fullName;
+  final String? userLevelId;
+  final String? firstName;
+  final String? lastName;
+  final String? email;
+  final String? phone;
+  final String? identificationNumber;
+  final String? identificationType;
+  final List<String>? identificationImage;
+  final String? oldIdentificationImage;
+  final String? otherDocuments;
+  final String? profileImage;
+  final String? fcmToken;
+  final String? phoneVerifiedAt;
+  final String? emailVerifiedAt;
+  final int? loyaltyPoints;
+  final String? password;
+  final String? refCode;
+  final String? userType;
+  final String? roleId;
+  final String? rememberToken;
+  final int? isActive;
+  final String? currentLanguageKey;
+  final String? deletedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final int? failedAttempt;
+  final int? isTempBlocked;
+  final String? blockedAt;
+
+  Customer({
+    this.id,
+    this.fullName,
+    this.userLevelId,
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.phone,
+    this.identificationNumber,
+    this.identificationType,
+    this.identificationImage,
+    this.oldIdentificationImage,
+    this.otherDocuments,
+    this.profileImage,
+    this.fcmToken,
+    this.phoneVerifiedAt,
+    this.emailVerifiedAt,
+    this.loyaltyPoints,
+    this.password,
+    this.refCode,
+    this.userType,
+    this.roleId,
+    this.rememberToken,
+    this.isActive,
+    this.currentLanguageKey,
+    this.deletedAt,
+    this.createdAt,
+    this.updatedAt,
+    this.failedAttempt,
+    this.isTempBlocked,
+    this.blockedAt,
+  });
+
+  factory Customer.fromJson(Map<String, dynamic> json) => Customer(
+        id: json["id"],
+        fullName: json["full_name"],
+        userLevelId: json["user_level_id"],
+        firstName: json["first_name"],
+        lastName: json["last_name"],
+        email: json["email"],
+        phone: json["phone"],
+        identificationNumber: json["identification_number"],
+        identificationType: json["identification_type"],
+        identificationImage: json["identification_image"] == null
+            ? []
+            : List<String>.from(json["identification_image"]!.map((x) => x)),
+        oldIdentificationImage: json["old_identification_image"],
+        otherDocuments: json["other_documents"],
+        profileImage: json["profile_image"],
+        fcmToken: json["fcm_token"],
+        phoneVerifiedAt: json["phone_verified_at"],
+        emailVerifiedAt: json["email_verified_at"],
+        loyaltyPoints: json["loyalty_points"],
+        password: json["password"],
+        refCode: json["ref_code"],
+        userType: json["user_type"],
+        roleId: json["role_id"],
+        rememberToken: json["remember_token"],
+        isActive: json["is_active"],
+        currentLanguageKey: json["current_language_key"],
+        deletedAt: json["deleted_at"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
+        failedAttempt: json["failed_attempt"],
+        isTempBlocked: json["is_temp_blocked"],
+        blockedAt: json["blocked_at"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "full_name": fullName,
+        "user_level_id": userLevelId,
+        "first_name": firstName,
+        "last_name": lastName,
+        "email": email,
+        "phone": phone,
+        "identification_number": identificationNumber,
+        "identification_type": identificationType,
+        "identification_image": identificationImage == null
+            ? []
+            : List<dynamic>.from(identificationImage!.map((x) => x)),
+        "old_identification_image": oldIdentificationImage,
+        "other_documents": otherDocuments,
+        "profile_image": profileImage,
+        "fcm_token": fcmToken,
+        "phone_verified_at": phoneVerifiedAt,
+        "email_verified_at": emailVerifiedAt,
+        "loyalty_points": loyaltyPoints,
+        "password": password,
+        "ref_code": refCode,
+        "user_type": userType,
+        "role_id": roleId,
+        "remember_token": rememberToken,
+        "is_active": isActive,
+        "current_language_key": currentLanguageKey,
+        "deleted_at": deletedAt,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+        "failed_attempt": failedAttempt,
+        "is_temp_blocked": isTempBlocked,
+        "blocked_at": blockedAt,
+      };
 }

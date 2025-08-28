@@ -72,7 +72,7 @@ class _RideAcceptedWidgetState extends State<RideAcceptedWidget> {
                     child: Column(children: [
                       (riderController.currentRideState == RideState.accepted &&
                               riderController.isInside)
-                          ? const OtpVerificationWidget()
+                          ?  OtpVerificationWidget(expandableKey: widget.expandableKey,)
                           : Column(children: [
                               const SizedBox(
                                   height: Dimensions.paddingSizeDefault),
@@ -106,7 +106,7 @@ class _RideAcceptedWidgetState extends State<RideAcceptedWidget> {
                                   horizontal: Dimensions.paddingSizeDefault,
                                 ),
                                 child:
-                                    const OtpVerificationWidget(fromOtp: false),
+                                     OtpVerificationWidget(fromOtp: false,expandableKey: widget.expandableKey,),
                               )
                             ]),
                       (riderController.currentRideState == RideState.accepted &&

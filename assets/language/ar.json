@@ -10,6 +10,8 @@
   "back_press_again_to_exit": "اضغط مرة أخرى للخروج",
   "home": "الرئيسية",
   "rides": "ركوب الخيل",
+
+  "not_at_time":"  لا تستطيع بدء الرحله حتي قبل موعد الرحله ١ ساعه ",
   "notifications": "إشعارات",
   "profile": "حساب تعريفي",
   "welcome_to": "مرحبا بك في",
@@ -356,7 +358,7 @@
   "this_app_collects_location_data": "يجمع هذا التطبيق بيانات الموقع",
   "minute": "دقيقة",
   "review_submitted_successfully": "تم إرسال المراجعة بنجاح",
-  "all_schedules": "كل الجداول",
+  "all_schedules": "كل المجداول",
   "accepted_schedules": " المقبولة",
   "use_current_location": "استخدام الموقع الحالي",
   "view_on_map": "عرض على الخريطة",

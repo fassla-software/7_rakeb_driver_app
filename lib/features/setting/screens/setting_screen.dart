@@ -32,10 +32,16 @@ class SettingScreen extends StatelessWidget {
               ]),
 
               GetBuilder<LocalizationController>(builder: (localizationController){
+                // Find matching language by languageCode only, ignore countryCode mismatch
+                LanguageModel? currentLanguage = AppConstants.languages.firstWhere(
+                  (lang) => lang.languageCode == localizationController.locale.languageCode,
+                  orElse: () => AppConstants.languages[0], // fallback to English
+                );
+                
                 return DropdownButton<Locale>(
                   isDense: true,
                   style: textMedium.copyWith(color: Theme.of(context).primaryColor),
-                  value: localizationController.locale,
+                  value: Locale(currentLanguage.languageCode, currentLanguage.countryCode),
                   underline: const SizedBox(),
                   icon: const Icon(Icons.keyboard_arrow_down_sharp),
                   elevation: 1,

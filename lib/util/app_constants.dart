@@ -176,5 +176,5 @@ class AppConstants {
   static const int balanceInputLen = 10;
 
   ///map zoom
-  static const double mapZoom = 20;
+  static const double mapZoom = 16;
 }
