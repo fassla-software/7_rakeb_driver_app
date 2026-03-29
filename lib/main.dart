@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -63,7 +64,8 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
-
+  String? deviceToken = await FirebaseMessaging.instance.getToken();
+  log("fcm token: $deviceToken");
   runApp(MyApp(languages: languages, notificationData: remoteMessage?.data));
 
   // Upload cached files on app start
