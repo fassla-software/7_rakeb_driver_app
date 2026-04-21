@@ -1,0 +1,9 @@
+import 'package:get/get_connect/http/src/response/response.dart';
+
+abstract class ScheduleRepositoriesInterface {
+    Future<Response> getAllScheduleTrips();
+      Future<Response> acceptScheduleTrip(String scheduleTripId);
+      Future<Response> cancelScheduleTrip(String scheduleTripId);
+      Future<Response> getAllAcceptSchedule();
+
+}

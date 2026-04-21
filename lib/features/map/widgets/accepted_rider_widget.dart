@@ -39,7 +39,13 @@ class _RideAcceptedWidgetState extends State<RideAcceptedWidget> {
   void initState() {
     Get.find<RiderMapController>().setSheetHeight(250, false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      tooltipController.showTooltip();
+      Future.delayed(const Duration(milliseconds: 500), () {
+        try {
+          tooltipController.showTooltip();
+        } catch (e) {
+          debugPrint("Tooltip not attached yet: $e");
+        }
+      });
     });
     super.initState();
   }
@@ -66,7 +72,7 @@ class _RideAcceptedWidgetState extends State<RideAcceptedWidget> {
                     child: Column(children: [
                       (riderController.currentRideState == RideState.accepted &&
                               riderController.isInside)
-                          ? const OtpVerificationWidget()
+                          ?  OtpVerificationWidget(expandableKey: widget.expandableKey,)
                           : Column(children: [
                               const SizedBox(
                                   height: Dimensions.paddingSizeDefault),
@@ -100,7 +106,7 @@ class _RideAcceptedWidgetState extends State<RideAcceptedWidget> {
                                   horizontal: Dimensions.paddingSizeDefault,
                                 ),
                                 child:
-                                    const OtpVerificationWidget(fromOtp: false),
+                                     OtpVerificationWidget(fromOtp: false,expandableKey: widget.expandableKey,),
                               )
                             ]),
                       (riderController.currentRideState == RideState.accepted &&

@@ -42,7 +42,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver{
   _findingCurrentRoute(){
     
     Get.find<RideController>().updateRoute(false, notify: false);
-    Get.find<RiderMapController>().setSheetHeight(Get.find<RiderMapController>().currentRideState == RideState.initial ? 1360 : 1360, false);
+    Get.find<RiderMapController>().setSheetHeight(Get.find<RiderMapController>().currentRideState == RideState.initial ? 1360 : 450, false);
     Get.find<RideController>().getPendingRideRequestList(1);
     if(Get.find<RideController>().ongoingTrip != null
         && Get.find<RideController>().ongoingTrip!.isNotEmpty
@@ -118,7 +118,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver{
               bearing: 192.8334901395799,
               target: LatLng(newLocalData.latitude, newLocalData.longitude),
               tilt: 0,
-              zoom: 16)));
+              zoom: 14)));
           updateMarkerAndCircle(newLocalData, imageData);
         }
       });
@@ -168,7 +168,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver{
                           rideController.tripDetail!.pickupCoordinates!.coordinates![1],
                           rideController.tripDetail!.pickupCoordinates!.coordinates![0],
                         ) : Get.find<LocationController>().initialPosition,
-                        zoom: 16,
+                        zoom: 14,
                       ),
                       onMapCreated: (GoogleMapController controller) async {
                         riderMapController.mapController = controller;
@@ -188,7 +188,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver{
                       minMaxZoomPreference: const MinMaxZoomPreference(0, AppConstants.mapZoom),
                       markers: Set<Marker>.of(riderMapController.markers),
                       polylines: riderMapController.polylines,
-                      zoomControlsEnabled: false,
+                      zoomControlsEnabled: true,
                       compassEnabled: false,
                       trafficEnabled: riderMapController.isTrafficEnable,
                       indoorViewEnabled: true,

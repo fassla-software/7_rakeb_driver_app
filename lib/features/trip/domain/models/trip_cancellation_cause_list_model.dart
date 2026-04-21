@@ -9,12 +9,12 @@ class TripCancellationCauseList {
 
   TripCancellationCauseList(
       {this.responseCode,
-        this.message,
-        this.totalSize,
-        this.limit,
-        this.offset,
-        this.data,
-        this.errors});
+      this.message,
+      this.totalSize,
+      this.limit,
+      this.offset,
+      this.data,
+      this.errors});
 
   TripCancellationCauseList.fromJson(Map<String, dynamic> json) {
     responseCode = json['response_code'];
@@ -22,10 +22,9 @@ class TripCancellationCauseList {
     totalSize = json['total_size'];
     limit = json['limit'];
     offset = json['offset'];
-    data = json['data'] != null ?  Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
     errors = json['errors'].cast<String>();
   }
-
 }
 
 class Data {
@@ -40,7 +39,7 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['ongoing_ride'] = ongoingRide;
     data['accepted_ride'] = acceptedRide;
     return data;

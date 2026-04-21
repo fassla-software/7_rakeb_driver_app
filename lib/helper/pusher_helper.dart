@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:audioplayers/audioplayers.dart';
+
 import 'package:dart_pusher_channels/dart_pusher_channels.dart';
 import 'package:get/get.dart';
 import 'package:ride_sharing_user_app/features/auth/controllers/auth_controller.dart';
@@ -9,6 +9,7 @@ import 'package:ride_sharing_user_app/features/ride/controllers/ride_controller.
 import 'package:ride_sharing_user_app/features/splash/controllers/splash_controller.dart';
 import 'package:ride_sharing_user_app/features/trip/screens/payment_received_screen.dart';
 import 'package:ride_sharing_user_app/features/trip/screens/review_this_customer_screen.dart';
+import 'package:ride_sharing_user_app/helper/notification_helper.dart';
 import '../features/dashboard/screens/dashboard_screen.dart';
 
 class PusherHelper {
@@ -16,13 +17,13 @@ class PusherHelper {
 
   static initilizePusher() async {
     PusherChannelsOptions testOptions = PusherChannelsOptions.fromHost(
-      host: Get.find<SplashController>().config!.webSocketUrl ?? '',
-      scheme: Get.find<SplashController>().config!.websocketScheme == 'https'
+      host: Get.find<SplashController>().config?.webSocketUrl ?? '',
+      scheme: Get.find<SplashController>().config?.websocketScheme == 'https'
           ? 'wss'
           : 'ws',
-      key: Get.find<SplashController>().config!.webSocketKey ?? '',
-      port: int.parse(
-          Get.find<SplashController>().config?.webSocketPort ?? '6001'),
+      key: Get.find<SplashController>().config?.webSocketKey ?? '',
+      port: int.tryParse(Get.find<SplashController>().config?.webSocketPort ?? '') ?? 6001,
+
     );
     pusherClient = PusherChannelsClient.websocket(
       options: testOptions,
@@ -152,8 +153,7 @@ class PusherHelper {
       if (driverTripSubscribe.currentStatus == null) {
         driverTripSubscribe.subscribeIfNotUnsubscribed();
         driverTripSubscribe.bind("customer-trip-request.$id").listen((event) {
-          AudioPlayer audio = AudioPlayer();
-          audio.play(AssetSource('notification.wav'));
+          NotificationHelper.startRideRequestSound();
           Get.find<RideController>().getPendingRideRequestList(1);
           Get.find<RideController>()
               .setRideId(jsonDecode(event.data!)['trip_id']);
@@ -202,6 +202,7 @@ class PusherHelper {
         customerInitialTripCancelChannel
             .bind("customer-trip-cancelled.$tripId.$userId")
             .listen((event) {
+          NotificationHelper.stopRideRequestSound();
           Get.find<RideController>().getPendingRideRequestList(1).then((value) {
             if (value.statusCode == 200) {
               Get.find<RiderMapController>()
@@ -242,6 +243,7 @@ class PusherHelper {
         anotherDriverAcceptedTripChannel
             .bind("another-driver-trip-accepted.$tripId.$userId")
             .listen((event) {
+          NotificationHelper.stopRideRequestSound();
           Get.find<RideController>().getPendingRideRequestList(1).then((value) {
             if (value.statusCode == 200) {
               Get.find<RiderMapController>()

@@ -44,10 +44,7 @@ class _RideOngoingWidgetState extends State<RideOngoingWidget> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      print('00widget.expandableKey.currentState?.expand();');
-      widget.expandableKey.currentState?.expand();
-    });
+   
   }
   @override
   Widget build(BuildContext context) {
@@ -375,10 +372,7 @@ class _RideOngoingWidgetState extends State<RideOngoingWidget> {
                   print('00000000000000000000');
                   currentState = 0;
                   setState(() {});
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    print('Trying to expand...');
-                    widget.expandableKey.currentState?.expand();
-                  });
+                 
                 }
 
 

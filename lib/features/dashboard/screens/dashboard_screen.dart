@@ -8,18 +8,28 @@ import 'package:ride_sharing_user_app/features/profile/controllers/profile_contr
 import 'package:ride_sharing_user_app/features/ride/controllers/ride_controller.dart';
 import 'package:ride_sharing_user_app/features/trip/screens/trip_screen.dart';
 import 'package:ride_sharing_user_app/features/wallet/screens/wallet_screen.dart';
+import 'package:ride_sharing_user_app/features/schedule/screens/schedule_screen.dart';
 import 'package:ride_sharing_user_app/util/dimensions.dart';
 import 'package:ride_sharing_user_app/util/images.dart';
 import 'package:ride_sharing_user_app/util/styles.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+  final int? initialScreen;
+  const DashboardScreen({super.key, this.initialScreen});
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
   final PageStorageBucket bucket = PageStorageBucket();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialScreen != null) {
+      Get.find<BottomMenuController>().setTabIndex(widget.initialScreen!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +45,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
           activeIcon: Images.activityActive,
           inactiveIcon: Images.activityOutline,
           screen: const TripHistoryMenu()),
+      NavigationModel(
+          name: 'schedule'.tr,
+          activeIcon: Images.calenderIcon,
+          inactiveIcon: Images.calenderOutline,
+          screen: const ScheduleScreen()),
       NavigationModel(
           name: 'notification'.tr,
           activeIcon: Images.notificationActive,
@@ -164,7 +179,7 @@ class CustomMenuItem extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: textRegular.copyWith(
-                            color: Colors.white,
+                            color:Theme.of(context).cardColor,
                             fontSize: Dimensions.fontSizeExtraSmall))
                     : const SizedBox(),
               ]),

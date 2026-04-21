@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -102,6 +104,7 @@ class AuthRepository implements AuthRepositoryInterface {
     String? deviceToken = '@';
     try {
       deviceToken = await FirebaseMessaging.instance.getToken();
+      log("fcm token: $deviceToken");
     }catch(e) {
       debugPrint('');
     }

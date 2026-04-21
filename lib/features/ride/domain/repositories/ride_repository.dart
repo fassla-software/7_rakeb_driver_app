@@ -97,6 +97,7 @@ class RideRepository implements RideRepositoryInterface{
       'status' : 'last_trip',
       'trip_type' : 'ride_request'
     });
+    
   }
 
   @override
