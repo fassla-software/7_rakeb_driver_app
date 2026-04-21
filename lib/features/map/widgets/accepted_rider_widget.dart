@@ -543,6 +543,42 @@ class _RideAcceptedWidgetState extends State<RideAcceptedWidget> {
                               borderColor: Theme.of(context).hintColor,
                               radius: Dimensions.paddingSizeSmall,
                               onPressed: () {
+                                // Get cancellation reason safely
+                                String cancellationReason = '';
+                                if (Get.find<TripController>()
+                                            .rideCancellationCauseList !=
+                                        null &&
+                                    Get.find<TripController>()
+                                            .rideCancellationCauseList!
+                                            .data !=
+                                        null &&
+                                    Get.find<TripController>()
+                                            .rideCancellationCauseList!
+                                            .data!
+                                            .acceptedRide !=
+                                        null &&
+                                    Get.find<TripController>()
+                                        .rideCancellationCauseList!
+                                        .data!
+                                        .acceptedRide!
+                                        .isNotEmpty) {
+                                  int index = Get.find<TripController>()
+                                      .rideCancellationCurrentIndex;
+                                  if (index >= 0 &&
+                                      index <
+                                          Get.find<TripController>()
+                                              .rideCancellationCauseList!
+                                              .data!
+                                              .acceptedRide!
+                                              .length) {
+                                    cancellationReason =
+                                        Get.find<TripController>()
+                                            .rideCancellationCauseList!
+                                            .data!
+                                            .acceptedRide![index];
+                                  }
+                                }
+
                                 Get.find<RideController>().remainingDistance(
                                   rideController.tripDetail!.id!,
                                   mapBound: true,
@@ -552,12 +588,7 @@ class _RideAcceptedWidgetState extends State<RideAcceptedWidget> {
                                   'cancelled',
                                   rideController.tripDetail!.id!,
                                   "trip_cancelled_successfully",
-                                  Get.find<TripController>()
-                                          .rideCancellationCauseList!
-                                          .data!
-                                          .acceptedRide![
-                                      Get.find<TripController>()
-                                          .rideCancellationCurrentIndex],
+                                  cancellationReason,
                                 )
                                     .then((value) async {
                                   if (value.statusCode == 200) {
@@ -623,6 +654,7 @@ class _RideAcceptedWidgetState extends State<RideAcceptedWidget> {
                               textColor: Theme.of(context).cardColor,
                               radius: Dimensions.paddingSizeSmall,
                               onPressed: () {
+                                debugPrint("onPressed33333333");
                                 rideController
                                     .tripStatusUpdate(
                                   'cancelled',

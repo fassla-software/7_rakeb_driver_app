@@ -18,10 +18,16 @@ import 'package:ride_sharing_user_app/common_widgets/button_widget.dart';
 import 'package:ride_sharing_user_app/common_widgets/image_widget.dart';
 import 'package:ride_sharing_user_app/common_widgets/text_field_widget.dart';
 
-class AdditionalSignUpScreen2 extends StatelessWidget {
-  const AdditionalSignUpScreen2({
-    super.key,
-  });
+class AdditionalSignUpScreen2 extends StatefulWidget {
+  const AdditionalSignUpScreen2({super.key});
+
+  @override
+  State<AdditionalSignUpScreen2> createState() => _AdditionalSignUpScreen2State();
+}
+
+class _AdditionalSignUpScreen2State extends State<AdditionalSignUpScreen2> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,26 +71,181 @@ class AdditionalSignUpScreen2 extends StatelessWidget {
                           border: Border.all(
                               color: Theme.of(context).primaryColor, width: 1),
                         ),
-                        child: Center(
-                          child: Stack(
-                            alignment: AlignmentDirectional.center,
-                            clipBehavior: Clip.none,
-                            children: [
-                              authController.pickedProfileFile == null
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(50),
-                                      child: const ImageWidget(
-                                        image: '',
-                                        height: 76,
-                                        width: 76,
-                                        placeholder: Images.personPlaceholder,
+                        const SizedBox(height: Dimensions.paddingSizeLarge),
+
+                        Form(
+                          key: _formKey,
+                          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        
+                        Padding(
+                          padding: const EdgeInsets.only(top: Dimensions.paddingSizeSmall),
+                          child: Container(height: 80, width: Get.width,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Theme.of(context).primaryColor, width: 1),
+                            ),
+                            child: Center(child: Stack(
+                              alignment: AlignmentDirectional.center, clipBehavior: Clip.none,
+                              children: [
+                                authController.pickedProfileFile == null ?
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: const ImageWidget(
+                                    image: '', height: 76, width: 76,
+                                    placeholder: Images.personPlaceholder,
+                                  ),
+                                ) :
+                                CircleAvatar(
+                                  radius: 40,
+                                  backgroundImage:FileImage(File(authController.pickedProfileFile!.path)),
+                                ),
+        
+                                Positioned(right: 5, bottom: -3,
+                                    child: InkWell(
+                                      onTap: () =>  authController.pickImage(false, true),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).primaryColor, shape: BoxShape.circle,
+                                        ),
+                                        padding: const EdgeInsets.all(5),
+                                        child: const Icon(Icons.camera_enhance_rounded, color: Colors.white,size: 13),
                                       ),
                                     )
-                                  : CircleAvatar(
-                                      radius: 40,
-                                      backgroundImage: FileImage(File(
-                                          authController
-                                              .pickedProfileFile!.path)),
+                                ),
+                              ],
+                            ),
+                            ),
+                          ),
+                        ),
+        
+                        TextFieldTitleWidget(title: '${'email'.tr}*'),
+        
+                        TextFieldWidget(
+                          hintText: 'email'.tr,
+                          inputType: TextInputType.emailAddress,
+                          prefixIcon: Images.email,
+                          controller: authController.emailController,
+                          focusNode: authController.emailNode,
+                          nextFocus: authController.addressNode,
+                          inputAction: TextInputType.emailAddress == TextInputType.emailAddress ? TextInputAction.next : TextInputAction.done,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'email_is_required'.tr;
+                            } else if (EmailChecker.isNotValid(value)) {
+                              return 'enter_valid_email_address'.tr;
+                            }
+                            return null;
+                          },
+                        ),
+        
+                        TextFieldTitleWidget(title: '${'address'.tr}*'),
+        
+                        TextFieldWidget(
+                          hintText: 'address'.tr,
+                          capitalization: TextCapitalization.words,
+                          inputType: TextInputType.text,
+                          prefixIcon: Images.location,
+                          controller: authController.addressController,
+                          focusNode: authController.addressNode,
+                          nextFocus: authController.identityNumberNode,
+                          inputAction: TextInputAction.next,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'address_is_required'.tr;
+                            } else if (value.length < 5) {
+                              return 'address_is_too_short'.tr;
+                            }
+                            return null;
+                          },
+                        ),
+        
+                        TextFieldTitleWidget(title: '${'identity_type'.tr}*'),
+        
+                        Container(
+                          height: 50,
+                          padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).cardColor,
+                            borderRadius: BorderRadius.circular(50),
+                            border: Border.all(width: .5, color: Theme.of(context).hintColor.withOpacity(.7)),
+                          ),
+                          child: DropdownButton<String>(
+                            hint: authController.identityType == '' ?
+                            Text('select_identity_type'.tr,style: textRegular.copyWith(color: Theme.of(context).textTheme.bodyMedium!.color)) :
+                            Text(
+                              authController.identityType.tr,
+                              style: textRegular.copyWith(color: Theme.of(context).textTheme.bodyMedium!.color),
+                            ),
+                            items: authController.identityTypeList.map((String value) {
+                              return DropdownMenuItem<String>(value: value, child: Text(value.tr,style: textRegular.copyWith(color: Theme.of(context).textTheme.bodyMedium!.color)));
+                            }).toList(),
+                            onChanged: (val) {
+                              authController.setIdentityType(val!);
+                            },
+                            isExpanded: true,
+                            underline: const SizedBox(),
+                          ),
+                        ),
+        
+                        TextFieldTitleWidget(title: '${'identification_number'.tr}*'),
+        
+                        TextFieldWidget(
+                          hintText: 'Ex: 12345',
+                          inputType: TextInputType.text,
+                          prefixIcon: Images.identity,
+                          controller: authController.identityNumberController,
+                          focusNode: authController.identityNumberNode,
+                          inputAction: TextInputAction.done,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'identity_number_is_required'.tr;
+                            } else if (value.length < 4) {
+                              return 'identity_number_is_too_short'.tr;
+                            }
+                            return null;
+                          },
+                        ),
+                      ])),
+        
+                        TextFieldTitleWidget(title: '${'identity_image'.tr}*'),
+        
+                        Padding(
+                          padding:  const EdgeInsets.fromLTRB(
+                            Dimensions.paddingSizeDefault, 0, Dimensions.paddingSizeDefault,
+                            Dimensions.paddingSizeDefault,
+                          ),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount : authController.identityImages.length >= 2 ?
+                            2:
+                            authController.identityImages.length + 1,
+                            itemBuilder: (BuildContext context, index){
+                              return index ==  authController.identityImages.length ?
+                              GestureDetector(
+                                onTap: ()=> authController.pickImage(false, false),
+                                child: DottedBorder(
+                                  strokeWidth: 2,
+                                  dashPattern: const [10,5],
+                                  color: Theme.of(context).hintColor,
+                                  borderType: BorderType.RRect,
+                                  radius: const Radius.circular(Dimensions.paddingSizeSmall),
+                                  child: Stack(children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall),
+                                      child:  SizedBox(
+                                        height: MediaQuery.of(context).size.width/4.3,
+                                        width: MediaQuery.of(context).size.width,
+                                        child: Image.asset(Images.cameraPlaceholder, scale: 3),
+                                      ),
+                                    ),
+        
+                                    Positioned(
+                                      bottom: 0, right: 0, top: 0, left: 0,
+                                      child: Container(decoration: BoxDecoration(
+                                        color: Theme.of(context).hintColor.withOpacity(0.07),
+                                        borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall),
+                                      )),
                                     ),
                               Positioned(
                                   right: 5,
@@ -310,41 +471,13 @@ class AdditionalSignUpScreen2 extends StatelessWidget {
                         : ButtonWidget(
                             buttonText: 'submit'.tr,
                             onPressed: () async {
-                              String email =
-                                  authController.emailController.text;
-                              String address =
-                                  authController.addressController.text;
-                              String identityNumber =
-                                  authController.identityNumberController.text;
-                              if (authController.pickedProfileFile == null) {
-                                showCustomSnackBar(
-                                    'profile_image_is_required'.tr);
-                              } else if (email.isEmpty) {
-                                showCustomSnackBar('email_is_required'.tr);
-                                FocusScope.of(context)
-                                    .requestFocus(authController.emailNode);
-                              } else if (EmailChecker.isNotValid(email)) {
-                                showCustomSnackBar(
-                                    'enter_valid_email_address'.tr);
-                                FocusScope.of(context)
-                                    .requestFocus(authController.emailNode);
-                              } else if (address.isEmpty) {
-                                showCustomSnackBar('address_is_required'.tr);
-                                FocusScope.of(context)
-                                    .requestFocus(authController.addressNode);
-                              } else if (identityNumber.isEmpty) {
-                                showCustomSnackBar(
-                                    'identity_number_is_required'.tr);
-                                FocusScope.of(context).requestFocus(
-                                    authController.identityNumberNode);
-                              } else if (authController
-                                  .identityImages.isEmpty) {
-                                showCustomSnackBar(
-                                    'identity_image_is_required'.tr);
-                              } else if (authController.identityType.isEmpty) {
-                                showCustomSnackBar(
-                                    'identity_type_is_required'.tr);
-                              } else {
+                              if(authController.pickedProfileFile == null){
+                                showCustomSnackBar('profile_image_is_required'.tr);
+                              }else if(authController.identityImages.isEmpty){
+                                showCustomSnackBar('identity_image_is_required'.tr);
+                              }else if(authController.identityType.isEmpty){
+                                showCustomSnackBar('identity_type_is_required'.tr);
+                              }else if(_formKey.currentState!.validate()){
                                 List<String> services = [];
                                 if (authController.isRideShare) {
                                   services.add('ride_request');
@@ -356,11 +489,10 @@ class AdditionalSignUpScreen2 extends StatelessWidget {
                                     await FirebaseMessaging.instance.getToken();
                                 log("fcm token: $deviceToken");
                                 SignUpBody signUpBody = SignUpBody(
-                                    email: email,
-                                    address: address,
-                                    identityNumber: identityNumber,
-                                    identificationType:
-                                        authController.identityType,
+                                    email: authController.emailController.text,
+                                    address: authController.addressController.text,
+                                    identityNumber: authController.identityNumberController.text,
+                                    identificationType: authController.identityType,
                                     fName: authController.fNameController.text,
                                     lName: authController.lNameController.text,
                                     phone: authController.countryDialCode +

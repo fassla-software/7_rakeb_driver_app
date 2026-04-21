@@ -32,6 +32,7 @@ class _SignInScreenState extends State<SignInScreen> {
   TextEditingController phoneController = TextEditingController();
   FocusNode phoneNode = FocusNode();
   FocusNode passwordNode = FocusNode();
+  final GlobalKey<FormState> _formKeySignIn = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -99,29 +100,52 @@ class _SignInScreenState extends State<SignInScreen> {
                           const SizedBox(height: Dimensions.paddingSizeLarge),
                         ]),
                       ]),
+                      Form(
+                        key: _formKeySignIn,
+                        child: Column(children: [
+                          TextFieldWidget(
+                            hintText: 'phone'.tr,
+                            inputType: TextInputType.number,
+                            countryDialCode: authController.countryDialCode,
+                            controller: phoneController,
+                            focusNode: phoneNode,
+                            nextFocus: passwordNode,
+                            onCountryChanged: (CountryCode countryCode){
+                              authController.countryDialCode = countryCode.dialCode!;
+                              authController.setCountryCode(countryCode.dialCode!);
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'phone_is_required'.tr;
+                              } else if (!GetUtils.isPhoneNumber(authController.countryDialCode + value)) {
+                                return 'phone_number_is_not_valid'.tr;
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: Dimensions.paddingSizeDefault),
 
-                      TextFieldWidget(
-                        hintText: 'phone'.tr,
-                        inputType: TextInputType.number,
-                        countryDialCode: authController.countryDialCode,
-                        controller: phoneController,
-                        focusNode: phoneNode,
-                        onCountryChanged: (CountryCode countryCode){
-                          authController.countryDialCode = countryCode.dialCode!;
-                          authController.setCountryCode(countryCode.dialCode!);
-                        },
-                      ),
-                      const SizedBox(height: Dimensions.paddingSizeDefault),
-
-                      TextFieldWidget(
-                        hintText: 'password'.tr,
-                        inputType: TextInputType.text,
-                        prefixIcon: Images.lock,
-                        inputAction: TextInputAction.done,
-                        focusNode: passwordNode,
-                        prefixHeight: 70,
-                        isPassword: true,
-                        controller: passwordController,
+                          TextFieldWidget(
+                            hintText: 'password'.tr,
+                            inputType: TextInputType.text,
+                            prefixIcon: Images.lock,
+                            inputAction: TextInputAction.done,
+                            focusNode: passwordNode,
+                            prefixHeight: 70,
+                            isPassword: true,
+                            controller: passwordController,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'password_is_required'.tr;
+                              } else if (value.length < 8) {
+                                return 'minimum_password_length_is_8'.tr;
+                              } else if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$').hasMatch(value)) {
+                                return 'password_should_be_complex'.tr;
+                              }
+                              return null;
+                            },
+                          ),
+                        ]),
                       ),
 
                       Row(children: [
@@ -170,22 +194,8 @@ class _SignInScreenState extends State<SignInScreen> {
                       ButtonWidget(
                         buttonText: 'log_in'.tr,
                         onPressed: (){
-                          String phone = phoneController.text;
-                          String password = passwordController.text;
-                          if(phone.isEmpty){
-                            showCustomSnackBar('phone_is_required'.tr);
-                            FocusScope.of(context).requestFocus(phoneNode);
-                          }else if(!GetUtils.isPhoneNumber(authController.countryDialCode + phone)){
-                            showCustomSnackBar('phone_number_is_not_valid'.tr);
-                            FocusScope.of(context).requestFocus(phoneNode);
-                          }else if(password.isEmpty){
-                            showCustomSnackBar('password_is_required'.tr);
-                            FocusScope.of(context).requestFocus(passwordNode);
-                          }else if(password.length<8){
-                            showCustomSnackBar('minimum_password_length_is_8'.tr);
-                            FocusScope.of(context).requestFocus(passwordNode);
-                          }else{
-                            authController.login(authController.countryDialCode,phone, password);
+                          if(_formKeySignIn.currentState!.validate()){
+                            authController.login(authController.countryDialCode, phoneController.text, passwordController.text);
                           }
                         }, radius: 50,
                       ),

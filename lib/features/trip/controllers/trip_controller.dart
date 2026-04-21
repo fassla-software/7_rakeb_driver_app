@@ -12,6 +12,7 @@ import 'package:ride_sharing_user_app/features/ride/controllers/ride_controller.
 import 'package:ride_sharing_user_app/features/ride/domain/models/trip_details_model.dart';
 import 'package:ride_sharing_user_app/features/trip/domain/models/trip_model.dart';
 import 'package:ride_sharing_user_app/features/trip/domain/models/trip_overview_model.dart';
+import 'package:ride_sharing_user_app/features/trip/screens/review_this_customer_screen.dart';
 
 class TripController extends GetxController implements GetxService {
   final TripServiceInterface tripServiceInterface;
@@ -187,7 +188,7 @@ class TripController extends GetxController implements GetxService {
           Get.find<RideController>().updateRoute(false, notify: true);
         });
       } else {
-        Get.offAll(() => const DashboardScreen());
+        Get.offAll(() => ReviewThisCustomerScreen(tripId: tripId));
       }
       isLoading = false;
     } else {
