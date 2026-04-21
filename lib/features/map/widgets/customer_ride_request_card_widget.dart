@@ -107,6 +107,11 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                         style: textRegular.copyWith(
                             color: Theme.of(Get.context!).primaryColor),
                       ),
+                    Text(
+                      '${'total_distance'.tr} : ${rideRequest.estimatedDistance?.toStringAsFixed(2) ?? '0'} km',
+                      style: textRegular.copyWith(
+                          color: Theme.of(Get.context!).primaryColor),
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: Dimensions.paddingSizeDefault),
@@ -142,24 +147,24 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                             ),
                           ]),
                     ),
-                                      Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "this_trip_start_at".tr,
-                        style: textRegular,
-                      ),
-                      Text(
-                        DateConverter.formatDate(
-                            DateTime.parse(rideRequest.createdAt ?? "")),
-                        style: textRegular.copyWith(
-                            color: Theme.of(Get.context!).primaryColor),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: Dimensions.paddingSizeSmall,
-                  ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "this_trip_start_at".tr,
+                          style: textRegular,
+                        ),
+                        Text(
+                          DateConverter.formatDate(
+                              DateTime.parse(rideRequest.createdAt ?? "")),
+                          style: textRegular.copyWith(
+                              color: Theme.of(Get.context!).primaryColor),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: Dimensions.paddingSizeSmall,
+                    ),
                     RouteWidget(
                       fromCard: true,
                       pickupAddress: rideRequest.pickupAddress!,
@@ -568,6 +573,11 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                     style: textRegular.copyWith(
                         color: Theme.of(Get.context!).primaryColor),
                   ),
+                  Text(
+                    '${'total_distance'.tr} : ${rideRequest.estimatedDistance?.toStringAsFixed(2) ?? '0'} km',
+                    style: textRegular.copyWith(
+                        color: Theme.of(Get.context!).primaryColor),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: Dimensions.paddingSizeDefault),
@@ -782,7 +792,7 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
 
                                                         Get.offAll(() =>
                                                             const DashboardScreen(
-                                                             initialScreen: 2,
+                                                              initialScreen: 2,
                                                             ));
                                                       }
                                                     });

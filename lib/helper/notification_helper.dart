@@ -36,6 +36,54 @@ import 'package:ride_sharing_user_app/features/trip/screens/payment_received_scr
 import 'package:ride_sharing_user_app/features/trip/screens/review_this_customer_screen.dart';
 
 class NotificationHelper {
+  static AudioPlayer? _player;
+  static Timer? _loopTimer;
+  static Timer? _stopTimer;
+
+  static void startRideRequestSound() async {
+    await stopRideRequestSound();
+
+    try {
+      _player = AudioPlayer();
+
+      // Play immediately (first play)
+      await _player!.play(AssetSource('notification2.wav'));
+
+      // Replay every 2 seconds (the sound is 2 seconds long)
+      int playCount = 1;
+      _loopTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
+        playCount++;
+        if (playCount >= 5) {
+          timer.cancel();
+        }
+        try {
+          await _player?.stop();
+          await _player?.play(AssetSource('notification2.wav'));
+        } catch (_) {}
+      });
+
+      // Hard stop after 10 seconds
+      _stopTimer = Timer(const Duration(seconds: 10), () {
+        stopRideRequestSound();
+      });
+    } catch (e) {
+      print('Error playing ride request sound: $e');
+      await stopRideRequestSound();
+    }
+  }
+
+  static Future<void> stopRideRequestSound() async {
+    _loopTimer?.cancel();
+    _loopTimer = null;
+    _stopTimer?.cancel();
+    _stopTimer = null;
+    try {
+      await _player?.stop();
+      await _player?.dispose();
+    } catch (_) {}
+    _player = null;
+  }
+
   static Future<void> initialize(
       FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
     AndroidInitializationSettings androidInitialize =
@@ -105,8 +153,9 @@ class NotificationHelper {
                 'Disconnected') {
           if (message.data['action'] == "new_ride_request_notification") {
             Get.find<RideController>().getPendingRideRequestList(1);
-            AudioPlayer audio = AudioPlayer();
-            audio.play(AssetSource('notification.wav'));
+
+            startRideRequestSound();
+
             Get.find<RideController>()
                 .setRideId(message.data['ride_request_id']);
             Get.find<RideController>()
@@ -140,6 +189,7 @@ class NotificationHelper {
             });
           } else if (message.data['action'] == "ride_accepted") {
             ///Bid Ride Accepted in this case....
+            stopRideRequestSound();
             Get.find<RideController>()
                 .getRideDetails(message.data['ride_request_id'])
                 .then((value) {
@@ -181,6 +231,7 @@ class NotificationHelper {
             });
           } else if (message.data['action'] == "ride_cancelled" ||
               message.data['action'] == "ride_started") {
+            stopRideRequestSound();
             Get.find<RideController>()
                 .getPendingRideRequestList(1)
                 .then((value) {
@@ -199,6 +250,7 @@ class NotificationHelper {
               }
             });
           } else if (message.data['action'] == "bid_rejected") {
+            stopRideRequestSound();
             Get.offAll(() => const DashboardScreen());
           } else if (message.data['action'] == 'identity_image_approved' ||
               message.data['action'] == 'identity_image_rejected') {

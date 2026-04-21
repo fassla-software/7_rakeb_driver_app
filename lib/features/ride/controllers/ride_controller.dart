@@ -388,7 +388,7 @@ class RideController extends GetxController implements GetxService {
         arrivalDestination(tripId, "destination");
         getRideDetails(tripId);
         AudioPlayer audio = AudioPlayer();
-        audio.play(AssetSource('notification.wav'));
+        audio.play(AssetSource('notification2.wav'));
       }
     } else {
       isLoading = false;

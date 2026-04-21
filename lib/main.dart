@@ -46,7 +46,6 @@ Future<void> main() async {
   // FlutterError.onError = (errorDetails) {
   //   FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
   // };
-  //
   // PlatformDispatcher.instance.onError = (error, stack) {
   //   FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
   //   return true;
@@ -148,8 +147,7 @@ class MyApp extends StatelessWidget {
                                                   .subscriptionStatus ==
                                               null
                                       ? SizedBox.shrink()
-                                      :
-                                       Positioned(
+                                      : Positioned(
                                           top: Get.height * 0.3,
                                           right: 0,
                                           child: GestureDetector(
