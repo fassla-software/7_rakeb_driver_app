@@ -49,6 +49,13 @@
   "identity_image_front_is_required": "مقدمة صورة الهوية مطلوبة",
   "identity_image_back_is_required": "صورة الهوية مطلوبة",
   "minimum_password_length_is_8": "الحد الأدنى لطول كلمة المرور هو 8",
+  "first_name_is_too_short": "الاسم الأول قصير جدًا",
+  "last_name_is_too_short": "اسم العائلة قصير جدًا",
+  "first_name_should_only_contain_letters": "يجب أن يحتوي الاسم الأول على أحرف فقط",
+  "last_name_should_only_contain_letters": "يجب أن يحتوي اسم العائلة على أحرف فقط",
+  "password_should_be_complex": "يجب أن تحتوي كلمة المرور على حرف كبير واحد وحرف صغير واحد ورقم واحد على الأقل",
+  "address_is_too_short": "العنوان قصير جدًا",
+  "identity_number_is_too_short": "رقم الهوية قصير جدًا",
   "activity": "نشاط",
   "notification": "إشعار",
   "money": "مال",
@@ -769,6 +776,6 @@
   "file_already_downloaded": "تم تنزيل الملف بالفعل",
   "downloaded_successfully": "تم التنزيل بنجاح",
   "download_failed": "فشل التنزيل",
-  "please_contact_us_to_renew_your_subscription": "برجاء التواصل معنا لتجديد الاشتراك",
+  "please_contact_us_to_renew_your_subscription": "رجاء التواصل مع الدعم لتفعيل الاشتراك\nهاتف 01034892158",
   "approval_note": "مذكرة الموافقة"
 }

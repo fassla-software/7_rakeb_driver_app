@@ -17,9 +17,16 @@ import 'package:ride_sharing_user_app/common_widgets/button_widget.dart';
 import 'package:ride_sharing_user_app/common_widgets/image_widget.dart';
 import 'package:ride_sharing_user_app/common_widgets/text_field_widget.dart';
 
-class AdditionalSignUpScreen2 extends StatelessWidget {
+class AdditionalSignUpScreen2 extends StatefulWidget {
+  const AdditionalSignUpScreen2({super.key});
 
-  const AdditionalSignUpScreen2({super.key,});
+  @override
+  State<AdditionalSignUpScreen2> createState() => _AdditionalSignUpScreen2State();
+}
+
+class _AdditionalSignUpScreen2State extends State<AdditionalSignUpScreen2> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,6 +50,10 @@ class AdditionalSignUpScreen2 extends StatelessWidget {
                           )),
                         ),
                         const SizedBox(height: Dimensions.paddingSizeLarge),
+
+                        Form(
+                          key: _formKey,
+                          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         
                         Padding(
                           padding: const EdgeInsets.only(top: Dimensions.paddingSizeSmall),
@@ -94,7 +105,15 @@ class AdditionalSignUpScreen2 extends StatelessWidget {
                           controller: authController.emailController,
                           focusNode: authController.emailNode,
                           nextFocus: authController.addressNode,
-                          inputAction: TextInputAction.next,
+                          inputAction: TextInputType.emailAddress == TextInputType.emailAddress ? TextInputAction.next : TextInputAction.done,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'email_is_required'.tr;
+                            } else if (EmailChecker.isNotValid(value)) {
+                              return 'enter_valid_email_address'.tr;
+                            }
+                            return null;
+                          },
                         ),
         
                         TextFieldTitleWidget(title: '${'address'.tr}*'),
@@ -108,6 +127,14 @@ class AdditionalSignUpScreen2 extends StatelessWidget {
                           focusNode: authController.addressNode,
                           nextFocus: authController.identityNumberNode,
                           inputAction: TextInputAction.next,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'address_is_required'.tr;
+                            } else if (value.length < 5) {
+                              return 'address_is_too_short'.tr;
+                            }
+                            return null;
+                          },
                         ),
         
                         TextFieldTitleWidget(title: '${'identity_type'.tr}*'),
@@ -147,7 +174,16 @@ class AdditionalSignUpScreen2 extends StatelessWidget {
                           controller: authController.identityNumberController,
                           focusNode: authController.identityNumberNode,
                           inputAction: TextInputAction.done,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'identity_number_is_required'.tr;
+                            } else if (value.length < 4) {
+                              return 'identity_number_is_too_short'.tr;
+                            }
+                            return null;
+                          },
                         ),
+                      ])),
         
                         TextFieldTitleWidget(title: '${'identity_image'.tr}*'),
         
@@ -242,29 +278,13 @@ class AdditionalSignUpScreen2 extends StatelessWidget {
                         Center(child: SpinKitCircle(color: Theme.of(context).primaryColor, size: 40.0)) :
                         ButtonWidget(buttonText: 'submit'.tr,
                             onPressed: () async {
-                              String email = authController.emailController.text;
-                              String address = authController.addressController.text;
-                              String identityNumber = authController.identityNumberController.text;
                               if(authController.pickedProfileFile == null){
                                 showCustomSnackBar('profile_image_is_required'.tr);
-                              }else if(email.isEmpty){
-                                showCustomSnackBar('email_is_required'.tr);
-                                FocusScope.of(context).requestFocus(authController.emailNode);
-                              }else if (EmailChecker.isNotValid(email)) {
-                                showCustomSnackBar('enter_valid_email_address'.tr);
-                                FocusScope.of(context).requestFocus(authController.emailNode);
-                              }else if(address.isEmpty){
-                                showCustomSnackBar('address_is_required'.tr);
-                                FocusScope.of(context).requestFocus(authController.addressNode);
-                              }else if(identityNumber.isEmpty){
-                                showCustomSnackBar('identity_number_is_required'.tr);
-                                FocusScope.of(context).requestFocus(authController.identityNumberNode);
                               }else if(authController.identityImages.isEmpty){
                                 showCustomSnackBar('identity_image_is_required'.tr);
                               }else if(authController.identityType.isEmpty){
                                 showCustomSnackBar('identity_type_is_required'.tr);
-                              }
-                              else{
+                              }else if(_formKey.currentState!.validate()){
                                 List<String> services = [];
                                 if(authController.isRideShare){
                                   services.add('ride_request');
@@ -274,9 +294,9 @@ class AdditionalSignUpScreen2 extends StatelessWidget {
                                 }
                                 String? deviceToken = await FirebaseMessaging.instance.getToken();
                                 SignUpBody signUpBody = SignUpBody(
-                                    email: email,
-                                    address: address,
-                                    identityNumber: identityNumber,
+                                    email: authController.emailController.text,
+                                    address: authController.addressController.text,
+                                    identityNumber: authController.identityNumberController.text,
                                     identificationType: authController.identityType,
                                     fName: authController.fNameController.text,
                                     lName: authController.lNameController.text,

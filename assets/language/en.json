@@ -51,6 +51,13 @@
   "identity_image_front_is_required": "Identity image front is required",
   "identity_image_back_is_required": "Identity image back is required",
   "minimum_password_length_is_8": "Minimum password length is 8",
+  "first_name_is_too_short": "First name is too short",
+  "last_name_is_too_short": "Last name is too short",
+  "first_name_should_only_contain_letters": "First name should only contain letters",
+  "last_name_should_only_contain_letters": "Last name should only contain letters",
+  "password_should_be_complex": "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+  "address_is_too_short": "Address is too short",
+  "identity_number_is_too_short": "Identity number is too short",
   "activity": "Activity",
   "notification": "Notification",
   "money": "Money",
@@ -776,6 +783,6 @@
   "permanently_delete_confirm_msg": "Are you sure? You want to permanently delete your account. You cant retrieve this account in future",
   "for_demo_purpose_use": "For demo purpose use 000000 as OTP",
   "denied_note": "Denied Note",
-  "please_contact_us_to_renew_your_subscription": "Please contact us to renew your subscription.",
+  "please_contact_us_to_renew_your_subscription": "Please contact support to activate your subscription\nPhone: 01034892158",
   "approval_note": "Approval Note"
 }
