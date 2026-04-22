@@ -55,11 +55,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
           activeIcon: Images.notificationActive,
           inactiveIcon: Images.notificationOutline,
           screen: const NotificationMenu()),
-      NavigationModel(
-          name: 'money'.tr,
-          activeIcon: Images.moneyActive,
-          inactiveIcon: Images.moneyOutline,
-          screen: const WalletScreenMenu()),
+      // NavigationModel(
+      //     name: 'money'.tr,
+      //     activeIcon: Images.moneyActive,
+      //     inactiveIcon: Images.moneyOutline,
+      //     screen: const WalletScreenMenu()),
     ];
 
     return PopScope(
@@ -179,7 +179,7 @@ class CustomMenuItem extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: textRegular.copyWith(
-                            color:Theme.of(context).cardColor,
+                            color: Theme.of(context).cardColor,
                             fontSize: Dimensions.fontSizeExtraSmall))
                     : const SizedBox(),
               ]),

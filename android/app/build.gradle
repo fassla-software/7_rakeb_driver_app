@@ -31,7 +31,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "com.rakebdriver.hwilo"
+    namespace "com.fassladev.wasalny"
     compileSdk 36
     ndkVersion = "27.0.12077973"
 
@@ -50,7 +50,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.rakebdriver.hwilo"
+        applicationId "com.fassladev.wasalny"
         minSdkVersion 24
         targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()

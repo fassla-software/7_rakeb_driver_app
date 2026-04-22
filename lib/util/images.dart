@@ -1,8 +1,8 @@
 class Images {
   static const String logo = 'assets/image/logo.png';
 
-  static const String logoNameWhite = 'assets/image/logo_name_white.png';
-  static const String logoNameBlack = 'assets/image/logo_name_black.png';
+  static const String logoNameWhite = 'assets/image/logo.png';
+  static const String logoNameBlack = 'assets/image/logo.png';
   static const String signUpScreenLogo = 'assets/image/sign_up_logo.png';
   static const String forgotPasswordLogo = 'assets/image/forgot_password.png';
   static const String saudi = 'assets/image/saudi.png';

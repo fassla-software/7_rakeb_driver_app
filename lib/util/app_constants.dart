@@ -2,9 +2,9 @@ import 'package:ride_sharing_user_app/localization/language_model.dart';
 import 'package:ride_sharing_user_app/util/images.dart';
 
 class AppConstants {
-  static const String appName = '7-Rakeb Driver';
+  static const String appName = 'Wasalny Driver Driver';
   static const String baseUrl =
-      'https://7rakeb.com'; /* 'https://drivemond-admin.codemond.com'; */
+      'https://wasalny.duckdns.org'; /* 'https://drivemond-admin.codemond.com'; */
   static const String polylineMapKey =
       'AIzaSyCHj3QwVPXAcG57hgUCowCRtbc4moArVH0';
   /* 'AIzaSyCGSZyU5GjFtJuay5jjqRD-xIr3XhGu1Ek'; */
@@ -37,7 +37,8 @@ class AppConstants {
   static const String tripDetails = '/api/driver/ride/details/';
   static const String uploadScreenShots = '/api/ride/store-screenshot';
   static const String tripAcceptOrReject = '/api/driver/ride/trip-action';
-  static const String scheduleTripCancel = '/api/driver/ride/schedule-trip-cancel';
+  static const String scheduleTripCancel =
+      '/api/driver/ride/schedule-trip-cancel';
   static const String matchOtp = '/api/driver/ride/match-otp';
   static const String remainDistance = '/api/driver/get-routes';
   static const String scheduleTrips = '/api/driver/ride/pending-ride-list';

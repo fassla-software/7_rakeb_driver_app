@@ -1,4 +1,4 @@
-package com.rakebdriver.hwilo
+package com.fassladev.wasalny
 
 import io.flutter.embedding.android.FlutterActivity
 

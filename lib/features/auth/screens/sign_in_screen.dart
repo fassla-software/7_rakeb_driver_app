@@ -27,7 +27,6 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-
   TextEditingController passwordController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   FocusNode phoneNode = FocusNode();
@@ -36,261 +35,318 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   void initState() {
-    if(Get.find<AuthController>().getUserNumber().isNotEmpty){
-      phoneController.text =  Get.find<AuthController>().getUserNumber();
+    if (Get.find<AuthController>().getUserNumber().isNotEmpty) {
+      phoneController.text = Get.find<AuthController>().getUserNumber();
     }
     passwordController.text = Get.find<AuthController>().getUserPassword();
-    if(passwordController.text != ''){
+    if (passwordController.text != '') {
       Get.find<AuthController>().setRememberMe();
     }
-    if(Get.find<AuthController>().getLoginCountryCode().isNotEmpty){
-      Get.find<AuthController>().countryDialCode = Get.find<AuthController>().getLoginCountryCode();
-    }else if(Get.find<SplashController>().config!.countryCode != null){
-      Get.find<AuthController>().countryDialCode = CountryCode.fromCountryCode(Get.find<SplashController>().config!.countryCode!).dialCode!;
+    if (Get.find<AuthController>().getLoginCountryCode().isNotEmpty) {
+      Get.find<AuthController>().countryDialCode =
+          Get.find<AuthController>().getLoginCountryCode();
+    } else if (Get.find<SplashController>().config!.countryCode != null) {
+      Get.find<AuthController>().countryDialCode = CountryCode.fromCountryCode(
+              Get.find<SplashController>().config!.countryCode!)
+          .dialCode!;
     }
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return PopScope(canPop: false,
+    return PopScope(
+      canPop: false,
       onPopInvokedWithResult: (res, val) async {
         Get.find<BottomMenuController>().exitApp();
         return;
       },
       child: Scaffold(
-        body: GetBuilder<AuthController>(builder: (authController){
+        body: GetBuilder<AuthController>(builder: (authController) {
           return GetBuilder<ProfileController>(builder: (profileController) {
             return GetBuilder<RideController>(builder: (rideController) {
-              return GetBuilder<LocationController>(builder: (locationController) {
-                return Center(child: SingleChildScrollView(
-                  child: Padding(padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
-                    child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      const SizedBox(height: Dimensions.paddingSizeSignUp),
+              return GetBuilder<LocationController>(
+                  builder: (locationController) {
+                return Center(
+                    child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: Dimensions.paddingSizeSignUp),
 
-                      Image.asset( Get.isDarkMode
-                                            ? Images.logoNameWhite
-                                            : Images.logoNameBlack,height: 60),
-                      const SizedBox(height: Dimensions.paddingSizeLarge),
+                          Image.asset(
+                              Get.isDarkMode
+                                  ? Images.logoNameWhite
+                                  : Images.logoNameBlack,
+                              height: 60),
+                          const SizedBox(height: Dimensions.paddingSizeLarge),
 
-                      Text(
-                        '${'welcome_to'.tr} ${AppConstants.appName}',
-                        style: textBold.copyWith(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: Dimensions.fontSizeLarge,
-                        ),
-                      ),
-                      SizedBox(height: MediaQuery.of(context).size.height*0.1),
-
-                      Row(children: [
-                        Column(crossAxisAlignment: CrossAxisAlignment.start,children: [
                           Text(
-                            'log_in'.tr,
+                            '${'welcome_to'.tr} ${AppConstants.appName}',
                             style: textBold.copyWith(
                               color: Theme.of(context).primaryColor,
-                              fontSize: Dimensions.fontSizeExtraLarge,
+                              fontSize: Dimensions.fontSizeLarge,
                             ),
                           ),
+                          SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.1),
 
-                          Text(
-                            'log_in_message'.tr,
-                            style: textRegular.copyWith(color: Theme.of(context).hintColor),
-                          ),
-                          const SizedBox(height: Dimensions.paddingSizeLarge),
-                        ]),
-                      ]),
-                      Form(
-                        key: _formKeySignIn,
-                        child: Column(children: [
-                          TextFieldWidget(
-                            hintText: 'phone'.tr,
-                            inputType: TextInputType.number,
-                            countryDialCode: authController.countryDialCode,
-                            controller: phoneController,
-                            focusNode: phoneNode,
-                            nextFocus: passwordNode,
-                            onCountryChanged: (CountryCode countryCode){
-                              authController.countryDialCode = countryCode.dialCode!;
-                              authController.setCountryCode(countryCode.dialCode!);
-                            },
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'phone_is_required'.tr;
-                              } else if (!GetUtils.isPhoneNumber(authController.countryDialCode + value)) {
-                                return 'phone_number_is_not_valid'.tr;
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: Dimensions.paddingSizeDefault),
-
-                          TextFieldWidget(
-                            hintText: 'password'.tr,
-                            inputType: TextInputType.text,
-                            prefixIcon: Images.lock,
-                            inputAction: TextInputAction.done,
-                            focusNode: passwordNode,
-                            prefixHeight: 70,
-                            isPassword: true,
-                            controller: passwordController,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'password_is_required'.tr;
-                              } else if (value.length < 8) {
-                                return 'minimum_password_length_is_8'.tr;
-                              } else if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$').hasMatch(value)) {
-                                return 'password_should_be_complex'.tr;
-                              }
-                              return null;
-                            },
-                          ),
-                        ]),
-                      ),
-
-                      Row(children: [
-                        Padding(
-                          padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-                          child: InkWell(
-                            onTap: () => authController.toggleRememberMe(),
-                            child: Row(children: [
-                              SizedBox(width: 20.0, child: Checkbox(
-                                checkColor: Theme.of(context).primaryColor,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                                activeColor: Theme.of(context).primaryColor.withOpacity(.125),
-                                value: authController.isActiveRememberMe,
-                                onChanged: (bool? isChecked) => authController.toggleRememberMe(),
-                              )),
-                              const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                              Text(
-                                'remember'.tr,
-                                style: textRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
+                          Row(children: [
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'log_in'.tr,
+                                    style: textBold.copyWith(
+                                      color: Theme.of(context).primaryColor,
+                                      fontSize: Dimensions.fontSizeExtraLarge,
+                                    ),
+                                  ),
+                                  Text(
+                                    'log_in_message'.tr,
+                                    style: textRegular.copyWith(
+                                        color: Theme.of(context).hintColor),
+                                  ),
+                                  const SizedBox(
+                                      height: Dimensions.paddingSizeLarge),
+                                ]),
+                          ]),
+                          Form(
+                            key: _formKeySignIn,
+                            child: Column(children: [
+                              TextFieldWidget(
+                                hintText: 'phone'.tr,
+                                inputType: TextInputType.number,
+                                countryDialCode: authController.countryDialCode,
+                                controller: phoneController,
+                                focusNode: phoneNode,
+                                nextFocus: passwordNode,
+                                onCountryChanged: (CountryCode countryCode) {
+                                  authController.countryDialCode =
+                                      countryCode.dialCode!;
+                                  authController
+                                      .setCountryCode(countryCode.dialCode!);
+                                },
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'phone_is_required'.tr;
+                                  } else if (!GetUtils.isPhoneNumber(
+                                      authController.countryDialCode + value)) {
+                                    return 'phone_number_is_not_valid'.tr;
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(
+                                  height: Dimensions.paddingSizeDefault),
+                              TextFieldWidget(
+                                hintText: 'password'.tr,
+                                inputType: TextInputType.text,
+                                prefixIcon: Images.lock,
+                                inputAction: TextInputAction.done,
+                                focusNode: passwordNode,
+                                prefixHeight: 70,
+                                isPassword: true,
+                                controller: passwordController,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'password_is_required'.tr;
+                                  } else if (value.length < 8) {
+                                    return 'minimum_password_length_is_8'.tr;
+                                  }
+                                  return null;
+                                },
                               ),
                             ]),
                           ),
-                        ),
 
-                        const Spacer(),
+                          Row(children: [
+                            Padding(
+                              padding: const EdgeInsets.all(
+                                  Dimensions.paddingSizeSmall),
+                              child: InkWell(
+                                onTap: () => authController.toggleRememberMe(),
+                                child: Row(children: [
+                                  SizedBox(
+                                      width: 20.0,
+                                      child: Checkbox(
+                                        checkColor:
+                                            Theme.of(context).primaryColor,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
+                                        activeColor: Theme.of(context)
+                                            .primaryColor
+                                            .withOpacity(.125),
+                                        value:
+                                            authController.isActiveRememberMe,
+                                        onChanged: (bool? isChecked) =>
+                                            authController.toggleRememberMe(),
+                                      )),
+                                  const SizedBox(
+                                      width: Dimensions.paddingSizeExtraSmall),
+                                  Text(
+                                    'remember'.tr,
+                                    style: textRegular.copyWith(
+                                        fontSize: Dimensions.fontSizeSmall),
+                                  ),
+                                ]),
+                              ),
+                            ),
+                            const Spacer(),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: TextButton(
+                                onPressed: () =>
+                                    Get.to(() => const ForgotPasswordScreen()),
+                                child: Text(
+                                  'forgot_password'.tr,
+                                  style: textRegular.copyWith(
+                                    fontSize: Dimensions.fontSizeSmall,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ]),
 
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () => Get.to(()=>const ForgotPasswordScreen()),
-                            child: Text(
-                              'forgot_password'.tr,
-                              style: textRegular.copyWith(
-                                fontSize: Dimensions.fontSizeSmall,
-                                color: Theme.of(context).primaryColor,
+                          (authController.isLoading ||
+                                  authController.updateFcm ||
+                                  profileController.isLoading ||
+                                  rideController.isLoading ||
+                                  locationController.lastLocationLoading)
+                              ? Center(
+                                  child: SpinKitCircle(
+                                      color: Theme.of(context).primaryColor,
+                                      size: 40.0))
+                              : ButtonWidget(
+                                  buttonText: 'log_in'.tr,
+                                  onPressed: () {
+                                    if (_formKeySignIn.currentState!
+                                        .validate()) {
+                                      authController.login(
+                                          authController.countryDialCode,
+                                          phoneController.text,
+                                          passwordController.text);
+                                    }
+                                  },
+                                  radius: 50,
+                                ),
+
+                          if (Get.find<SplashController>()
+                              .config!
+                              .selfRegistration!)
+                            Row(children: [
+                              const Expanded(child: Divider(thickness: .125)),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: Dimensions.paddingSizeSmall,
+                                  vertical: 8,
+                                ),
+                                child: Text(
+                                  'or'.tr,
+                                  style: textRegular.copyWith(
+                                      color: Theme.of(context).hintColor),
+                                ),
+                              ),
+                              const Expanded(child: Divider(thickness: .125)),
+                            ]),
+                          const SizedBox(height: Dimensions.paddingSizeDefault),
+
+                          // ButtonWidget(
+                          //   showBorder: true,
+                          //   borderWidth: 1,
+                          //   transparent: true,
+                          //   buttonText: 'otp_login'.tr,
+                          //   onPressed: () => Get.to(() => const OtpLoginScreen(fromSignIn: true)),
+                          //   radius: 50,
+                          // ),
+                          // const SizedBox(height: Dimensions.paddingSizeDefault),
+
+                          (Get.find<SplashController>()
+                                          .config!
+                                          .selfRegistration !=
+                                      null &&
+                                  Get.find<SplashController>()
+                                      .config!
+                                      .selfRegistration!)
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                      Text(
+                                        '${'do_not_have_an_account'.tr} ',
+                                        style: textRegular.copyWith(
+                                          fontSize: Dimensions.fontSizeSmall,
+                                          color: Theme.of(context).hintColor,
+                                        ),
+                                      ),
+                                      TextButton(
+                                        onPressed: () =>
+                                            Get.to(() => const SignUpScreen()),
+                                        style: TextButton.styleFrom(
+                                          padding: EdgeInsets.zero,
+                                          minimumSize: const Size(50, 30),
+                                          tapTargetSize:
+                                              MaterialTapTargetSize.shrinkWrap,
+                                        ),
+                                        child: Text(
+                                          'sign_up'.tr,
+                                          style: textRegular.copyWith(
+                                            decoration:
+                                                TextDecoration.underline,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            decorationColor:
+                                                Theme.of(context).primaryColor,
+                                          ),
+                                        ),
+                                      ),
+                                    ])
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                      Text("${'to_create_account'.tr} "),
+                                      InkWell(
+                                        onTap: () =>
+                                            Get.find<SplashController>()
+                                                .sendMailOrCall(
+                                          "tel:${Get.find<SplashController>().config?.businessContactPhone}",
+                                          false,
+                                        ),
+                                        child: Text(
+                                          "${'contact_support'.tr} ",
+                                          style: textRegular.copyWith(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                        ),
+                                      ),
+                                    ]),
+                          SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.1),
+
+                          InkWell(
+                            onTap: () => Get.to(() => const PolicyViewerScreen(
+                                htmlType: HtmlType.termsAndConditions)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(
+                                  Dimensions.paddingSizeDefault),
+                              child: Text(
+                                "terms_and_condition".tr,
+                                style: textMedium.copyWith(
+                                  decoration: TextDecoration.underline,
+                                  color: Theme.of(context).primaryColor,
+                                  decorationColor:
+                                      Theme.of(context).primaryColor,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ]),
-
-                      (authController.isLoading || authController.updateFcm ||
-                          profileController.isLoading || rideController.isLoading ||
-                          locationController.lastLocationLoading) ?
-                      Center(child: SpinKitCircle(color: Theme.of(context).primaryColor, size: 40.0)) :
-                      ButtonWidget(
-                        buttonText: 'log_in'.tr,
-                        onPressed: (){
-                          if(_formKeySignIn.currentState!.validate()){
-                            authController.login(authController.countryDialCode, phoneController.text, passwordController.text);
-                          }
-                        }, radius: 50,
-                      ),
-
-                      if(Get.find<SplashController>().config!.selfRegistration!)
-                        Row(children: [
-                          const Expanded(child: Divider(thickness: .125)),
-
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: Dimensions.paddingSizeSmall,vertical: 8,
-                            ),
-                            child: Text(
-                              'or'.tr ,
-                              style: textRegular.copyWith(color: Theme.of(context).hintColor),
-                            ),
-                          ),
-
-                          const Expanded(child: Divider(thickness: .125)),
                         ]),
-                      const SizedBox(height: Dimensions.paddingSizeDefault),
-
-                      // ButtonWidget(
-                      //   showBorder: true,
-                      //   borderWidth: 1,
-                      //   transparent: true,
-                      //   buttonText: 'otp_login'.tr,
-                      //   onPressed: () => Get.to(() => const OtpLoginScreen(fromSignIn: true)),
-                      //   radius: 50,
-                      // ),
-                      // const SizedBox(height: Dimensions.paddingSizeDefault),
-
-                      (Get.find<SplashController>().config!.selfRegistration != null &&
-                          Get.find<SplashController>().config!.selfRegistration!) ?
-                      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                        Text(
-                          '${'do_not_have_an_account'.tr} ',
-                          style: textRegular.copyWith(
-                            fontSize: Dimensions.fontSizeSmall,
-                            color: Theme.of(context).hintColor,
-                          ),
-                        ),
-
-                        TextButton(
-                          onPressed: () =>  Get.to(()=> const SignUpScreen()),
-                          style: TextButton.styleFrom(
-                            padding: EdgeInsets.zero, minimumSize: const Size(50,30),
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          ),
-                          child: Text(
-                            'sign_up'.tr,
-                            style: textRegular.copyWith(
-                              decoration: TextDecoration.underline,
-                              color: Theme.of(context).primaryColor,
-                              decorationColor: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                        ),
-                      ]) :
-                      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                        Text("${'to_create_account'.tr} "),
-
-                        InkWell(
-                          onTap: ()=>
-                              Get.find<SplashController>().sendMailOrCall(
-                                "tel:${Get.find<SplashController>().config?.businessContactPhone}",
-                                false,
-                              ),
-                          child: Text(
-                            "${'contact_support'.tr} ",
-                            style: textRegular.copyWith(
-                              color: Theme.of(context).primaryColor,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
-                      ]),
-                      SizedBox(height: MediaQuery.of(context).size.height*0.1),
-
-                      InkWell(
-                        onTap: ()=> Get.to(()=> const PolicyViewerScreen(htmlType: HtmlType.termsAndConditions)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
-                          child: Text(
-                            "terms_and_condition".tr,
-                            style: textMedium.copyWith(
-                              decoration: TextDecoration.underline,
-                              color: Theme.of(context).primaryColor,
-                              decorationColor: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                        ),
-                      ),
-
-                    ]),
                   ),
                 ));
               });

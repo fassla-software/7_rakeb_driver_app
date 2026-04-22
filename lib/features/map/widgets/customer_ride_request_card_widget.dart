@@ -119,7 +119,9 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'trip_type'.tr,
+                              rideRequest.type == 'parcel'
+                                  ? 'parcel'.tr
+                                  : 'trip_type'.tr,
                               style: textRegular.copyWith(
                                   color: Theme.of(Get.context!).primaryColor),
                             ),
@@ -136,11 +138,14 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                                     Dimensions.paddingSizeExtraSmall),
                               ),
                               child: Text(
-                                DateTime.parse(rideRequest.createdAt ?? '')
-                                            .day ==
-                                        DateTime.now().day
-                                    ? "ride_request".tr
-                                    : "schedule_trip".tr,
+                                rideRequest.type == 'parcel'
+                                    ? 'parcel'.tr
+                                    : DateTime.parse(
+                                                    rideRequest.createdAt ?? '')
+                                                .day ==
+                                            DateTime.now().day
+                                        ? "ride_request".tr
+                                        : "schedule_trip".tr,
                                 style: textRegular.copyWith(
                                     color: Theme.of(Get.context!).cardColor),
                               ),
@@ -602,11 +607,14 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                                   Dimensions.paddingSizeExtraSmall),
                             ),
                             child: Text(
-                                DateTime.parse(rideRequest.createdAt ?? '')
-                                            .day ==
-                                        DateTime.now().day
-                                    ? "ride_request".tr
-                                    : "schedule_trip".tr,
+                                rideRequest.type == 'parcel'
+                                    ? 'parcel'.tr
+                                    : DateTime.parse(
+                                                    rideRequest.createdAt ?? '')
+                                                .day ==
+                                            DateTime.now().day
+                                        ? "ride_request".tr
+                                        : "schedule_trip".tr,
                                 style: textRegular.copyWith(
                                     color: Theme.of(Get.context!).cardColor)),
                           ),

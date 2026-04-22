@@ -1,59 +1,21 @@
 {
   "project_info": {
-    "project_number": "783703710679",
-    "project_id": "rakeb-d70ee",
-    "storage_bucket": "rakeb-d70ee.firebasestorage.app"
+    "project_number": "103635106871",
+    "project_id": "waslny-59fea",
+    "storage_bucket": "waslny-59fea.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:783703710679:android:3b0e88636635e513dc0992",
+        "mobilesdk_app_id": "1:103635106871:android:a18cc18a08acf6894b93b2",
         "android_client_info": {
-          "package_name": "com.rakebdriver.hwilo"
+          "package_name": "com.fassladev.wasalny"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBOihWpOQ_DCdQV-E_2gu3VZ-Kexebi6YE"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:783703710679:android:03153c2580e6764bdc0992",
-        "android_client_info": {
-          "package_name": "com.drivoDriver.com"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBOihWpOQ_DCdQV-E_2gu3VZ-Kexebi6YE"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:783703710679:android:8d190839ed1dd858dc0992",
-        "android_client_info": {
-          "package_name": "com.sab3a.rakeb.eg"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBOihWpOQ_DCdQV-E_2gu3VZ-Kexebi6YE"
+          "current_key": "AIzaSyBGXy5GHXZub_XKiN3Sfi6EP-HjsGNpVFw"
         }
       ],
       "services": {

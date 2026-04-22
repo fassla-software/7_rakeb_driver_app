@@ -55,20 +55,20 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBOihWpOQ_DCdQV-E_2gu3VZ-Kexebi6YE',
-    appId: '1:783703710679:android:3b0e88636635e513dc0992',
-    messagingSenderId: '783703710679',
-    projectId: 'rakeb-d70ee',
-    storageBucket: 'rakeb-d70ee.firebasestorage.app',
+    apiKey: 'AIzaSyBGXy5GHXZub_XKiN3Sfi6EP-HjsGNpVFw',
+    appId: '1:103635106871:android:a18cc18a08acf6894b93b2',
+    messagingSenderId: '103635106871',
+    projectId: 'waslny-59fea',
+    storageBucket: 'waslny-59fea.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCSuEl3zEKRYwiIMwDrDKPvuCHudh8ucm4',
-    appId: '1:783703710679:ios:79eab4e657126d18dc0992',
-    messagingSenderId: '783703710679',
-    projectId: 'rakeb-d70ee',
-    storageBucket: 'rakeb-d70ee.firebasestorage.app',
-    iosBundleId: 'com.rakebdriver.hwiloDriver',
+    apiKey: 'AIzaSyDxVfSKXhiNF-ST_sWCikjRtoFGs37sOwY',
+    appId: '1:103635106871:ios:725b36b1c15ca20f4b93b2',
+    messagingSenderId: '103635106871',
+    projectId: 'waslny-59fea',
+    storageBucket: 'waslny-59fea.firebasestorage.app',
+    iosBundleId: 'com.fassladev.wasalny',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
