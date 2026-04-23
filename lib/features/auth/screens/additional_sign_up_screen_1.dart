@@ -187,6 +187,51 @@ class _AdditionalSignUpScreen1State extends State<AdditionalSignUpScreen1> {
                             inputAction: TextInputAction.done,
                           ),
                         ],
+                        TextFieldTitleWidget(title: '${'gender'.tr}*'),
+                        Container(
+                          height: 50,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: Dimensions.paddingSizeDefault),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).cardColor,
+                            borderRadius: BorderRadius.circular(50),
+                            border: Border.all(
+                                width: .5,
+                                color: Theme.of(context).hintColor.withOpacity(.7)),
+                          ),
+                          child: DropdownButton<String>(
+                            hint: authController.selectedGender == ''
+                                ? Text('gender'.tr,
+                                    style: textRegular.copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .color))
+                                : Text(
+                                    authController.selectedGender.tr,
+                                    style: textRegular.copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .color),
+                                  ),
+                            items: authController.genderList.map((String value) {
+                              return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value.tr,
+                                      style: textRegular.copyWith(
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium!
+                                              .color)));
+                            }).toList(),
+                            onChanged: (val) {
+                              authController.setSelectedGender(val!);
+                            },
+                            isExpanded: true,
+                            underline: const SizedBox(),
+                          ),
+                        ),
                       ])),
             ),
             const SizedBox(height: Dimensions.paddingSizeLarge),
@@ -197,7 +242,11 @@ class _AdditionalSignUpScreen1State extends State<AdditionalSignUpScreen1> {
               buttonText: 'next'.tr,
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  Get.to(() => const AdditionalSignUpScreen2());
+                  if (authController.selectedGender == '') {
+                    showCustomSnackBar('gender_is_required'.tr);
+                  } else {
+                    Get.to(() => const AdditionalSignUpScreen2());
+                  }
                 }
               },
             ),

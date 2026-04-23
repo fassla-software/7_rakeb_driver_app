@@ -62,293 +62,297 @@ class _SignInScreenState extends State<SignInScreen> {
         return;
       },
       child: Scaffold(
+        backgroundColor: Theme.of(context).primaryColor,
         body: GetBuilder<AuthController>(builder: (authController) {
           return GetBuilder<ProfileController>(builder: (profileController) {
             return GetBuilder<RideController>(builder: (rideController) {
               return GetBuilder<LocationController>(
                   builder: (locationController) {
-                return Center(
-                    child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
+                return Column(children: [
+                  // Top Section
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.35,
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: Dimensions.paddingSizeOverLarge),
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(height: Dimensions.paddingSizeSignUp),
-
-                          Image.asset(
-                              Get.isDarkMode
-                                  ? Images.logoNameWhite
-                                  : Images.logoNameBlack,
-                              height: 60),
-                          const SizedBox(height: Dimensions.paddingSizeLarge),
-
+                          const SizedBox(height: Dimensions.paddingSizeOverLarge),
                           Text(
-                            '${'welcome_to'.tr} ${AppConstants.appName}',
+                            'أهلاً بعودتك',
                             style: textBold.copyWith(
-                              color: Theme.of(context).primaryColor,
+                              color: const Color(0xFFEBC16F),
+                              fontSize: Dimensions.fontSizeOverLarge * 1.5,
+                            ),
+                          ),
+                          const SizedBox(height: Dimensions.paddingSizeSmall),
+                          Text(
+                            'سجل دخولك واستمتع بالخدمات',
+                            style: textRegular.copyWith(
+                              color: Colors.white,
                               fontSize: Dimensions.fontSizeLarge,
                             ),
                           ),
-                          SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.1),
-
-                          Row(children: [
-                            Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'log_in'.tr,
-                                    style: textBold.copyWith(
-                                      color: Theme.of(context).primaryColor,
-                                      fontSize: Dimensions.fontSizeExtraLarge,
-                                    ),
-                                  ),
-                                  Text(
-                                    'log_in_message'.tr,
-                                    style: textRegular.copyWith(
-                                        color: Theme.of(context).hintColor),
-                                  ),
-                                  const SizedBox(
-                                      height: Dimensions.paddingSizeLarge),
-                                ]),
-                          ]),
-                          Form(
-                            key: _formKeySignIn,
-                            child: Column(children: [
-                              TextFieldWidget(
-                                hintText: 'phone'.tr,
-                                inputType: TextInputType.number,
-                                countryDialCode: authController.countryDialCode,
-                                controller: phoneController,
-                                focusNode: phoneNode,
-                                nextFocus: passwordNode,
-                                onCountryChanged: (CountryCode countryCode) {
-                                  authController.countryDialCode =
-                                      countryCode.dialCode!;
-                                  authController
-                                      .setCountryCode(countryCode.dialCode!);
-                                },
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'phone_is_required'.tr;
-                                  } else if (!GetUtils.isPhoneNumber(
-                                      authController.countryDialCode + value)) {
-                                    return 'phone_number_is_not_valid'.tr;
-                                  }
-                                  return null;
-                                },
+                          const SizedBox(height: Dimensions.paddingSizeOverLarge),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'log_in'.tr,
+                                style: textBold.copyWith(
+                                  color: const Color(0xFFEBC16F),
+                                  fontSize: Dimensions.fontSizeExtraLarge * 1.2,
+                                ),
                               ),
-                              const SizedBox(
-                                  height: Dimensions.paddingSizeDefault),
-                              TextFieldWidget(
-                                hintText: 'password'.tr,
-                                inputType: TextInputType.text,
-                                prefixIcon: Images.lock,
-                                inputAction: TextInputAction.done,
-                                focusNode: passwordNode,
-                                prefixHeight: 70,
-                                isPassword: true,
-                                controller: passwordController,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'password_is_required'.tr;
-                                  } else if (value.length < 8) {
-                                    return 'minimum_password_length_is_8'.tr;
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ]),
-                          ),
-
-                          Row(children: [
-                            Padding(
-                              padding: const EdgeInsets.all(
-                                  Dimensions.paddingSizeSmall),
-                              child: InkWell(
-                                onTap: () => authController.toggleRememberMe(),
-                                child: Row(children: [
-                                  SizedBox(
-                                      width: 20.0,
-                                      child: Checkbox(
-                                        checkColor:
-                                            Theme.of(context).primaryColor,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5)),
-                                        activeColor: Theme.of(context)
-                                            .primaryColor
-                                            .withOpacity(.125),
-                                        value:
-                                            authController.isActiveRememberMe,
-                                        onChanged: (bool? isChecked) =>
-                                            authController.toggleRememberMe(),
-                                      )),
-                                  const SizedBox(
-                                      width: Dimensions.paddingSizeExtraSmall),
-                                  Text(
-                                    'remember'.tr,
-                                    style: textRegular.copyWith(
-                                        fontSize: Dimensions.fontSizeSmall),
-                                  ),
-                                ]),
-                              ),
-                            ),
-                            const Spacer(),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: TextButton(
-                                onPressed: () =>
-                                    Get.to(() => const ForgotPasswordScreen()),
-                                child: Text(
-                                  'forgot_password'.tr,
-                                  style: textRegular.copyWith(
-                                    fontSize: Dimensions.fontSizeSmall,
+                              const SizedBox(width: Dimensions.paddingSizeSmall),
+                              Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(0xFFEBC16F),
+                                ),
+                                child: Icon(Icons.arrow_forward,
                                     color: Theme.of(context).primaryColor,
-                                  ),
-                                ),
+                                    size: 20),
                               ),
-                            ),
-                          ]),
-
-                          (authController.isLoading ||
-                                  authController.updateFcm ||
-                                  profileController.isLoading ||
-                                  rideController.isLoading ||
-                                  locationController.lastLocationLoading)
-                              ? Center(
-                                  child: SpinKitCircle(
-                                      color: Theme.of(context).primaryColor,
-                                      size: 40.0))
-                              : ButtonWidget(
-                                  buttonText: 'log_in'.tr,
-                                  onPressed: () {
-                                    if (_formKeySignIn.currentState!
-                                        .validate()) {
-                                      authController.login(
-                                          authController.countryDialCode,
-                                          phoneController.text,
-                                          passwordController.text);
-                                    }
-                                  },
-                                  radius: 50,
-                                ),
-
-                          if (Get.find<SplashController>()
-                              .config!
-                              .selfRegistration!)
-                            Row(children: [
-                              const Expanded(child: Divider(thickness: .125)),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: Dimensions.paddingSizeSmall,
-                                  vertical: 8,
-                                ),
-                                child: Text(
-                                  'or'.tr,
-                                  style: textRegular.copyWith(
-                                      color: Theme.of(context).hintColor),
-                                ),
-                              ),
-                              const Expanded(child: Divider(thickness: .125)),
-                            ]),
-                          const SizedBox(height: Dimensions.paddingSizeDefault),
-
-                          // ButtonWidget(
-                          //   showBorder: true,
-                          //   borderWidth: 1,
-                          //   transparent: true,
-                          //   buttonText: 'otp_login'.tr,
-                          //   onPressed: () => Get.to(() => const OtpLoginScreen(fromSignIn: true)),
-                          //   radius: 50,
-                          // ),
-                          // const SizedBox(height: Dimensions.paddingSizeDefault),
-
-                          (Get.find<SplashController>()
-                                          .config!
-                                          .selfRegistration !=
-                                      null &&
-                                  Get.find<SplashController>()
-                                      .config!
-                                      .selfRegistration!)
-                              ? Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                      Text(
-                                        '${'do_not_have_an_account'.tr} ',
-                                        style: textRegular.copyWith(
-                                          fontSize: Dimensions.fontSizeSmall,
-                                          color: Theme.of(context).hintColor,
-                                        ),
-                                      ),
-                                      TextButton(
-                                        onPressed: () =>
-                                            Get.to(() => const SignUpScreen()),
-                                        style: TextButton.styleFrom(
-                                          padding: EdgeInsets.zero,
-                                          minimumSize: const Size(50, 30),
-                                          tapTargetSize:
-                                              MaterialTapTargetSize.shrinkWrap,
-                                        ),
-                                        child: Text(
-                                          'sign_up'.tr,
-                                          style: textRegular.copyWith(
-                                            decoration:
-                                                TextDecoration.underline,
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            decorationColor:
-                                                Theme.of(context).primaryColor,
-                                          ),
-                                        ),
-                                      ),
-                                    ])
-                              : Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                      Text("${'to_create_account'.tr} "),
-                                      InkWell(
-                                        onTap: () =>
-                                            Get.find<SplashController>()
-                                                .sendMailOrCall(
-                                          "tel:${Get.find<SplashController>().config?.businessContactPhone}",
-                                          false,
-                                        ),
-                                        child: Text(
-                                          "${'contact_support'.tr} ",
-                                          style: textRegular.copyWith(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            decoration:
-                                                TextDecoration.underline,
-                                          ),
-                                        ),
-                                      ),
-                                    ]),
-                          SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.1),
-
-                          InkWell(
-                            onTap: () => Get.to(() => const PolicyViewerScreen(
-                                htmlType: HtmlType.termsAndConditions)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(
-                                  Dimensions.paddingSizeDefault),
-                              child: Text(
-                                "terms_and_condition".tr,
-                                style: textMedium.copyWith(
-                                  decoration: TextDecoration.underline,
-                                  color: Theme.of(context).primaryColor,
-                                  decorationColor:
-                                      Theme.of(context).primaryColor,
-                                ),
-                              ),
-                            ),
+                            ],
                           ),
                         ]),
                   ),
-                ));
+
+                  // Bottom Section (Form)
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(40)),
+                      ),
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.all(
+                              Dimensions.paddingSizeOverLarge),
+                          child: Column(children: [
+                            Form(
+                              key: _formKeySignIn,
+                              child: Column(children: [
+                                TextFieldWidget(
+                                  hintText: 'أدخل هاتفك',
+                                  inputType: TextInputType.number,
+                                  countryDialCode:
+                                      authController.countryDialCode,
+                                  controller: phoneController,
+                                  focusNode: phoneNode,
+                                  nextFocus: passwordNode,
+                                  borderRadius: 15,
+                                  showBorder: true,
+                                  showPrefix: false,
+                                  onCountryChanged: (CountryCode countryCode) {
+                                    authController.countryDialCode =
+                                        countryCode.dialCode!;
+                                    authController
+                                        .setCountryCode(countryCode.dialCode!);
+                                  },
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'phone_is_required'.tr;
+                                    } else if (!GetUtils.isPhoneNumber(
+                                        authController.countryDialCode +
+                                            value)) {
+                                      return 'phone_number_is_not_valid'.tr;
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const SizedBox(
+                                    height: Dimensions.paddingSizeLarge),
+                                TextFieldWidget(
+                                  hintText: 'أدخل كلمة المرور',
+                                  inputType: TextInputType.text,
+                                  inputAction: TextInputAction.done,
+                                  focusNode: passwordNode,
+                                  isPassword: true,
+                                  controller: passwordController,
+                                  borderRadius: 15,
+                                  showBorder: true,
+                                  showPrefix: false,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'password_is_required'.tr;
+                                    } else if (value.length < 8) {
+                                      return 'minimum_password_length_is_8'.tr;
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ]),
+                            ),
+                            const SizedBox(height: Dimensions.paddingSizeSmall),
+
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TextButton(
+                                    onPressed: () => Get.to(
+                                        () => const ForgotPasswordScreen()),
+                                    style: TextButton.styleFrom(
+                                        padding: EdgeInsets.zero),
+                                    child: Text(
+                                      'هل نسيت كلمة المرور؟',
+                                      style: textRegular.copyWith(
+                                        fontSize: Dimensions.fontSizeSmall,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () =>
+                                        authController.toggleRememberMe(),
+                                    child: Row(children: [
+                                      Text(
+                                        'تذكرني',
+                                        style: textRegular.copyWith(
+                                            fontSize: Dimensions.fontSizeSmall),
+                                      ),
+                                      const SizedBox(
+                                          width:
+                                              Dimensions.paddingSizeExtraSmall),
+                                      SizedBox(
+                                          width: 20.0,
+                                          height: 20.0,
+                                          child: Checkbox(
+                                            checkColor:
+                                                Theme.of(context).cardColor,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                            activeColor:
+                                                Theme.of(context).primaryColor,
+                                            value: authController
+                                                .isActiveRememberMe,
+                                            onChanged: (bool? isChecked) =>
+                                                authController
+                                                    .toggleRememberMe(),
+                                          )),
+                                    ]),
+                                  ),
+                                ]),
+                            const SizedBox(height: Dimensions.paddingSizeLarge),
+
+                            (authController.isLoading ||
+                                    authController.updateFcm ||
+                                    profileController.isLoading ||
+                                    rideController.isLoading ||
+                                    locationController.lastLocationLoading)
+                                ? Center(
+                                    child: SpinKitCircle(
+                                        color: Theme.of(context).primaryColor,
+                                        size: 40.0))
+                                : ButtonWidget(
+                                    buttonText: 'log_in'.tr,
+                                    transparent: true,
+                                    showBorder: true,
+                                    radius: 30,
+                                    borderColor: Theme.of(context).primaryColor,
+                                    textColor: Theme.of(context).primaryColor,
+                                    onPressed: () {
+                                      if (_formKeySignIn.currentState!
+                                          .validate()) {
+                                        authController.login(
+                                            authController.countryDialCode,
+                                            phoneController.text,
+                                            passwordController.text);
+                                      }
+                                    },
+                                  ),
+                            const SizedBox(height: Dimensions.paddingSizeLarge),
+
+                            if (Get.find<SplashController>()
+                                    .config!
+                                    .selfRegistration !=
+                                null &&
+                                Get.find<SplashController>()
+                                    .config!
+                                    .selfRegistration!)
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '${'do_not_have_an_account'.tr} ',
+                                      style: textRegular.copyWith(
+                                        fontSize: Dimensions.fontSizeSmall,
+                                        color: Theme.of(context).hintColor,
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () =>
+                                          Get.to(() => const SignUpScreen()),
+                                      style: TextButton.styleFrom(
+                                        padding: EdgeInsets.zero,
+                                        minimumSize: const Size(50, 30),
+                                        tapTargetSize:
+                                            MaterialTapTargetSize.shrinkWrap,
+                                      ),
+                                      child: Text(
+                                        'sign_up'.tr,
+                                        style: textRegular.copyWith(
+                                          decoration: TextDecoration.underline,
+                                          color: const Color(0xFFEBC16F),
+                                          decorationColor:
+                                              const Color(0xFFEBC16F),
+                                        ),
+                                      ),
+                                    ),
+                                  ])
+                            else
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("${'to_create_account'.tr} "),
+                                    InkWell(
+                                      onTap: () => Get.find<SplashController>()
+                                          .sendMailOrCall(
+                                        "tel:${Get.find<SplashController>().config?.businessContactPhone}",
+                                        false,
+                                      ),
+                                      child: Text(
+                                        "${'contact_support'.tr} ",
+                                        style: textRegular.copyWith(
+                                          color: Theme.of(context).primaryColor,
+                                          decoration: TextDecoration.underline,
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+
+                            const SizedBox(height: Dimensions.paddingSizeOver),
+
+                            InkWell(
+                              onTap: () => Get.to(() =>
+                                  const PolicyViewerScreen(
+                                      htmlType: HtmlType.termsAndConditions)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(
+                                    Dimensions.paddingSizeDefault),
+                                child: Text(
+                                  "terms_and_condition".tr,
+                                  style: textMedium.copyWith(
+                                    decoration: TextDecoration.underline,
+                                    color: const Color(0xFFEBC16F),
+                                    decorationColor: const Color(0xFFEBC16F),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ]),
+                        ),
+                      ),
+                    ),
+                  ),
+                ]);
               });
             });
           });
@@ -356,4 +360,5 @@ class _SignInScreenState extends State<SignInScreen> {
       ),
     );
   }
+
 }

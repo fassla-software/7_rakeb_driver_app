@@ -27,6 +27,7 @@ class TextFieldWidget extends StatefulWidget {
   final double prefixHeight;
   final bool showCountryCode;
   final Function(CountryCode countryCode)? onCountryChanged;
+  final bool showPrefix;
   final String? Function(String?)? validator;
 
   const TextFieldWidget({
@@ -50,6 +51,7 @@ class TextFieldWidget extends StatefulWidget {
     this.countryDialCode,
     this.onCountryChanged,
     this.showCountryCode = true,
+    this.showPrefix = true,
     this.validator,
   });
 
@@ -130,9 +132,9 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
         ),
         filled: true,
         contentPadding: EdgeInsets.symmetric(
-            horizontal: Dimensions.paddingSizeExtraSmall,
+            horizontal: widget.showPrefix ? Dimensions.paddingSizeExtraSmall : Dimensions.paddingSizeDefault,
             vertical: widget.isEnabled ? 0 : 13),
-        prefixIcon: widget.prefixIcon != null
+        prefixIcon: widget.showPrefix ? (widget.prefixIcon != null
             ? Container(
                 margin: EdgeInsets.only(
                     right: Get.find<LocalizationController>().isLtr ? 10 : 0,
@@ -237,7 +239,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                       ),
                   ],
                 ),
-              ),
+              )) : null,
         suffixIcon: widget.isPassword
             ? IconButton(
                 icon: Icon(

@@ -354,7 +354,8 @@ class _AdditionalSignUpScreen2State extends State<AdditionalSignUpScreen2> {
                                     referralCode: authController
                                         .referralCodeController.text
                                         .trim(),
-                                    fcmToken: deviceToken);
+                                    fcmToken: deviceToken,
+                                    gender: authController.selectedGender);
                                 authController.register(
                                     authController.countryDialCode, signUpBody);
                               }

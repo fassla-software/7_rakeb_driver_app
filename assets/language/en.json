@@ -804,5 +804,9 @@
   "for_demo_purpose_use": "For demo purpose use 000000 as OTP",
   "denied_note": "Denied Note",
   "please_contact_us_to_renew_your_subscription": "Please contact support to activate your subscription\nPhone: 01034892158",
-  "approval_note": "Approval Note"
+  "approval_note": "Approval Note",
+  "gender": "Gender",
+  "male": "Male",
+  "female": "Female",
+  "gender_is_required": "Gender is required"
 }

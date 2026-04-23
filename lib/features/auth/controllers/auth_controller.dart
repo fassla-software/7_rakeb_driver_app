@@ -119,6 +119,16 @@ class AuthController extends GetxController implements GetxService {
     update();
   }
 
+  final List<String> _genderList = ['male', 'female'];
+  List<String> get genderList => _genderList;
+  String _selectedGender = '';
+  String get selectedGender => _selectedGender;
+
+  void setSelectedGender(String gender) {
+    _selectedGender = gender;
+    update();
+  }
+
 
   Future<void> login(String countryCode, String phone, String password) async {
     _isLoading = true;
@@ -225,6 +235,7 @@ class AuthController extends GetxController implements GetxService {
       identityImages.clear();
       multipartList.clear();
       referralCodeController.clear();
+      _selectedGender = '';
       _isLoading = false;
 
       if(configModel?.verification ?? false){
