@@ -14,9 +14,10 @@ void customPrint(String message) {
 
 void showCustomSnackBar(String message,
     {bool isError = true, int seconds = 3, String? subMessage}) {
-  Get.closeCurrentSnackbar();
-  Get.showSnackbar(GetSnackBar(
-    dismissDirection: DismissDirection.horizontal,
+  if (Get.context == null) return;
+  ScaffoldMessenger.of(Get.context!).clearSnackBars();
+  ScaffoldMessenger.of(Get.context!).showSnackBar(SnackBar(
+    behavior: SnackBarBehavior.floating,
     margin: const EdgeInsets.all(Dimensions.paddingSizeSmall).copyWith(
       right: ResponsiveHelper.isDesktop
           ? Get.context!.width * 0.7
@@ -26,8 +27,9 @@ void showCustomSnackBar(String message,
     backgroundColor: Get.isDarkMode
         ? Colors.white
         : Theme.of(Get.context!).textTheme.titleMedium!.color!,
-    borderRadius: Dimensions.paddingSizeSmall,
-    messageText: Row(children: [
+    shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall)),
+    content: Row(children: [
       Image.asset(
         isError ? Images.errorMessageIcon : Images.successMessageIcon,
         height: 20,
@@ -37,31 +39,29 @@ void showCustomSnackBar(String message,
         width: Dimensions.paddingSize,
       ),
       Expanded(
-          child: SizedBox(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+          child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
             Text(message,
                 style: textMedium.copyWith(
                     color: Get.isDarkMode
                         ? Theme.of(Get.context!).textTheme.bodySmall!.color
                         : Colors.white)),
-            subMessage != null
-                ? Text(
-                    subMessage,
-                    style: textMedium.copyWith(
-                      color: Get.isDarkMode
-                          ? Theme.of(Get.context!)
-                              .textTheme
-                              .bodySmall!
-                              .color!
-                              .withOpacity(0.75)
-                          : Colors.white.withOpacity(0.75),
-                    ),
-                  )
-                : const SizedBox(),
-          ]))),
+            if (subMessage != null)
+              Text(
+                subMessage,
+                style: textMedium.copyWith(
+                  color: Get.isDarkMode
+                      ? Theme.of(Get.context!)
+                          .textTheme
+                          .bodySmall!
+                          .color!
+                          .withOpacity(0.75)
+                      : Colors.white.withOpacity(0.75),
+                ),
+              ),
+          ])),
     ]),
   ));
 }
-
