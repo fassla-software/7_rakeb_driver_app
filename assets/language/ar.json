@@ -798,5 +798,9 @@
   "downloaded_successfully": "تم التنزيل بنجاح",
   "download_failed": "فشل التنزيل",
   "please_contact_us_to_renew_your_subscription": "رجاء التواصل مع الدعم لتفعيل الاشتراك\nهاتف 01034892158",
-  "approval_note": "مذكرة الموافقة"
+  "approval_note": "مذكرة الموافقة",
+  "gender": "الجنس",
+  "male": "ذكر",
+  "female": "أنثى",
+  "gender_is_required": "الجنس مطلوب"
 }

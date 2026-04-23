@@ -109,6 +109,16 @@ class AuthController extends GetxController implements GetxService {
     update();
   }
 
+  final List<String> _genderList = ['male', 'female'];
+  List<String> get genderList => _genderList;
+  String _selectedGender = '';
+  String get selectedGender => _selectedGender;
+
+  void setSelectedGender(String gender) {
+    _selectedGender = gender;
+    update();
+  }
+
   final List<String> _identityTypeList = ['passport', 'driving_license', 'nid', ];
   List<String> get identityTypeList => _identityTypeList;
   String _identityType = '';
@@ -225,6 +235,7 @@ class AuthController extends GetxController implements GetxService {
       identityImages.clear();
       multipartList.clear();
       referralCodeController.clear();
+      _selectedGender = '';
       _isLoading = false;
 
       if(configModel?.verification ?? false){
