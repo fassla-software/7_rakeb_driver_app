@@ -4,9 +4,9 @@ import 'package:ride_sharing_user_app/features/auth/domain/models/signup_body.da
 import 'package:ride_sharing_user_app/features/auth/domain/repositories/auth_repository_interface.dart';
 import 'package:ride_sharing_user_app/features/auth/domain/services/auth_service_interface.dart';
 
-class AuthService implements AuthServiceInterface{
- final AuthRepositoryInterface authRepositoryInterface;
- AuthService({required this.authRepositoryInterface});
+class AuthService implements AuthServiceInterface {
+  final AuthRepositoryInterface authRepositoryInterface;
+  AuthService({required this.authRepositoryInterface});
 
   @override
   Future changePassword(String oldPassword, String password) {
@@ -15,7 +15,7 @@ class AuthService implements AuthServiceInterface{
 
   @override
   bool clearSharedAddress() {
-   return authRepositoryInterface.clearSharedAddress();
+    return authRepositoryInterface.clearSharedAddress();
   }
 
   @override
@@ -75,7 +75,7 @@ class AuthService implements AuthServiceInterface{
 
   @override
   Future logOut() {
-   return authRepositoryInterface.logOut();
+    return authRepositoryInterface.logOut();
   }
 
   @override
@@ -84,8 +84,14 @@ class AuthService implements AuthServiceInterface{
   }
 
   @override
-  Future registration({required SignUpBody signUpBody, XFile? profileImage, List<MultipartBody>? identityImage}) {
-    return authRepositoryInterface.registration(signUpBody: signUpBody,profileImage: profileImage, identityImage: identityImage);
+  Future registration(
+      {required SignUpBody signUpBody,
+      XFile? profileImage,
+      List<MultipartBody>? identityImage}) {
+    return authRepositoryInterface.registration(
+        signUpBody: signUpBody,
+        profileImage: profileImage,
+        identityImage: identityImage);
   }
 
   @override
@@ -99,7 +105,7 @@ class AuthService implements AuthServiceInterface{
   }
 
   @override
-  Future<void> saveUserCredential(String code,String number, String password) {
+  Future<void> saveUserCredential(String code, String number, String password) {
     return authRepositoryInterface.saveUserCredential(code, number, password);
   }
 
@@ -150,22 +156,25 @@ class AuthService implements AuthServiceInterface{
 
   @override
   Future remainingTime() {
-   return  authRepositoryInterface.remainingTime();
+    return authRepositoryInterface.remainingTime();
   }
 
   @override
   String getLoginCountryCode() {
-   return  authRepositoryInterface.getLoginCountryCode();
+    return authRepositoryInterface.getLoginCountryCode();
   }
 
- @override
- Future verifyFirebaseOtp({required String phone, required String otp, required String session}) async{
-   return await authRepositoryInterface.verifyFirebaseOtp(phone: phone, otp: otp, session: session);
- }
+  @override
+  Future verifyFirebaseOtp(
+      {required String phone,
+      required String otp,
+      required String session}) async {
+    return await authRepositoryInterface.verifyFirebaseOtp(
+        phone: phone, otp: otp, session: session);
+  }
 
- @override
- Future isUserRegistered({required String phone}) async{
-   return await authRepositoryInterface.isUserRegistered(phone: phone);
- }
-
+  @override
+  Future isUserRegistered({required String phone}) async {
+    return await authRepositoryInterface.isUserRegistered(phone: phone);
+  }
 }

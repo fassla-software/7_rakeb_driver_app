@@ -1,9 +1,7 @@
-
-
 import 'package:ride_sharing_user_app/features/review/domain/repositories/review_repository_interface.dart';
 import 'package:ride_sharing_user_app/features/review/domain/services/review_service_interface.dart';
 
-class ReviewService implements ReviewServiceInterface{
+class ReviewService implements ReviewServiceInterface {
   final ReviewRepositoryInterface reviewRepositoryInterface;
   ReviewService({required this.reviewRepositoryInterface});
 
@@ -26,5 +24,4 @@ class ReviewService implements ReviewServiceInterface{
   Future submitReview(String id, int ratting, String comment) {
     return reviewRepositoryInterface.submitReview(id, ratting, comment);
   }
-
 }

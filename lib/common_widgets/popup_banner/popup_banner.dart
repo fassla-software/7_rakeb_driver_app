@@ -36,8 +36,7 @@ class PopupBanner {
       this.customCloseButton,
       required this.onClick,
       required this.initIndex,
-        required this.showDownloadButton
-      });
+      required this.showDownloadButton});
 
   Future<void> show() {
     return showDialog(

@@ -1,6 +1,4 @@
-
 import 'dart:math';
-
 
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -80,12 +78,15 @@ class CurrencyTextInputFormatterHelper extends TextInputFormatter {
     final String lastChar = text.substring(text.length - 1);
     return RegExp('[0-9]').hasMatch(lastChar);
   }
+
   String getFormattedValue() {
     return _newString;
   }
+
   num getUnformattedValue() {
     return _isNegative ? (_newNum * -1) : _newNum;
   }
+
   String format(String value) {
     _isNegative = value.startsWith('-');
     final String newText = value.replaceAll(RegExp('[^0-9]'), '');

@@ -100,7 +100,6 @@ class MyApp extends StatelessWidget {
                   bottom: true,
                   top: false,
                   left: false,
-                  
                   right: false,
                   child: GetMaterialApp(
                       title: AppConstants.appName,

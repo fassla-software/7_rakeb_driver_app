@@ -1,3 +1,1 @@
-enum VerificationForm{
-  signUp, login, reset
-}
+enum VerificationForm { signUp, login, reset }

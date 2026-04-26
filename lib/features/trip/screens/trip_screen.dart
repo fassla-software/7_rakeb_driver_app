@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ride_sharing_user_app/localization/localization_controller.dart';
@@ -34,7 +33,6 @@ class TripHistoryMenu extends GetView<ProfileController> {
   }
 }
 
-
 class TripHistoryScreen extends StatefulWidget {
   const TripHistoryScreen({super.key});
 
@@ -47,11 +45,17 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
 
   @override
   void initState() {
-    Get.find<TripController>().getTripList(1,'','',"ride_request",Get.find<TripController>().selectedFilterTypeName,Get.find<TripController>().selectedStatusName);
-    Get.find<TripController>().getTripOverView(Get.find<TripController>().selectedOverview);
+    Get.find<TripController>().getTripList(
+        1,
+        '',
+        '',
+        "ride_request",
+        Get.find<TripController>().selectedFilterTypeName,
+        Get.find<TripController>().selectedStatusName);
+    Get.find<TripController>()
+        .getTripOverView(Get.find<TripController>().selectedOverview);
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -60,21 +64,22 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
         return Stack(children: [
           Column(children: [
             AppBarWidget(
-              title: 'trip_history'.tr,showBackButton: false,
-              onTap: (){
+              title: 'trip_history'.tr,
+              showBackButton: false,
+              onTap: () {
                 Get.find<ProfileController>().toggleDrawer();
               },
             ),
-
             const SizedBox(height: 40),
-
-            tripController.activityTypeIndex == 0 ?
-            TripsWidget(tripController: tripController, scrollController: scrollController) :
-            TripOverviewWidget(tripController: tripController)
+            tripController.activityTypeIndex == 0
+                ? TripsWidget(
+                    tripController: tripController,
+                    scrollController: scrollController)
+                : TripOverviewWidget(tripController: tripController)
           ]),
-
           Positioned(
-            top: Dimensions.topSpace,left: Dimensions.paddingSizeSmall,
+            top: Dimensions.topSpace,
+            left: Dimensions.paddingSizeSmall,
             child: SizedBox(
               height: Get.find<LocalizationController>().isLtr ? 45 : 50,
               child: ListView.builder(
@@ -82,13 +87,14 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                 padding: EdgeInsets.zero,
                 scrollDirection: Axis.horizontal,
                 itemCount: tripController.activityTypeList.length,
-                itemBuilder: (context, index){
-                  return SizedBox(width: Get.width/2.1,
+                itemBuilder: (context, index) {
+                  return SizedBox(
+                    width: Get.width / 2.1,
                     child: TypeButtonWidget(
                       index: index,
                       name: tripController.activityTypeList[index],
                       selectedIndex: tripController.activityTypeIndex,
-                      onTap: ()=> tripController.setActivityTypeIndex(index),
+                      onTap: () => tripController.setActivityTypeIndex(index),
                     ),
                   );
                 },

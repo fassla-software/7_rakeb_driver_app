@@ -52,32 +52,32 @@ class ApiClient extends GetxService {
   }
 
   Future<Response> getData(
-  String uri, {
-  Map<String, dynamic>? query,
-  Map<String, String>? headers,
-}) async {
-  try {
-    final fullUri = Uri.parse(appBaseUrl + uri).replace(
-      queryParameters: query?.map((key, value) => MapEntry(key, value.toString())),
-    );
+    String uri, {
+    Map<String, dynamic>? query,
+    Map<String, String>? headers,
+  }) async {
+    try {
+      final fullUri = Uri.parse(appBaseUrl + uri).replace(
+        queryParameters:
+            query?.map((key, value) => MapEntry(key, value.toString())),
+      );
 
-    if (kDebugMode) {
-      log('====> API Call: $fullUri\nHeaders: ${headers ?? _mainHeaders}');
+      if (kDebugMode) {
+        log('====> API Call: $fullUri\nHeaders: ${headers ?? _mainHeaders}');
+      }
+
+      http.Response response = await http
+          .get(
+            fullUri,
+            headers: headers ?? _mainHeaders,
+          )
+          .timeout(Duration(seconds: timeoutInSeconds));
+
+      return handleResponse(response, uri);
+    } catch (e) {
+      return Response(statusCode: 1, statusText: noInternetMessage);
     }
-
-    http.Response response = await http
-        .get(
-          fullUri,
-          headers: headers ?? _mainHeaders,
-        )
-        .timeout(Duration(seconds: timeoutInSeconds));
-
-    return handleResponse(response, uri);
-  } catch (e) {
-    return Response(statusCode: 1, statusText: noInternetMessage);
   }
-}
-
 
   Future<Response> postData(String uri, dynamic body,
       {Map<String, String>? headers}) async {

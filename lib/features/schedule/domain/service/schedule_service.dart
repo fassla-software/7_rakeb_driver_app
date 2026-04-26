@@ -10,17 +10,17 @@ class ScheduleService implements ScheduleServiceInterface {
   Future<Response> getAllScheduleTrips() async {
     return await repository.getAllScheduleTrips();
   }
-  
+
   @override
   Future<Response> acceptScheduleTrip(String scheduleTripId) async {
-     return await repository.acceptScheduleTrip(scheduleTripId);
+    return await repository.acceptScheduleTrip(scheduleTripId);
   }
-  
+
   @override
   Future<Response> getAllAcceptSchedule() async {
     return await repository.getAllAcceptSchedule();
   }
-  
+
   @override
   Future<Response> cancelScheduleTrip(String scheduleTripId) async {
     return await repository.cancelScheduleTrip(scheduleTripId);

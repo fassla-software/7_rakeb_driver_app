@@ -161,7 +161,8 @@ class _OtpVerificationWidgetState extends State<OtpVerificationWidget> {
                                   width: Dimensions.iconSizeLarge,
                                   child: Transform(
                                     alignment: Alignment.center,
-                                    transform: Matrix4.rotationY(0), // Force LTR
+                                    transform:
+                                        Matrix4.rotationY(0), // Force LTR
                                     child: Image.asset(Images.arrowRight),
                                   )),
                             ),

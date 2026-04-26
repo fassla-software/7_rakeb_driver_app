@@ -5,43 +5,47 @@ import 'package:ride_sharing_user_app/data/api_client.dart';
 import 'package:ride_sharing_user_app/features/help_and_support/domain/repositories/help_and_support_repository_interface.dart';
 import 'package:ride_sharing_user_app/util/app_constants.dart';
 
-class HelpAndSupportRepository implements HelpAndSupportRepositoryInterface{
+class HelpAndSupportRepository implements HelpAndSupportRepositoryInterface {
   final ApiClient apiClient;
   const HelpAndSupportRepository({required this.apiClient});
 
-
-
   @override
   Future<Response> createChannel() async {
-    return await apiClient.postData(AppConstants.createChannelWithAdmin, {"_method": "put"});
+    return await apiClient
+        .postData(AppConstants.createChannelWithAdmin, {"_method": "put"});
   }
 
   @override
-  Future<Response> sendMessage({String? message, String? channelId, List<MultipartBody>? images, List<MultipartDocument>? documents}) async{
+  Future<Response> sendMessage(
+      {String? message,
+      String? channelId,
+      List<MultipartBody>? images,
+      List<MultipartDocument>? documents}) async {
     return await apiClient.postMultipartMergeWithImageAndDocument(
         AppConstants.sendMessageToAdmin,
         {
           "message": message ?? '',
-          "channel_id" : channelId ?? '',
-          "_method":"put"
+          "channel_id": channelId ?? '',
+          "_method": "put"
         },
         images,
-      documents: documents
-    );
+        documents: documents);
   }
 
   @override
-  Future<Response> sendFaqMessage({String? questionId, String? channelId}) async {
+  Future<Response> sendFaqMessage(
+      {String? questionId, String? channelId}) async {
     return await apiClient.postData(AppConstants.sendFaqMessageToAdmin, {
-      "channel_id" : channelId ?? '',
-      "question_id" : questionId ?? '',
+      "channel_id": channelId ?? '',
+      "question_id": questionId ?? '',
       "_method": "put"
     });
   }
 
   @override
-  Future<Response> getConversation(String channelId,int offset) async {
-    return await apiClient.getData('${AppConstants.conversationList}?channel_id=$channelId&limit=20&offset=$offset');
+  Future<Response> getConversation(String channelId, int offset) async {
+    return await apiClient.getData(
+        '${AppConstants.conversationList}?channel_id=$channelId&limit=20&offset=$offset');
   }
 
   @override
@@ -52,9 +56,10 @@ class HelpAndSupportRepository implements HelpAndSupportRepositoryInterface{
   @override
   Future<HttpClientResponse> downloadFile(String? url) async {
     HttpClient client = HttpClient();
-    final response = await client.getUrl(Uri.parse(url!)).then((HttpClientRequest request) {
-      return request.close();
-    },
+    final response = await client.getUrl(Uri.parse(url!)).then(
+      (HttpClientRequest request) {
+        return request.close();
+      },
     );
     return response;
   }
@@ -88,6 +93,4 @@ class HelpAndSupportRepository implements HelpAndSupportRepositoryInterface{
     // TODO: implement update
     throw UnimplementedError();
   }
-
-
 }

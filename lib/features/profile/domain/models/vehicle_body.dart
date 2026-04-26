@@ -13,17 +13,16 @@ class VehicleBody {
 
   VehicleBody(
       {this.brandId,
-        this.modelId,
-        this.categoryId,
-        this.licencePlateNumber,
-        this.licenceExpireDate,
-        this.vinNumber,
-        this.transmission,
-        this.fuelType,
-        this.driverId,
-        this.ownership,
-        this.parcelCapacityWeight
-      });
+      this.modelId,
+      this.categoryId,
+      this.licencePlateNumber,
+      this.licenceExpireDate,
+      this.vinNumber,
+      this.transmission,
+      this.fuelType,
+      this.driverId,
+      this.ownership,
+      this.parcelCapacityWeight});
 
   VehicleBody.fromJson(Map<String, dynamic> json) {
     brandId = json['brand_id'];

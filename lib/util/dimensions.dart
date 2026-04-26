@@ -20,7 +20,7 @@ class Dimensions {
   static const double paddingSizeSignUp = 35.0;
   static const double paddingSizeOverLarge = 30.0;
   static const double paddingSizeOver = 50.0;
-  static  double splashLogoWidth = Get.context!.width <= 400 ?120 : 150.0;
+  static double splashLogoWidth = Get.context!.width <= 400 ? 120 : 150.0;
 
   static const double radiusSmall = 5.0;
   static const double radiusDefault = 10.0;
@@ -52,8 +52,7 @@ class Dimensions {
   static const double topSpace = 100;
   static const double topBelowSpace = 40;
 
-
   static const double orderStatusIconHeight = 70;
-  static double headerCardHeight = Get.find<LocalizationController>().isLtr? 45 : 53;
-
+  static double headerCardHeight =
+      Get.find<LocalizationController>().isLtr ? 45 : 53;
 }

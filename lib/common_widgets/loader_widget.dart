@@ -7,13 +7,17 @@ class LoaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Container(
-        height: 100,
-        width: 100,
-        decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            borderRadius: BorderRadius.circular(Dimensions.radiusSmall)),
-        alignment: Alignment.center,
-        child: SpinKitCircle(color: Theme.of(context).primaryColor, size: 40.0,)));
+    return Center(
+        child: Container(
+            height: 100,
+            width: 100,
+            decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(Dimensions.radiusSmall)),
+            alignment: Alignment.center,
+            child: SpinKitCircle(
+              color: Theme.of(context).primaryColor,
+              size: 40.0,
+            )));
   }
 }

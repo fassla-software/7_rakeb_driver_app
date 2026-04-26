@@ -22,8 +22,9 @@ class PusherHelper {
           ? 'wss'
           : 'ws',
       key: Get.find<SplashController>().config?.webSocketKey ?? '',
-      port: int.tryParse(Get.find<SplashController>().config?.webSocketPort ?? '') ?? 6001,
-
+      port: int.tryParse(
+              Get.find<SplashController>().config?.webSocketPort ?? '') ??
+          6001,
     );
     pusherClient = PusherChannelsClient.websocket(
       options: testOptions,

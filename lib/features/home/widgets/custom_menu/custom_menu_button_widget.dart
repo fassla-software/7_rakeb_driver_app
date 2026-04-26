@@ -37,7 +37,7 @@ class _CustomMenuButtonWidgetState extends State<CustomMenuButtonWidget>
   late Animation<Color?> _backgroundColorAnimation;
   late Animation<Color?> _foregroundColorAnimation;
   final List<Animation<double>> _speedDialChildAnimations =
-  <Animation<double>>[];
+      <Animation<double>>[];
 
   @override
   void initState() {
@@ -63,10 +63,10 @@ class _CustomMenuButtonWidgetState extends State<CustomMenuButtonWidget>
     final double fractionOfOneSpeedDialChild =
         1.0 / widget.speedDialChildren.length;
     for (int speedDialChildIndex = 0;
-    speedDialChildIndex < widget.speedDialChildren.length;
-    ++speedDialChildIndex) {
+        speedDialChildIndex < widget.speedDialChildren.length;
+        ++speedDialChildIndex) {
       final List<TweenSequenceItem<double>> tweenSequenceItems =
-      <TweenSequenceItem<double>>[];
+          <TweenSequenceItem<double>>[];
 
       final double firstWeight =
           fractionOfOneSpeedDialChild * speedDialChildIndex;
@@ -121,8 +121,8 @@ class _CustomMenuButtonWidgetState extends State<CustomMenuButtonWidget>
                   .map<Widget>((CustomMenuWidget speedDialChild) {
                 final Widget speedDialChildWidget = Opacity(
                   opacity:
-                  _speedDialChildAnimations[speedDialChildAnimationIndex]
-                      .value,
+                      _speedDialChildAnimations[speedDialChildAnimationIndex]
+                          .value,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -150,7 +150,7 @@ class _CustomMenuButtonWidgetState extends State<CustomMenuButtonWidget>
                         ),
                       ScaleTransition(
                         scale: _speedDialChildAnimations[
-                        speedDialChildAnimationIndex],
+                            speedDialChildAnimationIndex],
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4.0),
                           child: FloatingActionButton(

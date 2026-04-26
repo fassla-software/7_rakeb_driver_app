@@ -6,14 +6,15 @@ import 'package:ride_sharing_user_app/localization/language_model.dart';
 import 'package:ride_sharing_user_app/util/app_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LocalizationController extends GetxController  implements GetxService{
+class LocalizationController extends GetxController implements GetxService {
   final SharedPreferences sharedPreferences;
 
   LocalizationController({required this.sharedPreferences}) {
     loadCurrentLanguage();
   }
 
-  Locale _locale = Locale(AppConstants.languages[1].languageCode, AppConstants.languages[1].countryCode);
+  Locale _locale = Locale(AppConstants.languages[1].languageCode,
+      AppConstants.languages[1].countryCode);
   bool _isLtr = true;
   int _selectIndex = 0;
   List<LanguageModel> _languages = [];
@@ -29,13 +30,21 @@ class LocalizationController extends GetxController  implements GetxService{
     _isLtr = !intl.Bidi.isRtlLanguage(_locale.languageCode);
     saveLanguage(_locale);
     update();
-    Get.find<ApiClient>().updateHeader(sharedPreferences.getString(AppConstants.token)??'', sharedPreferences.getString(AppConstants.languageCode), 'latitude', 'longitude', sharedPreferences.getString(AppConstants.zoneId)??'');
+    Get.find<ApiClient>().updateHeader(
+        sharedPreferences.getString(AppConstants.token) ?? '',
+        sharedPreferences.getString(AppConstants.languageCode),
+        'latitude',
+        'longitude',
+        sharedPreferences.getString(AppConstants.zoneId) ?? '');
     backendLanguageUpdate();
   }
 
   void loadCurrentLanguage() async {
-    _locale = Locale(sharedPreferences.getString(AppConstants.languageCode) ?? AppConstants.languages[1].languageCode,
-        sharedPreferences.getString(AppConstants.countryCode) ?? AppConstants.languages[1].countryCode);
+    _locale = Locale(
+        sharedPreferences.getString(AppConstants.languageCode) ??
+            AppConstants.languages[1].languageCode,
+        sharedPreferences.getString(AppConstants.countryCode) ??
+            AppConstants.languages[1].countryCode);
     _isLtr = !intl.Bidi.isRtlLanguage(_locale.languageCode);
     update();
   }
@@ -74,8 +83,7 @@ class LocalizationController extends GetxController  implements GetxService{
     }
   }
 
-  void backendLanguageUpdate(){
+  void backendLanguageUpdate() {
     Get.find<ApiClient>().postData(AppConstants.changeLanguage, {});
   }
-
 }

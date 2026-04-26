@@ -96,9 +96,13 @@ class ScheduleCard extends StatelessWidget {
                           color: Theme.of(context).primaryColor, size: 40.0)
                       : ElevatedButton.icon(
                           onPressed: () {
-                            controller.acceptScheduleTrip(schedule.id!).then((value){
-                                  SnackBarWidget("schedule_trip_accepted_and_added_to_your_list".tr, isError: false);
-
+                            controller
+                                .acceptScheduleTrip(schedule.id!)
+                                .then((value) {
+                              SnackBarWidget(
+                                  "schedule_trip_accepted_and_added_to_your_list"
+                                      .tr,
+                                  isError: false);
                             });
                           },
                           icon: const Icon(Icons.check_circle,

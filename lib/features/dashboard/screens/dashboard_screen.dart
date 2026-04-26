@@ -179,7 +179,7 @@ class CustomMenuItem extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: textRegular.copyWith(
-                            color:Theme.of(context).cardColor,
+                            color: Theme.of(context).cardColor,
                             fontSize: Dimensions.fontSizeExtraSmall))
                     : const SizedBox(),
               ]),

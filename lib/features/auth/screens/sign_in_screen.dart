@@ -27,7 +27,6 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-
   TextEditingController passwordController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   FocusNode phoneNode = FocusNode();
@@ -36,21 +35,23 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   void initState() {
-    if(Get.find<AuthController>().getUserNumber().isNotEmpty){
-      phoneController.text =  Get.find<AuthController>().getUserNumber();
+    if (Get.find<AuthController>().getUserNumber().isNotEmpty) {
+      phoneController.text = Get.find<AuthController>().getUserNumber();
     }
     passwordController.text = Get.find<AuthController>().getUserPassword();
-    if(passwordController.text != ''){
+    if (passwordController.text != '') {
       Get.find<AuthController>().setRememberMe();
     }
-    if(Get.find<AuthController>().getLoginCountryCode().isNotEmpty){
-      Get.find<AuthController>().countryDialCode = Get.find<AuthController>().getLoginCountryCode();
-    }else if(Get.find<SplashController>().config!.countryCode != null){
-      Get.find<AuthController>().countryDialCode = CountryCode.fromCountryCode(Get.find<SplashController>().config!.countryCode!).dialCode!;
+    if (Get.find<AuthController>().getLoginCountryCode().isNotEmpty) {
+      Get.find<AuthController>().countryDialCode =
+          Get.find<AuthController>().getLoginCountryCode();
+    } else if (Get.find<SplashController>().config!.countryCode != null) {
+      Get.find<AuthController>().countryDialCode = CountryCode.fromCountryCode(
+              Get.find<SplashController>().config!.countryCode!)
+          .dialCode!;
     }
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -67,317 +68,329 @@ class _SignInScreenState extends State<SignInScreen> {
             return GetBuilder<RideController>(builder: (rideController) {
               return GetBuilder<LocationController>(
                   builder: (locationController) {
-                return Stack(
-                  children: [
-                    // Dark Blue Header
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.35,
-                      width: MediaQuery.of(context).size.width,
-                      color: Theme.of(context).primaryColor, // Using primary color for header
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(Images.logoNameWhite, height: 60),
-                          const SizedBox(height: Dimensions.paddingSizeDefault),
-                          Text(
-                            '${'welcome_to'.tr} ${AppConstants.appName}',
-                            style: textBold.copyWith(
-                              color: Colors.white,
-                              fontSize: Dimensions.fontSizeLarge,
+                return SizedBox.expand(
+                  child: Stack(
+                    children: [
+                      // Dark Blue Header
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.35,
+                        width: MediaQuery.of(context).size.width,
+                        color: Theme.of(context)
+                            .primaryColor, // Using primary color for header
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(Images.logoNameWhite, height: 60),
+                            const SizedBox(
+                                height: Dimensions.paddingSizeDefault),
+                            Text(
+                              '${'welcome_to'.tr} ${AppConstants.appName}',
+                              style: textBold.copyWith(
+                                color: Colors.white,
+                                fontSize: Dimensions.fontSizeLarge,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // White Card
+                      Positioned(
+                        top: MediaQuery.of(context).size.height * 0.35 - 40,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).cardColor,
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(40),
+                              topRight: Radius.circular(40),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-
-                    // White Card
-                    Positioned(
-                      top: MediaQuery.of(context).size.height * 0.35 - 40,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).cardColor,
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(40),
-                            topRight: Radius.circular(40),
-                          ),
-                        ),
-                        child: SingleChildScrollView(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: Dimensions.paddingSizeLarge,
-                              vertical: Dimensions.paddingSizeOver),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'log_in'.tr,
-                                        style: textBold.copyWith(
-                                          color: Theme.of(context).primaryColor,
-                                          fontSize:
-                                              Dimensions.fontSizeExtraLarge,
-                                        ),
-                                      ),
-                                      Text(
-                                        'log_in_message'.tr,
-                                        style: textRegular.copyWith(
-                                            color: Theme.of(context).hintColor),
-                                      ),
-                                    ],
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context)
-                                          .primaryColor
-                                          .withOpacity(0.1),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Icon(Icons.arrow_forward_ios,
-                                        color: Theme.of(context).primaryColor,
-                                        size: 15),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: Dimensions.paddingSizeOver),
-                              Form(
-                                key: _formKeySignIn,
-                                child: Column(
+                          child: SingleChildScrollView(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: Dimensions.paddingSizeLarge,
+                                vertical: Dimensions.paddingSizeOver),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    TextFieldWidget(
-                                      hintText: 'phone'.tr,
-                                      inputType: TextInputType.number,
-                                      countryDialCode:
-                                          authController.countryDialCode,
-                                      controller: phoneController,
-                                      focusNode: phoneNode,
-                                      nextFocus: passwordNode,
-                                      borderRadius: 15,
-                                      showBorder: true,
-                                      onCountryChanged:
-                                          (CountryCode countryCode) {
-                                        authController.countryDialCode =
-                                            countryCode.dialCode!;
-                                        authController.setCountryCode(
-                                            countryCode.dialCode!);
-                                      },
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'phone_is_required'.tr;
-                                        } else if (!GetUtils.isPhoneNumber(
-                                            authController.countryDialCode +
-                                                value)) {
-                                          return 'phone_number_is_not_valid'.tr;
-                                        }
-                                        return null;
-                                      },
-                                    ),
-                                    const SizedBox(
-                                        height: Dimensions.paddingSizeLarge),
-                                    TextFieldWidget(
-                                      hintText: 'password'.tr,
-                                      inputType: TextInputType.text,
-                                      prefixIcon: Images.lock,
-                                      inputAction: TextInputAction.done,
-                                      focusNode: passwordNode,
-                                      borderRadius: 15,
-                                      showBorder: true,
-                                      isPassword: true,
-                                      controller: passwordController,
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'password_is_required'.tr;
-                                        } else if (value.length < 8) {
-                                          return 'minimum_password_length_is_8'
-                                              .tr;
-                                        }
-                                        return null;
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(
-                                  height: Dimensions.paddingSizeSmall),
-                              Row(
-                                children: [
-                                  InkWell(
-                                    onTap: () =>
-                                        authController.toggleRememberMe(),
-                                    child: Row(
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        SizedBox(
-                                          width: 20.0,
-                                          height: 20.0,
-                                          child: Checkbox(
-                                            checkColor: Colors.white,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(5)),
-                                            activeColor:
+                                        Text(
+                                          'log_in'.tr,
+                                          style: textBold.copyWith(
+                                            color:
                                                 Theme.of(context).primaryColor,
-                                            value: authController
-                                                .isActiveRememberMe,
-                                            onChanged: (bool? isChecked) =>
-                                                authController
-                                                    .toggleRememberMe(),
+                                            fontSize:
+                                                Dimensions.fontSizeExtraLarge,
                                           ),
                                         ),
-                                        const SizedBox(
-                                            width: Dimensions
-                                                .paddingSizeExtraSmall),
                                         Text(
-                                          'remember'.tr,
+                                          'log_in_message'.tr,
                                           style: textRegular.copyWith(
-                                              fontSize:
-                                                  Dimensions.fontSizeSmall),
+                                              color:
+                                                  Theme.of(context).hintColor),
                                         ),
                                       ],
                                     ),
+                                    Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context)
+                                            .primaryColor
+                                            .withOpacity(0.1),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Icon(Icons.arrow_forward_ios,
+                                          color: Theme.of(context).primaryColor,
+                                          size: 15),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                    height: Dimensions.paddingSizeOver),
+                                Form(
+                                  key: _formKeySignIn,
+                                  child: Column(
+                                    children: [
+                                      TextFieldWidget(
+                                        hintText: 'phone'.tr,
+                                        inputType: TextInputType.number,
+                                        countryDialCode:
+                                            authController.countryDialCode,
+                                        controller: phoneController,
+                                        focusNode: phoneNode,
+                                        nextFocus: passwordNode,
+                                        borderRadius: 15,
+                                        showBorder: true,
+                                        onCountryChanged:
+                                            (CountryCode countryCode) {
+                                          authController.countryDialCode =
+                                              countryCode.dialCode!;
+                                          authController.setCountryCode(
+                                              countryCode.dialCode!);
+                                        },
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'phone_is_required'.tr;
+                                          } else if (!GetUtils.isPhoneNumber(
+                                              authController.countryDialCode +
+                                                  value)) {
+                                            return 'phone_number_is_not_valid'
+                                                .tr;
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                      const SizedBox(
+                                          height: Dimensions.paddingSizeLarge),
+                                      TextFieldWidget(
+                                        hintText: 'password'.tr,
+                                        inputType: TextInputType.text,
+                                        prefixIcon: Images.lock,
+                                        inputAction: TextInputAction.done,
+                                        focusNode: passwordNode,
+                                        borderRadius: 15,
+                                        showBorder: true,
+                                        isPassword: true,
+                                        controller: passwordController,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'password_is_required'.tr;
+                                          } else if (value.length < 8) {
+                                            return 'minimum_password_length_is_8'
+                                                .tr;
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                    ],
                                   ),
-                                  const Spacer(),
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: TextButton(
-                                      onPressed: () => Get.to(
-                                          () => const ForgotPasswordScreen()),
+                                ),
+                                const SizedBox(
+                                    height: Dimensions.paddingSizeSmall),
+                                Row(
+                                  children: [
+                                    InkWell(
+                                      onTap: () =>
+                                          authController.toggleRememberMe(),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 20.0,
+                                            height: 20.0,
+                                            child: Checkbox(
+                                              checkColor: Colors.white,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)),
+                                              activeColor: Theme.of(context)
+                                                  .primaryColor,
+                                              value: authController
+                                                  .isActiveRememberMe,
+                                              onChanged: (bool? isChecked) =>
+                                                  authController
+                                                      .toggleRememberMe(),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                              width: Dimensions
+                                                  .paddingSizeExtraSmall),
+                                          Text(
+                                            'remember'.tr,
+                                            style: textRegular.copyWith(
+                                                fontSize:
+                                                    Dimensions.fontSizeSmall),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: TextButton(
+                                        onPressed: () => Get.to(
+                                            () => const ForgotPasswordScreen()),
+                                        child: Text(
+                                          'forgot_password'.tr,
+                                          style: textRegular.copyWith(
+                                            fontSize: Dimensions.fontSizeSmall,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                    height: Dimensions.paddingSizeOver),
+                                (authController.isLoading ||
+                                        authController.updateFcm ||
+                                        profileController.isLoading ||
+                                        rideController.isLoading ||
+                                        locationController.lastLocationLoading)
+                                    ? Center(
+                                        child: SpinKitCircle(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            size: 40.0))
+                                    : ButtonWidget(
+                                        buttonText: 'log_in'.tr,
+                                        onPressed: () {
+                                          if (_formKeySignIn.currentState!
+                                              .validate()) {
+                                            authController.login(
+                                                authController.countryDialCode,
+                                                phoneController.text,
+                                                passwordController.text);
+                                          }
+                                        },
+                                        radius: 50,
+                                      ),
+                                const SizedBox(
+                                    height: Dimensions.paddingSizeLarge),
+                                if (Get.find<SplashController>()
+                                            .config!
+                                            .selfRegistration !=
+                                        null &&
+                                    Get.find<SplashController>()
+                                        .config!
+                                        .selfRegistration!)
+                                  Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          '${'do_not_have_an_account'.tr} ',
+                                          style: textRegular.copyWith(
+                                            fontSize: Dimensions.fontSizeSmall,
+                                            color: Theme.of(context).hintColor,
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () => Get.to(
+                                              () => const SignUpScreen()),
+                                          style: TextButton.styleFrom(
+                                            padding: EdgeInsets.zero,
+                                            minimumSize: const Size(50, 30),
+                                            tapTargetSize: MaterialTapTargetSize
+                                                .shrinkWrap,
+                                          ),
+                                          child: Text(
+                                            'sign_up'.tr,
+                                            style: textRegular.copyWith(
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              decorationColor: Theme.of(context)
+                                                  .primaryColor,
+                                            ),
+                                          ),
+                                        ),
+                                      ])
+                                else
+                                  Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text("${'to_create_account'.tr} "),
+                                        InkWell(
+                                          onTap: () =>
+                                              Get.find<SplashController>()
+                                                  .sendMailOrCall(
+                                            "tel:${Get.find<SplashController>().config?.businessContactPhone}",
+                                            false,
+                                          ),
+                                          child: Text(
+                                            "${'contact_support'.tr} ",
+                                            style: textRegular.copyWith(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                            ),
+                                          ),
+                                        ),
+                                      ]),
+                                const SizedBox(
+                                    height: Dimensions.paddingSizeOver),
+                                Center(
+                                  child: InkWell(
+                                    onTap: () => Get.to(() =>
+                                        const PolicyViewerScreen(
+                                            htmlType:
+                                                HtmlType.termsAndConditions)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(
+                                          Dimensions.paddingSizeDefault),
                                       child: Text(
-                                        'forgot_password'.tr,
-                                        style: textRegular.copyWith(
-                                          fontSize: Dimensions.fontSizeSmall,
+                                        "terms_and_condition".tr,
+                                        style: textMedium.copyWith(
+                                          decoration: TextDecoration.underline,
                                           color: Theme.of(context).primaryColor,
+                                          decorationColor:
+                                              Theme.of(context).primaryColor,
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                  height: Dimensions.paddingSizeOver),
-                              (authController.isLoading ||
-                                      authController.updateFcm ||
-                                      profileController.isLoading ||
-                                      rideController.isLoading ||
-                                      locationController.lastLocationLoading)
-                                  ? Center(
-                                      child: SpinKitCircle(
-                                          color: Theme.of(context).primaryColor,
-                                          size: 40.0))
-                                  : ButtonWidget(
-                                      buttonText: 'log_in'.tr,
-                                      onPressed: () {
-                                        if (_formKeySignIn.currentState!
-                                            .validate()) {
-                                          authController.login(
-                                              authController.countryDialCode,
-                                              phoneController.text,
-                                              passwordController.text);
-                                        }
-                                      },
-                                      radius: 50,
-                                    ),
-                              const SizedBox(
-                                  height: Dimensions.paddingSizeLarge),
-                              if (Get.find<SplashController>()
-                                      .config!
-                                      .selfRegistration !=
-                                  null &&
-                                  Get.find<SplashController>()
-                                      .config!
-                                      .selfRegistration!)
-                                Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '${'do_not_have_an_account'.tr} ',
-                                        style: textRegular.copyWith(
-                                          fontSize: Dimensions.fontSizeSmall,
-                                          color: Theme.of(context).hintColor,
-                                        ),
-                                      ),
-                                      TextButton(
-                                        onPressed: () =>
-                                            Get.to(() => const SignUpScreen()),
-                                        style: TextButton.styleFrom(
-                                          padding: EdgeInsets.zero,
-                                          minimumSize: const Size(50, 30),
-                                          tapTargetSize:
-                                              MaterialTapTargetSize.shrinkWrap,
-                                        ),
-                                        child: Text(
-                                          'sign_up'.tr,
-                                          style: textRegular.copyWith(
-                                            decoration:
-                                                TextDecoration.underline,
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            decorationColor:
-                                                Theme.of(context).primaryColor,
-                                          ),
-                                        ),
-                                      ),
-                                    ])
-                              else
-                                Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text("${'to_create_account'.tr} "),
-                                      InkWell(
-                                        onTap: () => Get.find<
-                                                SplashController>()
-                                            .sendMailOrCall(
-                                          "tel:${Get.find<SplashController>().config?.businessContactPhone}",
-                                          false,
-                                        ),
-                                        child: Text(
-                                          "${'contact_support'.tr} ",
-                                          style: textRegular.copyWith(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            decoration:
-                                                TextDecoration.underline,
-                                          ),
-                                        ),
-                                      ),
-                                    ]),
-                              const SizedBox(
-                                  height: Dimensions.paddingSizeOver),
-                              Center(
-                                child: InkWell(
-                                  onTap: () => Get.to(() =>
-                                      const PolicyViewerScreen(
-                                          htmlType:
-                                              HtmlType.termsAndConditions)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(
-                                        Dimensions.paddingSizeDefault),
-                                    child: Text(
-                                      "terms_and_condition".tr,
-                                      style: textMedium.copyWith(
-                                        decoration: TextDecoration.underline,
-                                        color: Theme.of(context).primaryColor,
-                                        decorationColor:
-                                            Theme.of(context).primaryColor,
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 );
               });
             });
@@ -387,4 +400,3 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 }
-

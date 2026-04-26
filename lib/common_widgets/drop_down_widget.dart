@@ -18,25 +18,25 @@ class DropDownWidget<T> extends StatefulWidget {
 
   const DropDownWidget(
       {required this.items,
-        required this.onChanged,
-        this.hintText = "",
-        this.borderRadius = 0,
-        this.borderWidth = 1,
-        this.maxListHeight = 100,
-        this.defaultSelectedIndex = -1,
-        super.key,
-        this.enabled = true,
-        required this.icon,
-        this.showText = true,
-        this.menuItemWidth,
-        this.showLeftSide = true
-      });
+      required this.onChanged,
+      this.hintText = "",
+      this.borderRadius = 0,
+      this.borderWidth = 1,
+      this.maxListHeight = 100,
+      this.defaultSelectedIndex = -1,
+      super.key,
+      this.enabled = true,
+      required this.icon,
+      this.showText = true,
+      this.menuItemWidth,
+      this.showLeftSide = true});
 
   @override
   DropDownWidgetState createState() => DropDownWidgetState();
 }
 
-class DropDownWidgetState extends State<DropDownWidget> with WidgetsBindingObserver {
+class DropDownWidgetState extends State<DropDownWidget>
+    with WidgetsBindingObserver {
   bool _isOpen = false, _isAnyItemSelected = false, _isReverse = false;
   late OverlayEntry _overlayEntry;
   late RenderBox? _renderBox;
@@ -104,73 +104,91 @@ class DropDownWidgetState extends State<DropDownWidget> with WidgetsBindingObser
     return OverlayEntry(
         maintainState: false,
         builder: (context) => Align(
-          alignment: Alignment.center,
-          child: CompositedTransformFollower(
-            link: _layerLink,
-            showWhenUnlinked: false,
-            offset: dropDownOffset,
-            child: SizedBox(
-              height: widget.maxListHeight,
-              width: widget.menuItemWidth ?? size.width,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: _isReverse
-                    ? MainAxisAlignment.end
-                    : MainAxisAlignment.start,
-                children: <Widget>[
-                  Padding(padding: const EdgeInsets.only(top: 5),
-                    child: Container(
-                      constraints: BoxConstraints(maxHeight: widget.maxListHeight,
-                          maxWidth: widget.menuItemWidth ?? size.width),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: Get.isDarkMode ? null :shadow,
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(widget.borderRadius),
-                        ),
-                        child: Material(
-                          elevation: 0,
-                          color: Get.isDarkMode ? Theme.of(context).canvasColor : Theme.of(context).primaryColor.withOpacity(0.03),
-                          shadowColor: Get.isDarkMode ? Colors.transparent : Colors.grey,
-                          child: ListView(
-                            padding: EdgeInsets.zero,
-                            shrinkWrap: true,
-                            children: widget.items
-                                .map((item) => GestureDetector(
-                              child: Column(
-                                children: [
-                                  const SizedBox(height: 7),
-                                  item.child,
-                                  const SizedBox(height: 7),
-                                  if( widget.items.indexOf(item) != widget.items.length - 1 )
-                                    Container(height: 1,width: 60,color: Get.isDarkMode ? Theme.of(context).hintColor :Theme.of(context).primaryColor.withOpacity(0.2),)
-                                ],
+              alignment: Alignment.center,
+              child: CompositedTransformFollower(
+                link: _layerLink,
+                showWhenUnlinked: false,
+                offset: dropDownOffset,
+                child: SizedBox(
+                  height: widget.maxListHeight,
+                  width: widget.menuItemWidth ?? size.width,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: _isReverse
+                        ? MainAxisAlignment.end
+                        : MainAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5),
+                        child: Container(
+                          constraints: BoxConstraints(
+                              maxHeight: widget.maxListHeight,
+                              maxWidth: widget.menuItemWidth ?? size.width),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).cardColor,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: Get.isDarkMode ? null : shadow,
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(widget.borderRadius),
+                            ),
+                            child: Material(
+                              elevation: 0,
+                              color: Get.isDarkMode
+                                  ? Theme.of(context).canvasColor
+                                  : Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.03),
+                              shadowColor: Get.isDarkMode
+                                  ? Colors.transparent
+                                  : Colors.grey,
+                              child: ListView(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                children: widget.items
+                                    .map((item) => GestureDetector(
+                                          child: Column(
+                                            children: [
+                                              const SizedBox(height: 7),
+                                              item.child,
+                                              const SizedBox(height: 7),
+                                              if (widget.items.indexOf(item) !=
+                                                  widget.items.length - 1)
+                                                Container(
+                                                  height: 1,
+                                                  width: 60,
+                                                  color: Get.isDarkMode
+                                                      ? Theme.of(context)
+                                                          .hintColor
+                                                      : Theme.of(context)
+                                                          .primaryColor
+                                                          .withOpacity(0.2),
+                                                )
+                                            ],
+                                          ),
+                                          onTap: () {
+                                            if (mounted) {
+                                              setState(() {
+                                                _isAnyItemSelected = true;
+                                                _itemSelected = item.child;
+                                                _removeOverlay();
+                                                widget.onChanged(item.value);
+                                              });
+                                            }
+                                          },
+                                        ))
+                                    .toList(),
                               ),
-                              onTap: () {
-                                if (mounted) {
-                                  setState(() {
-                                    _isAnyItemSelected = true;
-                                    _itemSelected = item.child;
-                                    _removeOverlay();
-                                    widget.onChanged(item.value);
-                                  });
-                                }
-                              },
-                            ))
-                                .toList(),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-        ));
+            ));
   }
 
   Offset getOffset() {
@@ -179,11 +197,17 @@ class DropDownWidgetState extends State<DropDownWidget> with WidgetsBindingObser
     double spaceAvailable = _getAvailableSpace(y + renderBox.size.height);
     if (spaceAvailable > widget.maxListHeight) {
       _isReverse = false;
-      return Offset(widget.showLeftSide ? 0 : renderBox.size.width - (widget.menuItemWidth ?? 0), renderBox.size.height);
+      return Offset(
+          widget.showLeftSide
+              ? 0
+              : renderBox.size.width - (widget.menuItemWidth ?? 0),
+          renderBox.size.height);
     } else {
       _isReverse = true;
       return Offset(
-          widget.showLeftSide ? 0 : renderBox.size.width - (widget.menuItemWidth ?? 0),
+          widget.showLeftSide
+              ? 0
+              : renderBox.size.width - (widget.menuItemWidth ?? 0),
           renderBox.size.height -
               (widget.maxListHeight + renderBox.size.height));
     }
@@ -206,32 +230,33 @@ class DropDownWidgetState extends State<DropDownWidget> with WidgetsBindingObser
       child: GestureDetector(
         onTap: widget.enabled
             ? () {
-          _isOpen ? _removeOverlay() : _addOverlay();
-        }
+                _isOpen ? _removeOverlay() : _addOverlay();
+              }
             : null,
         child: Container(
           decoration: _getDecoration(),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              widget.showText ?
-              Flexible(
-                flex: 3,
-                child: _isAnyItemSelected ?
-                Padding(
-                  padding: const EdgeInsets.only(left: 4.0),
-                  child: _itemSelected!,
-                ) : Padding(
-                  padding:
-                  const EdgeInsets.only(left: 4.0), // change it here
-                  child: Text(
-                    widget.hintText,
-                    maxLines: 1,
-                    overflow: TextOverflow.clip,
-                  ),
-                ),
-              ) :
-              const SizedBox(),
+              widget.showText
+                  ? Flexible(
+                      flex: 3,
+                      child: _isAnyItemSelected
+                          ? Padding(
+                              padding: const EdgeInsets.only(left: 4.0),
+                              child: _itemSelected!,
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 4.0), // change it here
+                              child: Text(
+                                widget.hintText,
+                                maxLines: 1,
+                                overflow: TextOverflow.clip,
+                              ),
+                            ),
+                    )
+                  : const SizedBox(),
               Flexible(
                 flex: 1,
                 child: widget.icon,
@@ -270,7 +295,8 @@ class CustomDropdownMenuItem<T> extends StatelessWidget {
   final T value;
   final Widget child;
 
-  const CustomDropdownMenuItem({super.key, required this.value, required this.child});
+  const CustomDropdownMenuItem(
+      {super.key, required this.value, required this.child});
 
   @override
   Widget build(BuildContext context) {

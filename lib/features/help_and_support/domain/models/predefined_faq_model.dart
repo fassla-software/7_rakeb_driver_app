@@ -1,5 +1,3 @@
-
-
 class PredefineFawModel {
   String? responseCode;
   String? message;
@@ -8,14 +6,14 @@ class PredefineFawModel {
   int? offset;
   List<Data>? data;
 
-  PredefineFawModel(
-      {this.responseCode,
-        this.message,
-        this.totalSize,
-        this.limit,
-        this.offset,
-        this.data,
-      });
+  PredefineFawModel({
+    this.responseCode,
+    this.message,
+    this.totalSize,
+    this.limit,
+    this.offset,
+    this.data,
+  });
 
   PredefineFawModel.fromJson(Map<String, dynamic> json) {
     responseCode = json['response_code'];
@@ -29,7 +27,6 @@ class PredefineFawModel {
         data!.add(Data.fromJson(v));
       });
     }
-
   }
 
   Map<String, dynamic> toJson() {
@@ -57,12 +54,12 @@ class Data {
 
   Data(
       {this.id,
-        this.question,
-        this.answer,
-        this.questionAnswerFor,
-        this.isActive,
-        this.createdAt,
-        this.updatedAt});
+      this.question,
+      this.answer,
+      this.questionAnswerFor,
+      this.isActive,
+      this.createdAt,
+      this.updatedAt});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];

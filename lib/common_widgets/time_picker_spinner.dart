@@ -11,7 +11,7 @@ class ItemScrollPhysics extends ScrollPhysics {
     super.parent,
     this.itemHeight,
     this.targetPixelsLimit = 3.0,
-  })  : assert(itemHeight != null && itemHeight > 0);
+  }) : assert(itemHeight != null && itemHeight > 0);
 
   @override
   ItemScrollPhysics applyTo(ScrollPhysics? ancestor) {
@@ -21,7 +21,7 @@ class ItemScrollPhysics extends ScrollPhysics {
 
   double _getItem(ScrollPosition position) {
     double maxScrollItem =
-    (position.maxScrollExtent / itemHeight!).floorToDouble();
+        (position.maxScrollExtent / itemHeight!).floorToDouble();
     return min(max(0, position.pixels / itemHeight!), maxScrollItem);
   }
 
@@ -45,7 +45,7 @@ class ItemScrollPhysics extends ScrollPhysics {
       ScrollMetrics position, double velocity) {
     Tolerance tolerance = const Tolerance();
     final double target =
-    _getTargetPixels(position as ScrollPosition, tolerance, velocity);
+        _getTargetPixels(position as ScrollPosition, tolerance, velocity);
     if (target != position.pixels) {
       return ScrollSpringSimulation(spring, position.pixels, target, velocity,
           tolerance: tolerance);
@@ -59,8 +59,6 @@ class ItemScrollPhysics extends ScrollPhysics {
 
 typedef SelectedIndexCallback = void Function(int);
 typedef TimePickerCallback = void Function(DateTime);
-
-
 
 class TimePickerSpinner extends StatefulWidget {
   final DateTime? time;
@@ -79,20 +77,19 @@ class TimePickerSpinner extends StatefulWidget {
 
   const TimePickerSpinner(
       {super.key,
-        this.time,
-        this.minutesInterval = 1,
-        this.secondsInterval = 1,
-        this.is24HourMode = true,
-        this.isShowSeconds = false,
-        this.highlightedTextStyle,
-        this.normalTextStyle,
-        this.itemHeight,
-        this.itemWidth,
-        this.alignment,
-        this.spacing,
-        this.isForce2Digits = false,
-        this.onTimeChange
-      });
+      this.time,
+      this.minutesInterval = 1,
+      this.secondsInterval = 1,
+      this.is24HourMode = true,
+      this.isShowSeconds = false,
+      this.highlightedTextStyle,
+      this.normalTextStyle,
+      this.itemHeight,
+      this.itemWidth,
+      this.alignment,
+      this.spacing,
+      this.isForce2Digits = false,
+      this.onTimeChange});
 
   @override
   TimePickerSpinnerState createState() => TimePickerSpinnerState();
@@ -114,9 +111,9 @@ class TimePickerSpinnerState extends State<TimePickerSpinner> {
   bool isAPScrolling = false;
 
   TextStyle defaultHighlightTextStyle =
-  const TextStyle(fontSize: 32, color: Colors.black);
+      const TextStyle(fontSize: 32, color: Colors.black);
   TextStyle defaultNormalTextStyle =
-  const TextStyle(fontSize: 32, color: Colors.black54);
+      const TextStyle(fontSize: 32, color: Colors.black54);
   double defaultItemHeight = 60;
   double defaultItemWidth = 45;
   double defaultSpacing = 20;
@@ -166,10 +163,10 @@ class TimePickerSpinnerState extends State<TimePickerSpinner> {
     int hour = currentSelectedHourIndex - _getHourCount();
     if (!widget.is24HourMode && currentSelectedAPIndex == 2) hour += 12;
     int minute = (currentSelectedMinuteIndex -
-        (isLoop(_getMinuteCount()) ? _getMinuteCount() : 1)) *
+            (isLoop(_getMinuteCount()) ? _getMinuteCount() : 1)) *
         widget.minutesInterval;
     int second = (currentSelectedSecondIndex -
-        (isLoop(_getSecondCount()) ? _getSecondCount() : 1)) *
+            (isLoop(_getSecondCount()) ? _getSecondCount() : 1)) *
         widget.secondsInterval;
     return DateTime(currentTime!.year, currentTime!.month, currentTime!.day,
         hour, minute, second);
@@ -183,21 +180,21 @@ class TimePickerSpinnerState extends State<TimePickerSpinner> {
         (currentTime!.hour % (widget.is24HourMode ? 24 : 12)) + _getHourCount();
     hourController = ScrollController(
         initialScrollOffset:
-        (currentSelectedHourIndex - 1) * _getItemHeight()!);
+            (currentSelectedHourIndex - 1) * _getItemHeight()!);
 
     currentSelectedMinuteIndex =
         (currentTime!.minute / widget.minutesInterval).floor() +
             (isLoop(_getMinuteCount()) ? _getMinuteCount() : 1);
     minuteController = ScrollController(
         initialScrollOffset:
-        (currentSelectedMinuteIndex - 1) * _getItemHeight()!);
+            (currentSelectedMinuteIndex - 1) * _getItemHeight()!);
 
     currentSelectedSecondIndex =
         (currentTime!.second / widget.secondsInterval).floor() +
             (isLoop(_getSecondCount()) ? _getSecondCount() : 1);
     secondController = ScrollController(
         initialScrollOffset:
-        (currentSelectedSecondIndex - 1) * _getItemHeight()!);
+            (currentSelectedSecondIndex - 1) * _getItemHeight()!);
 
     currentSelectedAPIndex = currentTime!.hour >= 12 ? 2 : 1;
     apController = ScrollController(
@@ -221,14 +218,21 @@ class TimePickerSpinnerState extends State<TimePickerSpinner> {
           _getHourCount(),
           currentSelectedHourIndex,
           isHourScrolling,
-          1, (index) {
-          currentSelectedHourIndex = index;
-          isHourScrolling = true;
-        }, () => isHourScrolling = false,
+          1,
+          (index) {
+            currentSelectedHourIndex = index;
+            isHourScrolling = true;
+          },
+          () => isHourScrolling = false,
         ),
       ),
-      Padding(padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall),
-        child: Text(':',style: textMedium.copyWith(fontSize: Dimensions.fontSizeLarge),),
+      Padding(
+        padding:
+            const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall),
+        child: Text(
+          ':',
+          style: textMedium.copyWith(fontSize: Dimensions.fontSizeLarge),
+        ),
       ),
       SizedBox(
         width: _getItemWidth(),
@@ -239,11 +243,11 @@ class TimePickerSpinnerState extends State<TimePickerSpinner> {
           currentSelectedMinuteIndex,
           isMinuteScrolling,
           widget.minutesInterval,
-              (index) {
+          (index) {
             currentSelectedMinuteIndex = index;
             isMinuteScrolling = true;
           },
-              () => isMinuteScrolling = false,
+          () => isMinuteScrolling = false,
         ),
       ),
     ];
@@ -259,55 +263,74 @@ class TimePickerSpinnerState extends State<TimePickerSpinner> {
           currentSelectedSecondIndex,
           isSecondsScrolling,
           widget.secondsInterval,
-              (index) {
+          (index) {
             currentSelectedSecondIndex = index;
             isSecondsScrolling = true;
           },
-              () => isSecondsScrolling = false,
+          () => isSecondsScrolling = false,
         ),
       ));
     }
 
     if (!widget.is24HourMode) {
-      contents.add(const SizedBox(width: Dimensions.paddingSizeSmall,));
+      contents.add(const SizedBox(
+        width: Dimensions.paddingSizeSmall,
+      ));
       contents.add(Container(
-        height: _getItemHeight()! * 2,width: _getItemWidth()! * 1,
+        height: _getItemHeight()! * 2,
+        width: _getItemWidth()! * 1,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
           color: Theme.of(context).hintColor.withOpacity(0.15),
         ),
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           InkWell(
-            onTap: (){
+            onTap: () {
               setState(() {
                 currentSelectedAPIndex = 1;
               });
               widget.onTimeChange!(getDateTime());
             },
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeTiny,horizontal: Dimensions.paddingSizeSeven),
+              padding: const EdgeInsets.symmetric(
+                  vertical: Dimensions.paddingSizeTiny,
+                  horizontal: Dimensions.paddingSizeSeven),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
-                color: currentSelectedAPIndex == 1 ? Theme.of(context).primaryColor : Colors.transparent
-              ),
-              child: Text('am',style: textRegular.copyWith(color: currentSelectedAPIndex == 1 ? Theme.of(context).cardColor : null)),
+                  borderRadius:
+                      BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
+                  color: currentSelectedAPIndex == 1
+                      ? Theme.of(context).primaryColor
+                      : Colors.transparent),
+              child: Text('am',
+                  style: textRegular.copyWith(
+                      color: currentSelectedAPIndex == 1
+                          ? Theme.of(context).cardColor
+                          : null)),
             ),
           ),
-
           InkWell(
-            onTap: (){
+            onTap: () {
               setState(() {
                 currentSelectedAPIndex = 2;
               });
               widget.onTimeChange!(getDateTime());
             },
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeTiny,horizontal: Dimensions.paddingSizeSeven),
+              padding: const EdgeInsets.symmetric(
+                  vertical: Dimensions.paddingSizeTiny,
+                  horizontal: Dimensions.paddingSizeSeven),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
-                  color: currentSelectedAPIndex == 2 ? Theme.of(context).primaryColor : Colors.transparent
-              ),
-              child: Text('pm',style: textRegular.copyWith(color: currentSelectedAPIndex == 2 ? Theme.of(context).cardColor : null)),
+                  borderRadius:
+                      BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
+                  color: currentSelectedAPIndex == 2
+                      ? Theme.of(context).primaryColor
+                      : Colors.transparent),
+              child: Text('pm',
+                  style: textRegular.copyWith(
+                      color: currentSelectedAPIndex == 2
+                          ? Theme.of(context).cardColor
+                          : null)),
             ),
           )
         ]),
@@ -336,7 +359,6 @@ class TimePickerSpinnerState extends State<TimePickerSpinner> {
       int interval,
       SelectedIndexCallback onUpdateSelectedIndex,
       VoidCallback onScrollEnd) {
-
     Widget spinner = NotificationListener<ScrollNotification>(
       onNotification: (scrollNotification) {
         if (scrollNotification is UserScrollNotification) {
@@ -372,8 +394,7 @@ class TimePickerSpinnerState extends State<TimePickerSpinner> {
       child: Container(
         decoration: BoxDecoration(
             color: Theme.of(context).hintColor.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(Dimensions.radiusDefault)
-        ),
+            borderRadius: BorderRadius.circular(Dimensions.radiusDefault)),
         child: ScrollConfiguration(
           behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
           child: ListView.builder(
@@ -407,7 +428,8 @@ class TimePickerSpinnerState extends State<TimePickerSpinner> {
             },
             controller: controller,
             itemCount: isLoop(max) ? max * 3 : max + 2,
-            physics: ItemScrollPhysics(itemHeight: _getItemHeight(),targetPixelsLimit: 0),
+            physics: ItemScrollPhysics(
+                itemHeight: _getItemHeight(), targetPixelsLimit: 0),
             padding: EdgeInsets.zero,
           ),
         ),
@@ -419,9 +441,9 @@ class TimePickerSpinnerState extends State<TimePickerSpinner> {
         Positioned.fill(child: spinner),
         isScrolling
             ? Positioned.fill(
-            child: Container(
-              color: Colors.black.withOpacity(0),
-            ))
+                child: Container(
+                color: Colors.black.withOpacity(0),
+              ))
             : Container()
       ],
     );

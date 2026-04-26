@@ -4,9 +4,10 @@ import 'package:ride_sharing_user_app/data/api_client.dart';
 import 'package:ride_sharing_user_app/features/help_and_support/domain/repositories/help_and_support_repository_interface.dart';
 import 'package:ride_sharing_user_app/features/help_and_support/domain/services/help_and_support_service_interface.dart';
 
-class HelpAndSupportService implements HelpAndSupportServiceInterface{
+class HelpAndSupportService implements HelpAndSupportServiceInterface {
   final HelpAndSupportRepositoryInterface helpAndSupportRepositoryInterface;
-  const HelpAndSupportService({required this.helpAndSupportRepositoryInterface});
+  const HelpAndSupportService(
+      {required this.helpAndSupportRepositoryInterface});
 
   @override
   Future createChannel() {
@@ -14,13 +15,26 @@ class HelpAndSupportService implements HelpAndSupportServiceInterface{
   }
 
   @override
-  Future sendMessage({String? message, String? channelId, List<MultipartBody>? images, List<MultipartDocument>? documents}) {
-    return helpAndSupportRepositoryInterface.sendMessage(message: message, channelId: channelId, images: images, documents: documents);
+  Future sendMessage(
+      {String? message,
+      String? channelId,
+      List<MultipartBody>? images,
+      List<MultipartDocument>? documents}) {
+    return helpAndSupportRepositoryInterface.sendMessage(
+        message: message,
+        channelId: channelId,
+        images: images,
+        documents: documents);
   }
 
   @override
-  Future sendFaqMessage({String? questionId, String? channelId, List<MultipartBody>? images, List<MultipartDocument>? documents}) {
-    return helpAndSupportRepositoryInterface.sendFaqMessage(questionId: questionId, channelId: channelId);
+  Future sendFaqMessage(
+      {String? questionId,
+      String? channelId,
+      List<MultipartBody>? images,
+      List<MultipartDocument>? documents}) {
+    return helpAndSupportRepositoryInterface.sendFaqMessage(
+        questionId: questionId, channelId: channelId);
   }
 
   @override
@@ -34,7 +48,7 @@ class HelpAndSupportService implements HelpAndSupportServiceInterface{
   }
 
   @override
-  Future<HttpClientResponse> downloadFile(String url) async{
+  Future<HttpClientResponse> downloadFile(String url) async {
     return await helpAndSupportRepositoryInterface.downloadFile(url);
   }
 }

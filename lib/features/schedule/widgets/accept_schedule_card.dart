@@ -158,17 +158,15 @@ class AcceptScheduleCard extends StatelessWidget {
                             child: ImageWidget(
                               width: 50,
                               height: 50,
-                              image: schedule.customer?.profileImage??"",
+                              image: schedule.customer?.profileImage ?? "",
                             ),
                           ),
                         ]),
                         Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              if (schedule.customer!.firstName !=
-                                      null &&
-                                  schedule.customer!.lastName !=
-                                      null)
+                              if (schedule.customer!.firstName != null &&
+                                  schedule.customer!.lastName != null)
                                 SizedBox(
                                     width: 100,
                                     child: Text(
@@ -182,7 +180,7 @@ class AcceptScheduleCard extends StatelessWidget {
                                     size: Dimensions.iconSizeMedium,
                                   ),
                                   Text(
-                                   "0",
+                                    "0",
                                     style: textRegular.copyWith(),
                                   ),
                                 ]),
