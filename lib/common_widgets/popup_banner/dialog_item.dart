@@ -54,8 +54,7 @@ class DialogItem extends StatelessWidget {
       this.autoSlide = false,
       this.customCloseButton,
       required this.initIndex,
-      required this.showDownloadButton
-      });
+      required this.showDownloadButton});
 
   @override
   Widget build(BuildContext context) {
@@ -71,43 +70,52 @@ class DialogItem extends StatelessWidget {
   }
 
   Widget _dialogContent(BuildContext context) {
-    return Container(height: Get.height,width: Get.width,
+    return Container(
+        height: Get.height,
+        width: Get.width,
         decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(10),
-            boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 0.0, offset: Offset(0.0, 0.0))]),
-        child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.end, children: <Widget>[
-          GestureDetector(
-            onTap: () => Navigator.of(context).pop(),
-            child: customCloseButton ??
-                const Padding(
-                  padding: EdgeInsets.all(Dimensions.paddingSizeSmall),
-                  child: Icon(
-                    Icons.close,
-                    color: Colors.red,
-                  ),
-                ),
-          ),
-
-          ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: SliderItem(
-                height: height ?? (MediaQuery.of(context).size.height * 0.9),
-                fromNetwork: fromNetwork,
-                fit: fit,
-                imageList: images,
-                dotsAlignment: dotsAlignment,
-                onClick: (index) => onClick(index),
-                useDots: useDots,
-                dotsColorActive: dotsColorActive,
-                dotsColorInactive: dotsColorInactive,
-                dotsMarginBottom: dotsMarginBottom,
-                autoSlide: autoSlide,
-                initIndex: initIndex,
-                showDownloadButton: showDownloadButton,
-              )),
-
-        ]));
+            boxShadow: const [
+              BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 0.0,
+                  offset: Offset(0.0, 0.0))
+            ]),
+        child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () => Navigator.of(context).pop(),
+                child: customCloseButton ??
+                    const Padding(
+                      padding: EdgeInsets.all(Dimensions.paddingSizeSmall),
+                      child: Icon(
+                        Icons.close,
+                        color: Colors.red,
+                      ),
+                    ),
+              ),
+              ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: SliderItem(
+                    height:
+                        height ?? (MediaQuery.of(context).size.height * 0.9),
+                    fromNetwork: fromNetwork,
+                    fit: fit,
+                    imageList: images,
+                    dotsAlignment: dotsAlignment,
+                    onClick: (index) => onClick(index),
+                    useDots: useDots,
+                    dotsColorActive: dotsColorActive,
+                    dotsColorInactive: dotsColorInactive,
+                    dotsMarginBottom: dotsMarginBottom,
+                    autoSlide: autoSlide,
+                    initIndex: initIndex,
+                    showDownloadButton: showDownloadButton,
+                  )),
+            ]));
   }
 }

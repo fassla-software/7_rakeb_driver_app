@@ -16,7 +16,8 @@ class UpdatePaymentInfoScreen extends StatefulWidget {
   const UpdatePaymentInfoScreen({super.key, required this.methods});
 
   @override
-  State<UpdatePaymentInfoScreen> createState() => _UpdatePaymentInfoScreenState();
+  State<UpdatePaymentInfoScreen> createState() =>
+      _UpdatePaymentInfoScreenState();
 }
 
 class _UpdatePaymentInfoScreenState extends State<UpdatePaymentInfoScreen> {
@@ -35,61 +36,28 @@ class _UpdatePaymentInfoScreenState extends State<UpdatePaymentInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(title:'update_withdraw_method'.tr, showBackButton: true),
+      appBar: AppBarWidget(
+          title: 'update_withdraw_method'.tr, showBackButton: true),
       body: SingleChildScrollView(
-        child: Padding(padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
+        child: Padding(
+          padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
           child: GetBuilder<WalletController>(builder: (walletController) {
-            return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSeven),
-                child: Text(
-                  'method_name'.tr,
-                  style: textBold.copyWith(
-                    color: Theme.of(context).textTheme.bodyMedium!.color,
-                  ),
-                ),
-              ),
-
-              TextField(
-                controller: _methodName,
-                keyboardType: TextInputType.text,
-                cursorColor: Theme.of(context).hintColor,
-                style: textRegular.copyWith(
-                  fontSize: Dimensions.fontSizeDefault,
-                  color: Theme.of(context).textTheme.bodyMedium?.color,
-                ),
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(Dimensions.paddingSizeOver),
-                    borderSide:  BorderSide(
-                      width: 0.5,
-                      color: Theme.of(context).hintColor.withOpacity(0.25),
+            return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: Dimensions.paddingSizeSeven),
+                    child: Text(
+                      'method_name'.tr,
+                      style: textBold.copyWith(
+                        color: Theme.of(context).textTheme.bodyMedium!.color,
+                      ),
                     ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(Dimensions.paddingSizeOver),
-                    borderSide:  BorderSide(
-                      width: 0.5,
-                      color: Theme.of(context).hintColor.withOpacity(0.25),
-                    ),
-                  ),
-                  hintText: 'personal_account'.tr,
-                ),
-              ),
-              const SizedBox(height: Dimensions.paddingSizeSmall),
-
-              Text('payment_method'.tr,
-                style: textBold.copyWith(
-                  color: Theme.of(context).textTheme.bodyMedium!.color,
-                ),
-              ),
-              const SizedBox(height: Dimensions.paddingSizeSmall),
-
-              SizedBox(
-                  width: Get.width,
-                  child: TextField(
-                    controller: _controller,
-                    readOnly: true,
+                  TextField(
+                    controller: _methodName,
+                    keyboardType: TextInputType.text,
                     cursorColor: Theme.of(context).hintColor,
                     style: textRegular.copyWith(
                       fontSize: Dimensions.fontSizeDefault,
@@ -97,115 +65,182 @@ class _UpdatePaymentInfoScreenState extends State<UpdatePaymentInfoScreen> {
                     ),
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(Dimensions.paddingSizeOver),
-                        borderSide:  BorderSide(
-                          color: Theme.of(context).primaryColor.withOpacity(0.5),
+                        borderRadius:
+                            BorderRadius.circular(Dimensions.paddingSizeOver),
+                        borderSide: BorderSide(
+                          width: 0.5,
+                          color: Theme.of(context).hintColor.withOpacity(0.25),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(Dimensions.paddingSizeOver),
-                        borderSide:  BorderSide(
-                          color: Theme.of(context).primaryColor.withOpacity(0.5),
+                        borderRadius:
+                            BorderRadius.circular(Dimensions.paddingSizeOver),
+                        borderSide: BorderSide(
+                          width: 0.5,
+                          color: Theme.of(context).hintColor.withOpacity(0.25),
                         ),
                       ),
-                      suffixIcon: Icon(
-                        Icons.keyboard_arrow_down_sharp,
-                        color: Theme.of(context).primaryColor,
-                      )
+                      hintText: 'personal_account'.tr,
                     ),
-
-                  )
-              ),
-
-              const SizedBox(height: Dimensions.paddingSizeDefault),
-
-              (widget.methods.methodInfo!.isNotEmpty && widget.methods.methodInfo != null &&
-                  walletController.inputFieldControllerList.isNotEmpty) ?
-              ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: widget.methods.methodInfo!.length,
-                itemBuilder: (context, index){
-
-                  String type = widget.methods.withdrawMethod!.methodFields![index].inputType!;
-
-                  return Padding(padding:  const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSeven),
-                          child: Text(
-                            widget.methods.methodInfo![index].key?.toTitleCase() ?? '',
-                            style: textBold.copyWith(
-                              color: Theme.of(context).textTheme.bodyMedium!.color,
-                            ),
-                          ),
+                  ),
+                  const SizedBox(height: Dimensions.paddingSizeSmall),
+                  Text(
+                    'payment_method'.tr,
+                    style: textBold.copyWith(
+                      color: Theme.of(context).textTheme.bodyMedium!.color,
+                    ),
+                  ),
+                  const SizedBox(height: Dimensions.paddingSizeSmall),
+                  SizedBox(
+                      width: Get.width,
+                      child: TextField(
+                        controller: _controller,
+                        readOnly: true,
+                        cursorColor: Theme.of(context).hintColor,
+                        style: textRegular.copyWith(
+                          fontSize: Dimensions.fontSizeDefault,
+                          color: Theme.of(context).textTheme.bodyMedium?.color,
                         ),
-
-                        TextField(
-                          controller: walletController.inputFieldControllerList[index],
-                          keyboardType: (type == 'number' || type == "phone") ? TextInputType.number:
-                          TextInputType.text,
-                          cursorColor: Theme.of(context).hintColor,
-                          style: textRegular.copyWith(
-                            fontSize: Dimensions.fontSizeDefault,
-                            color: Theme.of(context).textTheme.bodyMedium?.color,
-                          ),
-                          decoration: InputDecoration(
+                        decoration: InputDecoration(
                             enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(Dimensions.paddingSizeOver),
-                              borderSide:  BorderSide(
-                                color: Theme.of(context).primaryColor.withOpacity(0.25),
+                              borderRadius: BorderRadius.circular(
+                                  Dimensions.paddingSizeOver),
+                              borderSide: BorderSide(
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(0.5),
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(Dimensions.paddingSizeOver),
-                              borderSide:  BorderSide(
-                                color: Theme.of(context).primaryColor.withOpacity(0.25),
+                              borderRadius: BorderRadius.circular(
+                                  Dimensions.paddingSizeOver),
+                              borderSide: BorderSide(
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(0.5),
                               ),
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ) : const LoaderWidget()
-            ]);
+                            suffixIcon: Icon(
+                              Icons.keyboard_arrow_down_sharp,
+                              color: Theme.of(context).primaryColor,
+                            )),
+                      )),
+                  const SizedBox(height: Dimensions.paddingSizeDefault),
+                  (widget.methods.methodInfo!.isNotEmpty &&
+                          widget.methods.methodInfo != null &&
+                          walletController.inputFieldControllerList.isNotEmpty)
+                      ? ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: widget.methods.methodInfo!.length,
+                          itemBuilder: (context, index) {
+                            String type = widget.methods.withdrawMethod!
+                                .methodFields![index].inputType!;
+
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                  bottom: Dimensions.paddingSizeSmall),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: Dimensions.paddingSizeSeven),
+                                    child: Text(
+                                      widget.methods.methodInfo![index].key
+                                              ?.toTitleCase() ??
+                                          '',
+                                      style: textBold.copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .color,
+                                      ),
+                                    ),
+                                  ),
+                                  TextField(
+                                    controller: walletController
+                                        .inputFieldControllerList[index],
+                                    keyboardType:
+                                        (type == 'number' || type == "phone")
+                                            ? TextInputType.number
+                                            : TextInputType.text,
+                                    cursorColor: Theme.of(context).hintColor,
+                                    style: textRegular.copyWith(
+                                      fontSize: Dimensions.fontSizeDefault,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.color,
+                                    ),
+                                    decoration: InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            Dimensions.paddingSizeOver),
+                                        borderSide: BorderSide(
+                                          color: Theme.of(context)
+                                              .primaryColor
+                                              .withOpacity(0.25),
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            Dimensions.paddingSizeOver),
+                                        borderSide: BorderSide(
+                                          color: Theme.of(context)
+                                              .primaryColor
+                                              .withOpacity(0.25),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        )
+                      : const LoaderWidget()
+                ]);
           }),
         ),
       ),
-      bottomNavigationBar: Column(mainAxisSize: MainAxisSize.min,
-          children: [
-            GetBuilder<WalletController>(builder: (walletController){
-              return Padding( padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
-                child: walletController.isLoading ?
-                 Center(child: SpinKitCircle(color: Theme.of(context).primaryColor, size: 40.0)) :
-                ButtonWidget(
-                  buttonText:'update'.tr,
-                  onPressed: (){
-                    bool haveBlankTitle = false;
-                    for(int i =0; i< walletController.inputFieldControllerList.length; i++){
-                      if(walletController.inputFieldControllerList[i].text.isEmpty && walletController.isRequiredList[i] == 1){
-                        haveBlankTitle = true;
-                        break;
+      bottomNavigationBar: Column(mainAxisSize: MainAxisSize.min, children: [
+        GetBuilder<WalletController>(builder: (walletController) {
+          return Padding(
+            padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
+            child: walletController.isLoading
+                ? Center(
+                    child: SpinKitCircle(
+                        color: Theme.of(context).primaryColor, size: 40.0))
+                : ButtonWidget(
+                    buttonText: 'update'.tr,
+                    onPressed: () {
+                      bool haveBlankTitle = false;
+                      for (int i = 0;
+                          i < walletController.inputFieldControllerList.length;
+                          i++) {
+                        if (walletController
+                                .inputFieldControllerList[i].text.isEmpty &&
+                            walletController.isRequiredList[i] == 1) {
+                          haveBlankTitle = true;
+                          break;
+                        }
                       }
-                    }
-                    if(haveBlankTitle){
-                      showCustomToaster('please_fill_all_the_field'.tr);
-                    }else{
-                      walletController.updateWithdrawMethodInfo(
-                        _methodName.text,
-                          widget.methods.id ?? '',widget.methods.withdrawMethod?.id ?? 0,
-                      );
-                    }
-                  },
-                ),
-              );
-            })
-          ]),
+                      if (haveBlankTitle) {
+                        showCustomToaster('please_fill_all_the_field'.tr);
+                      } else {
+                        walletController.updateWithdrawMethodInfo(
+                          _methodName.text,
+                          widget.methods.id ?? '',
+                          widget.methods.withdrawMethod?.id ?? 0,
+                        );
+                      }
+                    },
+                  ),
+          );
+        })
+      ]),
     );
   }
 }

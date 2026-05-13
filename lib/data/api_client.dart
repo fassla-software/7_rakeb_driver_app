@@ -51,18 +51,28 @@ class ApiClient extends GetxService {
     _mainHeaders = header;
   }
 
-  Future<Response> getData(String uri,
-      {Map<String, dynamic>? query, Map<String, String>? headers}) async {
+  Future<Response> getData(
+    String uri, {
+    Map<String, dynamic>? query,
+    Map<String, String>? headers,
+  }) async {
     try {
+      final fullUri = Uri.parse(appBaseUrl + uri).replace(
+        queryParameters:
+            query?.map((key, value) => MapEntry(key, value.toString())),
+      );
+
       if (kDebugMode) {
-        log('====> API Call: $uri\nHeader: $_mainHeaders');
+        log('====> API Call: $fullUri\nHeaders: ${headers ?? _mainHeaders}');
       }
+
       http.Response response = await http
           .get(
-            Uri.parse(appBaseUrl + uri),
+            fullUri,
             headers: headers ?? _mainHeaders,
           )
           .timeout(Duration(seconds: timeoutInSeconds));
+
       return handleResponse(response, uri);
     } catch (e) {
       return Response(statusCode: 1, statusText: noInternetMessage);

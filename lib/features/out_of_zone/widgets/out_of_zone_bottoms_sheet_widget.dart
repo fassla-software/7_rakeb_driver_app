@@ -13,13 +13,15 @@ class OutOfZoneBottomSheetWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Container(
         constraints: BoxConstraints(maxHeight: Get.height * 0.5),
         width: double.infinity,
-        decoration: BoxDecoration(color: Theme.of(context).cardColor,
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
           borderRadius: const BorderRadius.only(
-            topLeft:  Radius.circular(25),
+            topLeft: Radius.circular(25),
             topRight: Radius.circular(25),
           ),
         ),
@@ -30,44 +32,42 @@ class OutOfZoneBottomSheetWidget extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(mainAxisSize: MainAxisSize.min, children: [
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 Navigator.pop(context);
               },
               child: const Icon(Icons.keyboard_arrow_down),
             ),
             const SizedBox(height: Dimensions.paddingSizeDefault),
-
-            Image.asset(Images.refundAlertBottomsheetIcon,height: 100,width: 100),
+            Image.asset(Images.refundAlertBottomsheetIcon,
+                height: 100, width: 100),
             const SizedBox(height: Dimensions.paddingSizeDefault),
-
-            Text('you_are_out_of_zone'.tr,style: textBold.copyWith(fontSize: Dimensions.fontSizeLarge)),
+            Text('you_are_out_of_zone'.tr,
+                style: textBold.copyWith(fontSize: Dimensions.fontSizeLarge)),
             const SizedBox(height: Dimensions.paddingSizeDefault),
-
-            Text('you_are_now_out_of_our_service'.tr, style: textRegular.copyWith(
-              color: Theme.of(context).colorScheme.secondaryFixedDim,
-              fontSize: Dimensions.fontSizeSmall,
-
-            ),textAlign: TextAlign.center),
+            Text('you_are_now_out_of_our_service'.tr,
+                style: textRegular.copyWith(
+                  color: Theme.of(context).colorScheme.secondaryFixedDim,
+                  fontSize: Dimensions.fontSizeSmall,
+                ),
+                textAlign: TextAlign.center),
             const SizedBox(height: Dimensions.paddingSizeDefault),
-
             Padding(
               padding: EdgeInsets.symmetric(horizontal: Get.width * 0.2),
               child: ButtonWidget(
                 buttonText: 'view_map'.tr,
-                onPressed: ()=> Get.to(()=> const OutOfZoneMapScreen()),
+                onPressed: () => Get.to(() => const OutOfZoneMapScreen()),
               ),
             ),
             const SizedBox(height: Dimensions.paddingSizeDefault),
-
             InkWell(
-                onTap: (){
+                onTap: () {
                   Get.find<OutOfZoneController>().updateShowDialog(false);
                   Get.back();
                 },
-                child: Text('okay'.tr,style: textBold.copyWith(color: Theme.of(context).primaryColor))
-            ),
+                child: Text('okay'.tr,
+                    style: textBold.copyWith(
+                        color: Theme.of(context).primaryColor))),
             const SizedBox(height: Dimensions.paddingSizeExtraLarge)
-
           ]),
         ),
       ),

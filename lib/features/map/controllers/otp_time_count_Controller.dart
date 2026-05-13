@@ -17,7 +17,7 @@ class OtpTimeCountController extends GetxController implements GetxService {
         if (duration >= 0) {
           if (duration >= 60) {
             min = ((duration % 3600) / 60).floor();
-          }else{
+          } else {
             min = 0;
           }
           sec = (duration % 60);
@@ -36,30 +36,30 @@ class OtpTimeCountController extends GetxController implements GetxService {
     });
   }
 
-  void initialCounter(){
-   min = 0; sec = 0;
-   remainingPercent = 0;
-   currentState = 0;
-   duration = 120;
-   _animationTimer?.cancel();
-   totalTimeSecond = 363;
-   update();
+  void initialCounter() {
+    min = 0;
+    sec = 0;
+    remainingPercent = 0;
+    currentState = 0;
+    duration = 120;
+    _animationTimer?.cancel();
+    totalTimeSecond = 363;
+    update();
   }
 
-  void resumeCountingTime(int oldTime){
+  void resumeCountingTime(int oldTime) {
     totalTimeSecond = 363 - oldTime;
-    if(totalTimeSecond > 360){
+    if (totalTimeSecond > 360) {
       totalTimeSecond = 0;
       currentState = 1;
       update();
-    }else if(totalTimeSecond<= 360 && totalTimeSecond >240){
+    } else if (totalTimeSecond <= 360 && totalTimeSecond > 240) {
       currentState = 0;
       duration = totalTimeSecond - 240;
-    }else{
+    } else {
       currentState = 1;
       duration = totalTimeSecond;
     }
     startCountingState();
   }
-
 }

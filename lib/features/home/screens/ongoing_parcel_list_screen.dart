@@ -11,7 +11,8 @@ class OngoingParcelListScreen extends StatefulWidget {
   const OngoingParcelListScreen({super.key, required this.title});
 
   @override
-  State<OngoingParcelListScreen> createState() => _OngoingParcelListScreenState();
+  State<OngoingParcelListScreen> createState() =>
+      _OngoingParcelListScreenState();
 }
 
 class _OngoingParcelListScreenState extends State<OngoingParcelListScreen> {
@@ -19,23 +20,30 @@ class _OngoingParcelListScreenState extends State<OngoingParcelListScreen> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult: (_, __) => Future.delayed(const Duration(milliseconds: 50)).then((_){
-        Get.offAll(()=> const DashboardScreen());
+      onPopInvokedWithResult: (_, __) =>
+          Future.delayed(const Duration(milliseconds: 50)).then((_) {
+        Get.offAll(() => const DashboardScreen());
       }),
       child: Scaffold(
-          appBar: AppBarWidget(title: widget.title.tr, regularAppbar: true,),
-          body: GetBuilder<RideController>(builder: (rideController){
-            return (rideController.parcelListModel == null || rideController.parcelListModel!.data!.isEmpty) ?
-            const NoDataWidget(title: 'no_trip_found') :
-              ListView.builder(
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                itemCount: rideController.parcelListModel!.data!.length,
-                itemBuilder: (context, index){
-                  return ParcelRequestCardWidget(rideRequest: rideController.parcelListModel!.data![index], index: index);
-                });
-          })
-      ),
+          appBar: AppBarWidget(
+            title: widget.title.tr,
+            regularAppbar: true,
+          ),
+          body: GetBuilder<RideController>(builder: (rideController) {
+            return (rideController.parcelListModel == null ||
+                    rideController.parcelListModel!.data!.isEmpty)
+                ? const NoDataWidget(title: 'no_trip_found')
+                : ListView.builder(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    itemCount: rideController.parcelListModel!.data!.length,
+                    itemBuilder: (context, index) {
+                      return ParcelRequestCardWidget(
+                          rideRequest:
+                              rideController.parcelListModel!.data![index],
+                          index: index);
+                    });
+          })),
     );
   }
 }

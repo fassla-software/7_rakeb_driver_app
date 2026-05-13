@@ -23,8 +23,6 @@ import 'package:ride_sharing_user_app/helper/pusher_helper.dart';
 import 'package:ride_sharing_user_app/util/app_constants.dart';
 import 'package:ride_sharing_user_app/util/images.dart';
 
-import '../../../record_manger.dart';
-
 class SplashScreen extends StatefulWidget {
   final Map<String, dynamic>? notificationData;
   final String? userName;

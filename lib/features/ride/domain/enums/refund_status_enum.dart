@@ -1,6 +1,1 @@
-enum RefundStatus{
-  pending,
-  approved,
-  refunded,
-  denied
-}
+enum RefundStatus { pending, approved, refunded, denied }

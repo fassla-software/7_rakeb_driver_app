@@ -1,15 +1,11 @@
-
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:ride_sharing_user_app/data/api_client.dart';
 import 'package:ride_sharing_user_app/features/out_of_zone/domain/repositories/out_of_zone_repository_interface.dart';
 import 'package:ride_sharing_user_app/util/app_constants.dart';
 
-class OutOfZoneRepository implements OutOfZoneRepositoryInterface{
+class OutOfZoneRepository implements OutOfZoneRepositoryInterface {
   final ApiClient apiClient;
   OutOfZoneRepository({required this.apiClient});
-
-
-
 
   @override
   Future add(value) {
@@ -42,8 +38,7 @@ class OutOfZoneRepository implements OutOfZoneRepositoryInterface{
   }
 
   @override
-  Future<Response> getZoneList() async{
+  Future<Response> getZoneList() async {
     return await apiClient.getData(AppConstants.getZoneList);
   }
-
 }

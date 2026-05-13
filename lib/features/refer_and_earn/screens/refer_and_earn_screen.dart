@@ -17,7 +17,6 @@ class ReferAndEarnScreen extends StatefulWidget {
 }
 
 class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
-
   @override
   void initState() {
     Get.find<ReferAndEarnController>().getEarningHistoryList(1);
@@ -30,37 +29,38 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
   Widget build(BuildContext context) {
     return CustomPopScopeWidget(
       child: Scaffold(
-        body: GetBuilder<ReferAndEarnController>(builder: (referAndEarnController) {
+        body: GetBuilder<ReferAndEarnController>(
+            builder: (referAndEarnController) {
           return Stack(children: [
             Column(children: [
               AppBarWidget(title: 'refer&earn'.tr),
               const SizedBox(height: Dimensions.topBelowSpace),
-
               const SizedBox(height: Dimensions.paddingSizeSignUp),
-
               Expanded(
-                  child: referAndEarnController.referralTypeIndex == 0 ?
-                  const ReferralDetailsScreen() :
-                  const ReferralEarningScreen()
-              ),
-
-
+                  child: referAndEarnController.referralTypeIndex == 0
+                      ? const ReferralDetailsScreen()
+                      : const ReferralEarningScreen()),
             ]),
-
-            Positioned(top: Dimensions.topSpace,left: Dimensions.paddingSizeSmall,
-              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                SizedBox(height: Dimensions.headerCardHeight,
+            Positioned(
+              top: Dimensions.topSpace,
+              left: Dimensions.paddingSizeSmall,
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                SizedBox(
+                  height: Dimensions.headerCardHeight,
                   child: Center(
                     child: ListView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,
                       scrollDirection: Axis.horizontal,
                       itemCount: referAndEarnController.referralType.length,
-                      itemBuilder: (context, index){
-                        return SizedBox(width : Get.width/2.1,
+                      itemBuilder: (context, index) {
+                        return SizedBox(
+                            width: Get.width / 2.1,
                             child: ReferralTypeButtonWidget(
                               index: index,
-                              referralType: referAndEarnController.referralType[index],
+                              referralType:
+                                  referAndEarnController.referralType[index],
                             ));
                       },
                     ),

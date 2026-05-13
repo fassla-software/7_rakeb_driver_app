@@ -1,4 +1,3 @@
-
 class ReferralDetailsModel {
   String? responseCode;
   String? message;
@@ -10,12 +9,12 @@ class ReferralDetailsModel {
 
   ReferralDetailsModel(
       {this.responseCode,
-        this.message,
-        this.totalSize,
-        this.limit,
-        this.offset,
-        this.data,
-        this.errors});
+      this.message,
+      this.totalSize,
+      this.limit,
+      this.offset,
+      this.data,
+      this.errors});
 
   ReferralDetailsModel.fromJson(Map<String, dynamic> json) {
     responseCode = json['response_code'];
@@ -26,7 +25,6 @@ class ReferralDetailsModel {
     data = json['data'] != null ? Data.fromJson(json['data']) : null;
     errors = json['errors'].cast<String>();
   }
-  
 }
 
 class Data {
@@ -41,5 +39,4 @@ class Data {
     shareCodeEarning = double.parse(json['share_code_earning'].toString());
     useCodeEarning = double.parse(json['use_code_earning'].toString());
   }
-  
 }

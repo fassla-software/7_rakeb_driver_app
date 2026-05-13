@@ -103,6 +103,7 @@ class Images {
   static const String waitForVerification =
       'assets/image/wait_verification.png';
   static const String calender = 'assets/image/calender.png';
+  static const String calenderOutline = 'assets/image/calendar_outline.png';
   static const String licenceCard = 'assets/image/licence_card.png';
   static const String upload = 'assets/image/upload.png';
   static const String clip = 'assets/image/clip.png';

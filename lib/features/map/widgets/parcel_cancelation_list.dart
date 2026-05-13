@@ -12,7 +12,8 @@ import 'package:ride_sharing_user_app/util/styles.dart';
 class ParcelCancellationList extends StatefulWidget {
   final bool isOngoing;
   final GlobalKey<ExpandableBottomSheetState> expandableKey;
-  const ParcelCancellationList({super.key, required this.isOngoing, required this.expandableKey});
+  const ParcelCancellationList(
+      {super.key, required this.isOngoing, required this.expandableKey});
 
   @override
   State<ParcelCancellationList> createState() => _ParcelCancellationListState();
@@ -25,7 +26,8 @@ class _ParcelCancellationListState extends State<ParcelCancellationList> {
   @override
   void initState() {
     _keyboardVisibilityController = KeyboardVisibilityController();
-    keyboardSubscription = _keyboardVisibilityController.onChange.listen((isVisible) {
+    keyboardSubscription =
+        _keyboardVisibilityController.onChange.listen((isVisible) {
       if (!isVisible) {
         Get.find<RideController>().focusOnBottomSheet(widget.expandableKey);
       }
@@ -43,60 +45,83 @@ class _ParcelCancellationListState extends State<ParcelCancellationList> {
   Widget build(BuildContext context) {
     return GetBuilder<TripController>(builder: (tripController) {
       return Column(children: [
-        if((widget.isOngoing ?
-        tripController.parcelCancellationCauseList!.data!.ongoingRide!.length :
-        tripController.parcelCancellationCauseList!.data!.acceptedRide!.length) > 1)
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount: widget.isOngoing ?
-          tripController.parcelCancellationCauseList!.data!.ongoingRide!.length :
-          tripController.parcelCancellationCauseList!.data!.acceptedRide!.length,
-          physics: const NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.zero,
-          itemBuilder: (context, index) {
-            return ParcelCustomRadioButton(
-              text: widget.isOngoing ?
-              tripController.parcelCancellationCauseList!.data!.ongoingRide![index] :
-              tripController.parcelCancellationCauseList!.data!.acceptedRide![index],
-              isSelected: tripController.parcelCancellationCurrentIndex == index,
-              onTap: () {
-                tripController.setParcelCancellationCurrentIndex(index);
-                setState(() {});
-              },
-            );
-          },
-        ),
+        if ((widget.isOngoing
+                ? tripController
+                    .parcelCancellationCauseList!.data!.ongoingRide!.length
+                : tripController
+                    .parcelCancellationCauseList!.data!.acceptedRide!.length) >
+            1)
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: widget.isOngoing
+                ? tripController
+                    .parcelCancellationCauseList!.data!.ongoingRide!.length
+                : tripController
+                    .parcelCancellationCauseList!.data!.acceptedRide!.length,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            itemBuilder: (context, index) {
+              return ParcelCustomRadioButton(
+                text: widget.isOngoing
+                    ? tripController
+                        .parcelCancellationCauseList!.data!.ongoingRide![index]
+                    : tripController.parcelCancellationCauseList!.data!
+                        .acceptedRide![index],
+                isSelected:
+                    tripController.parcelCancellationCurrentIndex == index,
+                onTap: () {
+                  tripController.setParcelCancellationCurrentIndex(index);
+                  setState(() {});
+                },
+              );
+            },
+          ),
         const SizedBox(height: Dimensions.paddingSizeSmall),
-
-          Padding(
+        Padding(
             padding: const EdgeInsets.symmetric(
                 horizontal: Dimensions.paddingSizeLarge),
             child: TextField(
               controller: tripController.othersCancellationController,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall),
-                  borderSide: BorderSide(width: 0.5, color: Theme.of(context).hintColor.withOpacity(0.5)),
+                  borderRadius:
+                      BorderRadius.circular(Dimensions.paddingSizeSmall),
+                  borderSide: BorderSide(
+                      width: 0.5,
+                      color: Theme.of(context).hintColor.withOpacity(0.5)),
                 ),
                 disabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall),
-                  borderSide: BorderSide(width: 0.5, color: Theme.of(context).hintColor.withOpacity(0.5)),
+                  borderRadius:
+                      BorderRadius.circular(Dimensions.paddingSizeSmall),
+                  borderSide: BorderSide(
+                      width: 0.5,
+                      color: Theme.of(context).hintColor.withOpacity(0.5)),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall),
-                  borderSide: BorderSide(width: 0.5, color: Theme.of(context).hintColor.withOpacity(0.5)),
+                  borderRadius:
+                      BorderRadius.circular(Dimensions.paddingSizeSmall),
+                  borderSide: BorderSide(
+                      width: 0.5,
+                      color: Theme.of(context).hintColor.withOpacity(0.5)),
                 ),
                 hintText: 'type_here_your_cancel_reason'.tr,
-                hintStyle: textRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).hintColor),
+                hintStyle: textRegular.copyWith(
+                    fontSize: Dimensions.fontSizeSmall,
+                    color: Theme.of(context).hintColor),
               ),
-              readOnly: (widget.isOngoing ?
-              tripController.parcelCancellationCauseList!.data!.ongoingRide!.length-1 :
-              tripController.parcelCancellationCauseList!.data!.acceptedRide!.length -1) != tripController.parcelCancellationCurrentIndex,
+              readOnly: (widget.isOngoing
+                      ? tripController.parcelCancellationCauseList!.data!
+                              .ongoingRide!.length -
+                          1
+                      : tripController.parcelCancellationCauseList!.data!
+                              .acceptedRide!.length -
+                          1) !=
+                  tripController.parcelCancellationCurrentIndex,
               maxLines: 2,
               style: textRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
-              onTap: () => Get.find<RideController>().focusOnBottomSheet(widget.expandableKey),
-            )
-          ),
+              onTap: () => Get.find<RideController>()
+                  .focusOnBottomSheet(widget.expandableKey),
+            )),
         const SizedBox(height: Dimensions.paddingSizeSmall)
       ]);
     });

@@ -1,6 +1,1 @@
-enum HtmlType {
-  privacyPolicy,
-  refundPolicy,
-  legal,
-  termsAndConditions
-}
+enum HtmlType { privacyPolicy, refundPolicy, legal, termsAndConditions }

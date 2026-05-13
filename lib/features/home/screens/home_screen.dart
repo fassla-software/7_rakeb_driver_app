@@ -335,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
           floatingActionButton:
               GetBuilder<RideController>(builder: (rideController) {
             int ridingCount = rideController.getOnGoingRideCount();
-
+            print("ride count : ${ridingCount}");
             int parcelCount = rideController.parcelListModel?.totalSize ?? 0;
             return Padding(
               padding: const EdgeInsets.only(bottom: 80),

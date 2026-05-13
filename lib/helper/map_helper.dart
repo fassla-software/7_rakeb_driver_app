@@ -2,11 +2,11 @@ import 'dart:math';
 import 'package:geolocator/geolocator.dart';
 import 'package:ride_sharing_user_app/features/out_of_zone/domain/models/zone_list_model.dart';
 
-class MapHelper{
-
+class MapHelper {
   /// Algorithm of NearestPolygone
 // Function to calculate the distance from the point to the closest polygon edge
-  static double calculateDistanceToPolygon(LatLngPoint point, List<LatLngPoint> polygon) {
+  static double calculateDistanceToPolygon(
+      LatLngPoint point, List<LatLngPoint> polygon) {
     double minDistance = double.infinity;
     for (int i = 0; i < polygon.length - 1; i++) {
       LatLngPoint vertex1 = polygon[i];
@@ -22,16 +22,21 @@ class MapHelper{
   }
 
 // Function to calculate the distance from a point to a line segment
-  static double distanceToSegment(LatLngPoint point, LatLngPoint vertex1, LatLngPoint vertex2) {
+  static double distanceToSegment(
+      LatLngPoint point, LatLngPoint vertex1, LatLngPoint vertex2) {
     // Calculate geodesic distances between the point and the vertices
     double distanceToVertex1 = Geolocator.distanceBetween(
-      point.latitude, point.longitude,
-      vertex1.latitude, vertex1.longitude,
+      point.latitude,
+      point.longitude,
+      vertex1.latitude,
+      vertex1.longitude,
     );
 
     double distanceToVertex2 = Geolocator.distanceBetween(
-      point.latitude, point.longitude,
-      vertex2.latitude, vertex2.longitude,
+      point.latitude,
+      point.longitude,
+      vertex2.latitude,
+      vertex2.longitude,
     );
 
     // Return the smaller distance (this is a simplified method, but effective)
@@ -39,7 +44,8 @@ class MapHelper{
   }
 
 // Function to find the nearest polygon
-  static List<LatLngPoint> findNearestPolygon(LatLngPoint point, List<List<LatLngPoint>> polygons) {
+  static List<LatLngPoint> findNearestPolygon(
+      LatLngPoint point, List<List<LatLngPoint>> polygons) {
     double minDistance = double.infinity;
     List<LatLngPoint>? nearestPolygon;
 
@@ -53,7 +59,6 @@ class MapHelper{
     }
     return nearestPolygon!;
   }
-
 
   /// Algorithm of is Inside of zone
 
@@ -74,18 +79,22 @@ class MapHelper{
   }
 
 // Function to check if a ray intersects a segment between two points
-  static bool rayIntersectsSegment(LatLngPoint point, LatLngPoint vertex1, LatLngPoint vertex2) {
+  static bool rayIntersectsSegment(
+      LatLngPoint point, LatLngPoint vertex1, LatLngPoint vertex2) {
     if (vertex1.latitude > vertex2.latitude) {
       LatLngPoint temp = vertex1;
       vertex1 = vertex2;
       vertex2 = temp;
     }
 
-    if (point.latitude == vertex1.latitude || point.latitude == vertex2.latitude) {
+    if (point.latitude == vertex1.latitude ||
+        point.latitude == vertex2.latitude) {
       point = LatLngPoint(point.latitude + 0.00000001, point.longitude);
     }
 
-    if (point.latitude > vertex2.latitude || point.latitude < vertex1.latitude || point.longitude >= max(vertex1.longitude, vertex2.longitude)) {
+    if (point.latitude > vertex2.latitude ||
+        point.latitude < vertex1.latitude ||
+        point.longitude >= max(vertex1.longitude, vertex2.longitude)) {
       return false;
     }
 
@@ -100,5 +109,4 @@ class MapHelper{
 
     return point.longitude <= intersectLongitude;
   }
-
 }

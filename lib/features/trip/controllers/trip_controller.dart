@@ -12,70 +12,78 @@ import 'package:ride_sharing_user_app/features/ride/controllers/ride_controller.
 import 'package:ride_sharing_user_app/features/ride/domain/models/trip_details_model.dart';
 import 'package:ride_sharing_user_app/features/trip/domain/models/trip_model.dart';
 import 'package:ride_sharing_user_app/features/trip/domain/models/trip_overview_model.dart';
+import 'package:ride_sharing_user_app/features/trip/screens/review_this_customer_screen.dart';
 
-class TripController extends GetxController implements GetxService{
+class TripController extends GetxController implements GetxService {
   final TripServiceInterface tripServiceInterface;
 
   TripController({required this.tripServiceInterface});
 
-   bool customerReviewed = false;
+  bool customerReviewed = false;
   List<TripDetail> tripList = [];
   bool isLoading = false;
 
+  void toggleReviewed() {
+    customerReviewed = true;
+    update();
+  }
 
-   void toggleReviewed(){
-     customerReviewed = true;
-     update();
-   }
+  List<String> activityTypeList = ['trips', 'over_view'];
+  int activityTypeIndex = 0;
+  void setActivityTypeIndex(int index) {
+    activityTypeIndex = index;
+    update();
+  }
 
-
-   List<String> activityTypeList = ['trips', 'over_view'];
-   int activityTypeIndex = 0;
-   void setActivityTypeIndex(int index){
-     activityTypeIndex = index;
-     update();
-   }
-
-
-  List<String> selectedFilterType = ['today', 'this_month', 'this_year','all_time'];
-  List<String> selectedStatus = ['all', 'ongoing', 'cancelled', 'completed','returned'];
+  List<String> selectedFilterType = [
+    'today',
+    'this_month',
+    'this_year',
+    'all_time'
+  ];
+  List<String> selectedStatus = [
+    'all',
+    'ongoing',
+    'cancelled',
+    'completed',
+    'returned'
+  ];
   String selectedStatusName = 'all';
   String _selectedFilterTypeName = 'today';
   String get selectedFilterTypeName => _selectedFilterTypeName;
-  void setFilterTypeName(String name){
+  void setFilterTypeName(String name) {
     tripModel = null;
     _selectedFilterTypeName = name;
-    getTripList(1, '', '', 'ride_request', selectedFilterTypeName,selectedStatusName);
+    getTripList(
+        1, '', '', 'ride_request', selectedFilterTypeName, selectedStatusName);
     update();
   }
 
-  void setStatusIndex(int index){
+  void setStatusIndex(int index) {
     tripModel = null;
     selectedStatusName = selectedStatus[index];
-    getTripList(1, '', '', 'ride_request', selectedFilterTypeName,selectedStatusName);
+    getTripList(
+        1, '', '', 'ride_request', selectedFilterTypeName, selectedStatusName);
     update();
   }
 
-
-
-
   TripModel? tripModel;
-  Future<Response> getTripList(int offset, String from, String to, String tripType, String filter,String status) async {
+  Future<Response> getTripList(int offset, String from, String to,
+      String tripType, String filter, String status) async {
     isLoading = true;
 
-    Response response = await tripServiceInterface.getTripList(tripType, from, to, offset, filter,status);
+    Response response = await tripServiceInterface.getTripList(
+        tripType, from, to, offset, filter, status);
     if (response.statusCode == 200) {
       isLoading = false;
-      if(offset == 1){
+      if (offset == 1) {
         tripModel = TripModel.fromJson(response.body);
         update();
-      }else{
+      } else {
         tripModel!.data!.addAll(TripModel.fromJson(response.body).data!);
         tripModel!.offset = TripModel.fromJson(response.body).offset;
         tripModel!.totalSize = TripModel.fromJson(response.body).totalSize;
       }
-
-
     } else {
       isLoading = false;
       ApiChecker.checkApi(response);
@@ -87,7 +95,7 @@ class TripController extends GetxController implements GetxService{
   List<String> selectedOverviewType = ['today', 'this_week', 'last_week'];
   String selectedOverview = 'today';
   String get selectedOverviewIndex => selectedOverview;
-  void setOverviewType(String name){
+  void setOverviewType(String name) {
     selectedOverview = name;
     getTripOverView(selectedOverview);
     update();
@@ -108,53 +116,82 @@ class TripController extends GetxController implements GetxService{
       tripOverView = TripOverView.fromJson(response.body);
       bool isToday = selectedOverview == 'today';
 
-
-
       weekList.insert(0, 0);
-      weekList.insert(1, double.parse((isToday ? tripOverView?.incomeStat?.sixAm ?? 0 : tripOverView?.incomeStat?.sun ?? 0).toStringAsFixed(2)));
-      weekList.insert(2, double.parse((isToday ? tripOverView?.incomeStat?.temAM ?? 0 : tripOverView?.incomeStat?.mon ?? 0).toStringAsFixed(2)));
-      weekList.insert(3, double.parse((isToday ? tripOverView?.incomeStat?.twoPm ?? 0 : tripOverView?.incomeStat?.tues ?? 0).toStringAsFixed(2)));
-      weekList.insert(4, double.parse((isToday ? tripOverView?.incomeStat?.sixPm ?? 0 : tripOverView?.incomeStat?.wed ?? 0).toStringAsFixed(2)));
-      weekList.insert(5, double.parse((isToday ? tripOverView?.incomeStat?.temPm ?? 0 : tripOverView?.incomeStat?.thu ?? 0).toStringAsFixed(2)));
-      weekList.insert(6, double.parse((isToday ? tripOverView?.incomeStat?.twoAm ?? 0 : tripOverView?.incomeStat?.fri ?? 0).toStringAsFixed(2)));
-      if(!isToday) {
-        weekList.insert(7, double.parse((tripOverView?.incomeStat?.sat ?? 0).toStringAsFixed(2)));
+      weekList.insert(
+          1,
+          double.parse((isToday
+                  ? tripOverView?.incomeStat?.sixAm ?? 0
+                  : tripOverView?.incomeStat?.sun ?? 0)
+              .toStringAsFixed(2)));
+      weekList.insert(
+          2,
+          double.parse((isToday
+                  ? tripOverView?.incomeStat?.temAM ?? 0
+                  : tripOverView?.incomeStat?.mon ?? 0)
+              .toStringAsFixed(2)));
+      weekList.insert(
+          3,
+          double.parse((isToday
+                  ? tripOverView?.incomeStat?.twoPm ?? 0
+                  : tripOverView?.incomeStat?.tues ?? 0)
+              .toStringAsFixed(2)));
+      weekList.insert(
+          4,
+          double.parse((isToday
+                  ? tripOverView?.incomeStat?.sixPm ?? 0
+                  : tripOverView?.incomeStat?.wed ?? 0)
+              .toStringAsFixed(2)));
+      weekList.insert(
+          5,
+          double.parse((isToday
+                  ? tripOverView?.incomeStat?.temPm ?? 0
+                  : tripOverView?.incomeStat?.thu ?? 0)
+              .toStringAsFixed(2)));
+      weekList.insert(
+          6,
+          double.parse((isToday
+                  ? tripOverView?.incomeStat?.twoAm ?? 0
+                  : tripOverView?.incomeStat?.fri ?? 0)
+              .toStringAsFixed(2)));
+      if (!isToday) {
+        weekList.insert(
+            7,
+            double.parse(
+                (tripOverView?.incomeStat?.sat ?? 0).toStringAsFixed(2)));
       }
 
       earningChartList = weekList.asMap().entries.map((e) {
         return FlSpot(e.key.toDouble(), e.value);
       }).toList();
       maxValue = weekList.reduce(max);
-
     } else {
       ApiChecker.checkApi(response);
     }
     update();
   }
 
-
-
-
-  Future<Response> paymentSubmit(String tripId, String paymentMethod , {fromParcel = false}) async {
+  Future<Response> paymentSubmit(String tripId, String paymentMethod,
+      {fromParcel = false}) async {
     Get.back();
     isLoading = true;
     update();
-    Response response = await tripServiceInterface.paymentSubmit(tripId, paymentMethod);
-    if (response.statusCode == 200 ) {
-
-      if(fromParcel && Get.find<RideController>().tripDetail?.parcelInformation?.payer == 'sender'){
+    Response response =
+        await tripServiceInterface.paymentSubmit(tripId, paymentMethod);
+    if (response.statusCode == 200) {
+      if (fromParcel &&
+          Get.find<RideController>().tripDetail?.parcelInformation?.payer ==
+              'sender') {
         Get.back();
         showCustomSnackBar('payment_successful'.tr, isError: false);
-        Get.find<RideController>().getRideDetails(tripId).then((value){
+        Get.find<RideController>().getRideDetails(tripId).then((value) {
           Get.find<RiderMapController>().setMarkersInitialPosition();
           Get.find<RideController>().updateRoute(false, notify: true);
         });
-
-      }else{
-        Get.offAll(()=> const DashboardScreen());
+      } else {
+        Get.offAll(() => ReviewThisCustomerScreen(tripId: tripId));
       }
       isLoading = false;
-    }else{
+    } else {
       isLoading = false;
       ApiChecker.checkApi(response);
     }
@@ -169,70 +206,72 @@ class TripController extends GetxController implements GetxService{
   int rideCancellationCurrentIndex = 0;
   int parcelCancellationCurrentIndex = 0;
 
-
-  void rideCancellationReasonList() async{
+  void rideCancellationReasonList() async {
     Response response = await tripServiceInterface.rideCancellationReasonList();
 
-    if(response.statusCode == 200){
-      rideCancellationCauseList = TripCancellationCauseList.fromJson(response.body);
-    }else{
+    if (response.statusCode == 200) {
+      rideCancellationCauseList =
+          TripCancellationCauseList.fromJson(response.body);
+    } else {
       ApiChecker.checkApi(response);
     }
   }
 
-  void setCancellationCurrentIndex(int index){
+  void setCancellationCurrentIndex(int index) {
     rideCancellationCurrentIndex = index;
   }
 
-  void setParcelCancellationCurrentIndex(int index){
+  void setParcelCancellationCurrentIndex(int index) {
     parcelCancellationCurrentIndex = index;
   }
 
-  void parcelCancellationReasonList() async{
-    Response response = await tripServiceInterface.parcelCancellationReasonList();
+  void parcelCancellationReasonList() async {
+    Response response =
+        await tripServiceInterface.parcelCancellationReasonList();
 
-    if(response.statusCode == 200){
-      parcelCancellationCauseList = TripCancellationCauseList.fromJson(response.body);
+    if (response.statusCode == 200) {
+      parcelCancellationCauseList =
+          TripCancellationCauseList.fromJson(response.body);
       parcelCancellationCauseList?.data?.ongoingRide?.add('other'.tr);
       parcelCancellationCauseList?.data?.acceptedRide?.add('other'.tr);
-    }else{
+    } else {
       ApiChecker.checkApi(response);
     }
   }
 
   String? parcelReturnDate;
   String? parcelReturnTime;
-  void setParcelReturnDate(String date){
+  void setParcelReturnDate(String date) {
     parcelReturnDate = date;
   }
 
-  void setParcelReturnTime(String time){
+  void setParcelReturnTime(String time) {
     parcelReturnTime = time;
   }
 
-  void resendReturnedOtp(String tripId)async{
+  void resendReturnedOtp(String tripId) async {
     Response response = await tripServiceInterface.resendReturnedOtp(tripId);
 
-    if(response.statusCode == 200){
-      showCustomSnackBar('otp_sent_successfully'.tr,isError: false);
-    }else{
+    if (response.statusCode == 200) {
+      showCustomSnackBar('otp_sent_successfully'.tr, isError: false);
+    } else {
       ApiChecker.checkApi(response);
     }
   }
 
-  Future<Response> parcelReturnSubmitOtp(String tripId, String otp)async{
+  Future<Response> parcelReturnSubmitOtp(String tripId, String otp) async {
     isLoading = true;
     update();
-    Response response = await tripServiceInterface.parcelReturnSubmitOtp(tripId, otp);
-    if(response.statusCode == 200){
+    Response response =
+        await tripServiceInterface.parcelReturnSubmitOtp(tripId, otp);
+    if (response.statusCode == 200) {
       Get.find<RideController>().getOngoingParcelList();
       Get.find<RideController>().getRideDetails(tripId);
-    }else{
+    } else {
       ApiChecker.checkApi(response);
     }
     isLoading = false;
     update();
     return response;
   }
-
 }

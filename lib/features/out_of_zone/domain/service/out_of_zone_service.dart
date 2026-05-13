@@ -2,14 +2,12 @@ import 'package:ride_sharing_user_app/features/out_of_zone/domain/repositories/o
 import 'package:ride_sharing_user_app/features/out_of_zone/domain/service/out_of_zone_service_interface.dart';
 
 class OutOfZoneService implements OutOfZoneServiceInterface {
- final OutOfZoneRepositoryInterface outOfZoneRepositoryInterface;
+  final OutOfZoneRepositoryInterface outOfZoneRepositoryInterface;
 
- OutOfZoneService({required this.outOfZoneRepositoryInterface});
+  OutOfZoneService({required this.outOfZoneRepositoryInterface});
 
   @override
   Future getZoneList() {
     return outOfZoneRepositoryInterface.getZoneList();
   }
-
-
 }

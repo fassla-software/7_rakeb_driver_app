@@ -1,4 +1,3 @@
-
 class ConfigModel {
   String? businessName;
   String? logo;
@@ -55,72 +54,69 @@ class ConfigModel {
   bool? driverQuestionAnswerStatus;
   String? websocketScheme;
 
-
   ConfigModel(
       {this.businessName,
-        this.logo,
-        this.bidOnFare,
-        this.countryCode,
-        this.businessAddress,
-        this.businessContactPhone,
-        this.businessContactEmail,
-        this.businessSupportPhone,
-        this.businessSupportEmail,
-        this.baseUrl,
-        this.webSocketUrl,
-        this.webSocketPort,
-        this.webSocketKey,
-        this.imageBaseUrl,
-        this.currencyDecimalPoint,
-        this.currencyCode,
-        this.currencySymbolPosition,
-        this.aboutUs,
-        this.privacyPolicy,
-        this.termsAndConditions,
-        this.legal,
-        this.smsVerification,
-        this.emailVerification,
-        this.mapApiKey,
-        this.paginationLimit,
-        this.facebookLogin,
-        this.googleLogin,
-        this.timeZones,
-        this.verification,
-        this.conversionStatus,
-        this.conversionRate,
-        this.otpResendTime,
-        this.selfRegistration,
-        this.currencySymbol,
-        this.reviewStatus,
-        this.maintenanceMode,
-        this.completionRadius,
-        this.isDemo,
-        this.levelStatus,
-        this.referralEarningStatus,
-        this.parcelReturnTime,
-        this.parcelReturnFeeTimeExceed,
-        this.parcelReturnTimeType,
-        this.parcelReturnTimeFeeStatus,
-        this.iosAppUrl,
-        this.androidAppUrl,
-        this.iosAppMinimumVersion,
-        this.androidAppMinimumVersion,
-        this.isFirebaseOtpVerification,
-        this.isSmsGateway,
-        this.refundPolicy,
-        this.websocketScheme,
-        this.driverQuestionAnswerStatus,
-        this.chattingSetupStatus
-
-      });
+      this.logo,
+      this.bidOnFare,
+      this.countryCode,
+      this.businessAddress,
+      this.businessContactPhone,
+      this.businessContactEmail,
+      this.businessSupportPhone,
+      this.businessSupportEmail,
+      this.baseUrl,
+      this.webSocketUrl,
+      this.webSocketPort,
+      this.webSocketKey,
+      this.imageBaseUrl,
+      this.currencyDecimalPoint,
+      this.currencyCode,
+      this.currencySymbolPosition,
+      this.aboutUs,
+      this.privacyPolicy,
+      this.termsAndConditions,
+      this.legal,
+      this.smsVerification,
+      this.emailVerification,
+      this.mapApiKey,
+      this.paginationLimit,
+      this.facebookLogin,
+      this.googleLogin,
+      this.timeZones,
+      this.verification,
+      this.conversionStatus,
+      this.conversionRate,
+      this.otpResendTime,
+      this.selfRegistration,
+      this.currencySymbol,
+      this.reviewStatus,
+      this.maintenanceMode,
+      this.completionRadius,
+      this.isDemo,
+      this.levelStatus,
+      this.referralEarningStatus,
+      this.parcelReturnTime,
+      this.parcelReturnFeeTimeExceed,
+      this.parcelReturnTimeType,
+      this.parcelReturnTimeFeeStatus,
+      this.iosAppUrl,
+      this.androidAppUrl,
+      this.iosAppMinimumVersion,
+      this.androidAppMinimumVersion,
+      this.isFirebaseOtpVerification,
+      this.isSmsGateway,
+      this.refundPolicy,
+      this.websocketScheme,
+      this.driverQuestionAnswerStatus,
+      this.chattingSetupStatus});
 
   ConfigModel.fromJson(Map<String, dynamic> json) {
     businessName = json['business_name'];
     logo = json['logo'];
     bidOnFare = json['bid_on_fare'];
-    if(json['country_code'] != null && json['country_code'] != ""){
-      countryCode = json['country_code']??'BD';
-    }else{
+    if (json['country_code'] != null && json['country_code'] != "") {
+      countryCode = json['country_code'] ?? 'BD';
+    } else {
       countryCode = 'BD';
     }
     businessAddress = json['business_address'];
@@ -138,18 +134,15 @@ class ConfigModel {
     currencyDecimalPoint = json['currency_decimal_point'];
     currencyCode = json['currency_code'];
     currencySymbolPosition = json['currency_symbol_position'];
-    aboutUs = json['about_us'] != null
-        ? AboutUs.fromJson(json['about_us'])
-        : null;
+    aboutUs =
+        json['about_us'] != null ? AboutUs.fromJson(json['about_us']) : null;
     privacyPolicy = json['privacy_policy'] != null
         ? AboutUs.fromJson(json['privacy_policy'])
         : null;
     termsAndConditions = json['terms_and_conditions'] != null
         ? AboutUs.fromJson(json['terms_and_conditions'])
         : null;
-    legal = json['legal'] != null
-        ? AboutUs.fromJson(json['legal'])
-        : null;
+    legal = json['legal'] != null ? AboutUs.fromJson(json['legal']) : null;
     smsVerification = json['sms_verification'];
     emailVerification = json['email_verification'];
     mapApiKey = json['map_api_key'];
@@ -159,10 +152,10 @@ class ConfigModel {
     isDemo = json['is_demo'];
     levelStatus = json['level_status'];
     verification = '${json['verification']}'.contains('true');
-    conversionStatus = json['conversion_status']??true;
-    if(json['conversion_rate'] != null){
+    conversionStatus = json['conversion_status'] ?? true;
+    if (json['conversion_rate'] != null) {
       conversionRate = json['conversion_rate'];
-    }else{
+    } else {
       conversionRate = 0;
     }
     otpResendTime = int.parse(json['otp_resend_time'].toString());
@@ -172,19 +165,22 @@ class ConfigModel {
     parcelReturnTime = json['return_time_for_driver'];
     parcelReturnTimeType = json['return_time_type_for_driver'];
     parcelReturnTimeFeeStatus = json['parcel_return_time_fee_status'] ?? false;
-    parcelReturnFeeTimeExceed = double.parse(json['return_fee_for_driver_time_exceed'].toString());
+    parcelReturnFeeTimeExceed =
+        double.parse(json['return_fee_for_driver_time_exceed'].toString());
     maintenanceMode = json['maintenance_mode'] != null
         ? MaintenanceMode.fromJson(json['maintenance_mode'])
         : null;
-    if(json['driver_completion_radius'] != null){
-      try{
+    if (json['driver_completion_radius'] != null) {
+      try {
         completionRadius = json['driver_completion_radius'].toDouble();
-      }catch(e){
-        completionRadius = double.parse(json['driver_completion_radius'].toString());
+      } catch (e) {
+        completionRadius =
+            double.parse(json['driver_completion_radius'].toString());
       }
     }
     referralEarningStatus = json['referral_earning_status'];
-    androidAppMinimumVersion = json['app_minimum_version_for_android'].toDouble();
+    androidAppMinimumVersion =
+        json['app_minimum_version_for_android'].toDouble();
     androidAppUrl = json['app_url_for_android'];
     iosAppMinimumVersion = json['app_minimum_version_for_ios'].toDouble();
     iosAppUrl = json['app_url_for_ios'];
@@ -193,15 +189,10 @@ class ConfigModel {
     chattingSetupStatus = json['chatting_setup_status'];
     driverQuestionAnswerStatus = json['driver_question_answer_status'];
     websocketScheme = json['websocket_scheme'];
-    refundPolicy = json['about_us'] != null
-        ? AboutUs.fromJson(json['about_us'])
-        : null;
-
+    refundPolicy =
+        json['about_us'] != null ? AboutUs.fromJson(json['about_us']) : null;
   }
-
 }
-
-
 
 class ImageBaseUrl {
   String? profileImageCustomer;
@@ -218,17 +209,16 @@ class ImageBaseUrl {
 
   ImageBaseUrl(
       {this.profileImageCustomer,
-        this.banner,
-        this.vehicleCategory,
-        this.vehicleModel,
-        this.vehicleBrand,
-        this.profileImage,
-        this.identityImage,
-        this.documents,
-        this.pages,
-        this.conversation,
-        this.profileImageAdmin
-      });
+      this.banner,
+      this.vehicleCategory,
+      this.vehicleModel,
+      this.vehicleBrand,
+      this.profileImage,
+      this.identityImage,
+      this.documents,
+      this.pages,
+      this.conversation,
+      this.profileImageAdmin});
 
   ImageBaseUrl.fromJson(Map<String, dynamic> json) {
     profileImageCustomer = json['profile_image_customer'];
@@ -258,6 +248,7 @@ class ImageBaseUrl {
     return data;
   }
 }
+
 class AboutUs {
   String? image;
   String? name;
@@ -290,15 +281,16 @@ class MaintenanceMode {
   MaintenanceTypeAndDuration? maintenanceTypeAndDuration;
 
   MaintenanceMode(
-      { maintenanceStatus,
-         selectedMaintenanceSystem,
-         maintenanceMessages,  maintenanceTypeAndDuration});
+      {maintenanceStatus,
+      selectedMaintenanceSystem,
+      maintenanceMessages,
+      maintenanceTypeAndDuration});
 
   MaintenanceMode.fromJson(Map<String, dynamic> json) {
     maintenanceStatus = json['maintenance_status'];
     selectedMaintenanceSystem = json['selected_maintenance_system'] != null
         ? SelectedMaintenanceSystem.fromJson(
-        json['selected_maintenance_system'])
+            json['selected_maintenance_system'])
         : null;
     maintenanceMessages = json['maintenance_messages'] != null
         ? MaintenanceMessages.fromJson(json['maintenance_messages'])
@@ -306,24 +298,21 @@ class MaintenanceMode {
 
     maintenanceTypeAndDuration = json['maintenance_type_and_duration'] != null
         ? MaintenanceTypeAndDuration.fromJson(
-        json['maintenance_type_and_duration'])
+            json['maintenance_type_and_duration'])
         : null;
   }
-
 }
 
 class SelectedMaintenanceSystem {
   int? userApp;
   int? driverApp;
 
-  SelectedMaintenanceSystem(
-      { this.userApp, this.driverApp});
+  SelectedMaintenanceSystem({this.userApp, this.driverApp});
 
   SelectedMaintenanceSystem.fromJson(Map<String, dynamic> json) {
     userApp = json['user_app'];
     driverApp = json['driver_app'];
   }
-
 }
 
 class MaintenanceMessages {
@@ -334,9 +323,9 @@ class MaintenanceMessages {
 
   MaintenanceMessages(
       {this.businessNumber,
-        this.businessEmail,
-        this.maintenanceMessage,
-        this.messageBody});
+      this.businessEmail,
+      this.maintenanceMessage,
+      this.messageBody});
 
   MaintenanceMessages.fromJson(Map<String, dynamic> json) {
     businessNumber = json['business_number'];
@@ -344,7 +333,6 @@ class MaintenanceMessages {
     maintenanceMessage = json['maintenance_message'];
     messageBody = json['message_body'];
   }
-
 }
 
 class MaintenanceTypeAndDuration {
@@ -355,13 +343,13 @@ class MaintenanceTypeAndDuration {
   MaintenanceTypeAndDuration(
       {String? maintenanceDuration, String? startDate, String? endDate}) {
     if (maintenanceDuration != null) {
-       maintenanceDuration = maintenanceDuration;
+      maintenanceDuration = maintenanceDuration;
     }
     if (startDate != null) {
-       startDate = startDate;
+      startDate = startDate;
     }
     if (endDate != null) {
-       endDate = endDate;
+      endDate = endDate;
     }
   }
 
@@ -370,5 +358,4 @@ class MaintenanceTypeAndDuration {
     startDate = json['start_date'];
     endDate = json['end_date'];
   }
-
 }

@@ -36,8 +36,7 @@ class SliderItem extends StatefulWidget {
       this.autoSlide = true,
       this.slideChangeDuration = const Duration(seconds: 6),
       required this.initIndex,
-        required this.showDownloadButton
-      });
+      required this.showDownloadButton});
 
   @override
   State<SliderItem> createState() => _SliderItemState();
@@ -122,7 +121,8 @@ class _SliderItemState extends State<SliderItem> {
                 ? Align(
                     alignment: widget.dotsAlignment,
                     child: Padding(
-                      padding: const EdgeInsets.only(bottom: 10, left: 20, right: 20, top: 10),
+                      padding: const EdgeInsets.only(
+                          bottom: 10, left: 20, right: 20, top: 10),
                       child: _dotProgress(),
                     ),
                   )
@@ -168,42 +168,41 @@ class _SliderItemState extends State<SliderItem> {
 
   Widget _imageItem(int index, String item) {
     return GestureDetector(
-    //  onTap: () => widget.onClick(index),
+      //  onTap: () => widget.onClick(index),
       child: Stack(children: [
-        checkFileType(item) ?
-          widget.fromNetwork ?
-          Center(child: ImageWidget(image: item,fit: widget.fit)) :
-          Center(child: Image.asset(item, fit: widget.fit)) :
-          Center(child: Text(item.split('/').last)),
-
-        if(widget.showDownloadButton)
-        Positioned(
-          right: 30,bottom: 30,
-            child: InkWell(
-              onTap: ()=> widget.onClick(index),
-              child: Container(
-                height: 40, width: 40 ,
-                padding: EdgeInsets.all(Dimensions.paddingSizeSmall),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Theme.of(context).cardColor
+        checkFileType(item)
+            ? widget.fromNetwork
+                ? Center(child: ImageWidget(image: item, fit: widget.fit))
+                : Center(child: Image.asset(item, fit: widget.fit))
+            : Center(child: Text(item.split('/').last)),
+        if (widget.showDownloadButton)
+          Positioned(
+              right: 30,
+              bottom: 30,
+              child: InkWell(
+                onTap: () => widget.onClick(index),
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  padding: EdgeInsets.all(Dimensions.paddingSizeSmall),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(context).cardColor),
+                  child: Image.asset(Images.downloadIcon),
                 ),
-                child: Image.asset(Images.downloadIcon),
-              ),
-            )
-        )
-        ]),
+              ))
+      ]),
     );
   }
 
-  bool checkFileType(String item){
-    if(item.contains('png')){
+  bool checkFileType(String item) {
+    if (item.contains('png')) {
       return true;
-    }else if(item.contains('jpg')){
+    } else if (item.contains('jpg')) {
       return true;
-    } else if(item.contains('jpeg')){
+    } else if (item.contains('jpeg')) {
       return true;
-    }else{
+    } else {
       return false;
     }
   }

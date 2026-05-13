@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:ride_sharing_user_app/helper/notification_helper.dart';
 import 'package:ride_sharing_user_app/util/dimensions.dart';
 import 'package:ride_sharing_user_app/util/images.dart';
@@ -45,7 +47,6 @@ Future<void> main() async {
   // FlutterError.onError = (errorDetails) {
   //   FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
   // };
-  //
   // PlatformDispatcher.instance.onError = (error, stack) {
   //   FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
   //   return true;
@@ -63,7 +64,8 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
-
+  String? deviceToken = await FirebaseMessaging.instance.getToken();
+  log("fcm token: $deviceToken");
   runApp(MyApp(languages: languages, notificationData: remoteMessage?.data));
 
   // Upload cached files on app start
@@ -83,6 +85,8 @@ class MyApp extends StatelessWidget {
             Get.isDarkMode ? const Color(0xFF053B35) : const Color(0xFF00A08D),
         statusBarIconBrightness: Brightness.dark,
         statusBarBrightness: Brightness.dark));
+    //SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
     if (GetPlatform.isWeb) {
       Get.find<SplashController>().initSharedData();
     }
@@ -92,126 +96,139 @@ class MyApp extends StatelessWidget {
         return GetBuilder<SplashController>(builder: (configController) {
           return (GetPlatform.isWeb && configController.config == null)
               ? const SizedBox()
-              : GetMaterialApp(
-                  title: AppConstants.appName,
-                  debugShowCheckedModeBanner: false,
-                  navigatorKey: Get.key,
-                  scrollBehavior: const MaterialScrollBehavior().copyWith(
-                    dragDevices: {
-                      PointerDeviceKind.mouse,
-                      PointerDeviceKind.touch
-                    },
-                  ),
-                  theme: themeController.darkTheme ? darkTheme : lightTheme,
-                  locale: localizeController.locale,
-                  translations: Messages(languages: languages),
-                  fallbackLocale: Locale(AppConstants.languages[0].languageCode,
-                      AppConstants.languages[0].countryCode),
-                  initialRoute: RouteHelper.getSplashRoute(
-                      notificationData: notificationData),
-                  getPages: RouteHelper.routes,
-                  defaultTransition: Transition.fade,
-                  transitionDuration: const Duration(milliseconds: 500),
-                  builder: (context, child) {
-                    return MediaQuery(
-                        data: MediaQuery.of(context)
-                            .copyWith(textScaler: TextScaler.noScaling),
-                        child: GetBuilder<RideController>(
-                            builder: (rideController) {
-                          return Stack(
-                            children: [
-                              child!,
-                              if (rideController.notSplashRoute) ...[
-                                if (!(Get.find<SplashController>()
-                                                .config!
-                                                .maintenanceMode !=
-                                            null &&
+              : SafeArea(
+                  bottom: true,
+                  top: false,
+                  left: false,
+                  right: false,
+                  child: GetMaterialApp(
+                      title: AppConstants.appName,
+                      debugShowCheckedModeBanner: false,
+                      navigatorKey: Get.key,
+                      scrollBehavior: const MaterialScrollBehavior().copyWith(
+                        dragDevices: {
+                          PointerDeviceKind.mouse,
+                          PointerDeviceKind.touch
+                        },
+                      ),
+                      theme: themeController.darkTheme ? darkTheme : lightTheme,
+                      locale: localizeController.locale,
+                      translations: Messages(languages: languages),
+                      fallbackLocale: Locale(
+                          AppConstants.languages[0].languageCode,
+                          AppConstants.languages[0].countryCode),
+                      initialRoute: RouteHelper.getSplashRoute(
+                          notificationData: notificationData),
+                      getPages: RouteHelper.routes,
+                      defaultTransition: Transition.fade,
+                      transitionDuration: const Duration(milliseconds: 500),
+                      builder: (context, child) {
+                        return MediaQuery(
+                            data: MediaQuery.of(context)
+                                .copyWith(textScaler: TextScaler.noScaling),
+                            child: GetBuilder<RideController>(
+                                builder: (rideController) {
+                              return Stack(
+                                children: [
+                                  child!,
+                                  if (rideController.notSplashRoute) ...[
+                                    if (!(Get.find<SplashController>()
+                                                    .config!
+                                                    .maintenanceMode !=
+                                                null &&
+                                            Get.find<SplashController>()
+                                                    .config!
+                                                    .maintenanceMode!
+                                                    .maintenanceStatus ==
+                                                1 &&
+                                            Get.find<SplashController>()
+                                                    .config!
+                                                    .maintenanceMode!
+                                                    .selectedMaintenanceSystem!
+                                                    .driverApp ==
+                                                1) ||
                                         Get.find<SplashController>()
-                                                .config!
-                                                .maintenanceMode!
-                                                .maintenanceStatus ==
-                                            1 &&
-                                        Get.find<SplashController>()
-                                                .config!
-                                                .maintenanceMode!
-                                                .selectedMaintenanceSystem!
-                                                .driverApp ==
-                                            1) ||
-                                    Get.find<SplashController>()
-                                        .haveOngoingRides()) ...[
-                                  Get.find<ProfileController>()
-                                                  .subscriptionStatus ==
-                                              0 ||
-                                          Get.find<ProfileController>()
-                                                  .subscriptionStatus ==
-                                              null
-                                      ? SizedBox.shrink()
-                                      : Positioned(
-                                          top: Get.height * 0.3,
-                                          right: 0,
-                                          child: GestureDetector(
-                                            onTap: () async {
-                                              Response res =
-                                                  await rideController
-                                                      .getRideDetails(
-                                                          rideController
-                                                                  .rideId ??
-                                                              '1',
-                                                          fromHomeScreen: true);
-                                              if (res.statusCode == 403 ||
-                                                  rideController.tripDetail
-                                                          ?.currentStatus ==
-                                                      'returning' ||
-                                                  rideController.tripDetail
-                                                          ?.currentStatus ==
-                                                      'returned') {
-                                                Get.find<RiderMapController>()
-                                                    .setRideCurrentState(
-                                                        RideState.initial);
-                                              }
-                                              Get.to(() => const MapScreen());
-                                            },
-                                            onHorizontalDragEnd:
-                                                (DragEndDetails details) {
-                                              _onHorizontalDrag(details);
-                                              Get.to(() => const MapScreen());
-                                            },
-                                            child: Stack(children: [
-                                              SizedBox(
-                                                  width: Dimensions
-                                                      .iconSizeExtraLarge,
-                                                  child: Image.asset(
-                                                      Images.homeToMapIcon,
-                                                      color: Theme.of(context)
-                                                          .primaryColor)),
-                                              Positioned(
-                                                  top: 0,
-                                                  bottom: 0,
-                                                  left: 5,
-                                                  right: 5,
-                                                  child: SizedBox(
-                                                      width: 15,
+                                            .haveOngoingRides()) ...[
+                                      Get.find<ProfileController>()
+                                                      .subscriptionStatus ==
+                                                  0 ||
+                                              Get.find<ProfileController>()
+                                                      .subscriptionStatus ==
+                                                  null
+                                          ? SizedBox.shrink()
+                                          : Positioned(
+                                              top: Get.height * 0.3,
+                                              right: 0,
+                                              child: GestureDetector(
+                                                onTap: () async {
+                                                  Response res =
+                                                      await rideController
+                                                          .getRideDetails(
+                                                              rideController
+                                                                      .rideId ??
+                                                                  '1',
+                                                              fromHomeScreen:
+                                                                  true);
+                                                  if (res.statusCode == 403 ||
+                                                      rideController.tripDetail
+                                                              ?.currentStatus ==
+                                                          'returning' ||
+                                                      rideController.tripDetail
+                                                              ?.currentStatus ==
+                                                          'returned') {
+                                                    Get.find<
+                                                            RiderMapController>()
+                                                        .setRideCurrentState(
+                                                            RideState.initial);
+                                                  }
+                                                  Get.to(
+                                                      () => const MapScreen());
+                                                },
+                                                onHorizontalDragEnd:
+                                                    (DragEndDetails details) {
+                                                  _onHorizontalDrag(details);
+                                                  Get.to(
+                                                      () => const MapScreen());
+                                                },
+                                                child: Stack(children: [
+                                                  SizedBox(
+                                                      width: Dimensions
+                                                          .iconSizeExtraLarge,
                                                       child: Image.asset(
-                                                          Images.map,
-                                                          color: Get.isDarkMode
-                                                              ? Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .bodyMedium!
-                                                                  .color
-                                                              : Theme.of(
-                                                                      context)
-                                                                  .colorScheme
-                                                                  .shadow)))
-                                            ]),
-                                          ),
-                                        ),
-                                ]
-                              ]
-                            ],
-                          );
-                        }));
-                  });
+                                                          Images.homeToMapIcon,
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .primaryColor)),
+                                                  Positioned(
+                                                      top: 0,
+                                                      bottom: 0,
+                                                      left: 5,
+                                                      right: 5,
+                                                      child: SizedBox(
+                                                          width: 15,
+                                                          child: Image.asset(
+                                                              Images.map,
+                                                              color: Get
+                                                                      .isDarkMode
+                                                                  ? Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyMedium!
+                                                                      .color
+                                                                  : Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .shadow)))
+                                                ]),
+                                              ),
+                                            ),
+                                    ]
+                                  ]
+                                ],
+                              );
+                            }));
+                      }),
+                );
         });
       });
     });
