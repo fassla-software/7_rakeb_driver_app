@@ -234,11 +234,13 @@ class _RideAcceptedWidgetState extends State<RideAcceptedWidget> {
                                         .primaryColor
                                         .withOpacity(0.15)),
                                 InkWell(
-                                  onTap: () => Get.find<SplashController>()
-                                      .sendMailOrCall(
-                                    "tel:${rideController.tripDetail!.customer!.phone}",
-                                    false,
-                                  ),
+                                  onTap: () async {
+                                    final phone = rideController
+                                        .tripDetail!.customer!.phone
+                                        ?.replaceAll('+200', '+20');
+                                    await Get.find<SplashController>()
+                                        .sendMailOrCall("tel:$phone", false);
+                                  },
                                   child: SizedBox(
                                     width: Dimensions.iconSizeLarge,
                                     child: Image.asset(Images.customerCall),

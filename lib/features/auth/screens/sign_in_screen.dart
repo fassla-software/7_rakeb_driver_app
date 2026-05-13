@@ -19,6 +19,8 @@ import 'package:ride_sharing_user_app/util/app_constants.dart';
 import 'package:ride_sharing_user_app/util/dimensions.dart';
 import 'package:ride_sharing_user_app/util/images.dart';
 import 'package:ride_sharing_user_app/util/styles.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -256,8 +258,26 @@ class _SignInScreenState extends State<SignInScreen> {
                                     Align(
                                       alignment: Alignment.centerRight,
                                       child: TextButton(
-                                        onPressed: () => Get.to(
-                                            () => const ForgotPasswordScreen()),
+                                        onPressed: () async {
+                                          // Determine message based on current GetX locale
+                                          bool isArabic =
+                                              Get.locale?.languageCode == 'ar';
+                                          String message = isArabic
+                                              ? 'لقد نسيت كلمة المرور الخاصة بي'
+                                              : 'I forgot my password';
+
+                                          // WhatsApp URL format: https://wa.me/number?text=urlencodedmessage
+                                          final Uri whatsappUrl = Uri.parse(
+                                              "https://wa.me/201034892158?text=${Uri.encodeComponent(message)}");
+
+                                          // if (await canLaunchUrl(whatsappUrl)) {
+                                          await launchUrl(whatsappUrl,
+                                              mode: LaunchMode
+                                                  .externalApplication);
+                                          // } else {
+                                          //   showCustomSnackBar('could_not_launch_whatsapp'.tr);
+                                          // }
+                                        },
                                         child: Text(
                                           'forgot_password'.tr,
                                           style: textRegular.copyWith(
