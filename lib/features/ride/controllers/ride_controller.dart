@@ -264,6 +264,7 @@ class RideController extends GetxController implements GetxService {
       if (type == 'rejected') {
         await rideServiceInterface.ignoreMessage(tripId);
         showCustomSnackBar('trip_is_rejected'.tr, isError: false);
+        getPendingRideRequestList(1);
       } else {
         showCustomSnackBar('trip_is_accepted'.tr, isError: false);
         Get.find<OtpTimeCountController>().initialCounter();
@@ -449,6 +450,9 @@ class RideController extends GetxController implements GetxService {
           pendingRideRequestModel!.data!
               .addAll(PendingRideRequestModel.fromJson(response.body).data!);
         }
+        // pendingRideRequestModel!.data!.removeWhere((trip) =>
+        //     trip.currentStatus == 'accepted' ||
+        //     trip.currentStatus == 'ongoing');
       }
 
       isLoading = false;
