@@ -694,7 +694,7 @@ class Customer {
   final String? identificationType;
   final List<String>? identificationImage;
   final String? oldIdentificationImage;
-  final String? otherDocuments;
+  final dynamic otherDocuments;
   final String? profileImage;
   final String? fcmToken;
   final String? phoneVerifiedAt;
