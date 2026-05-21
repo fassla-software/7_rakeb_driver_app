@@ -5,19 +5,35 @@ import 'package:ride_sharing_user_app/util/dimensions.dart';
 void SnackBarWidget(String? message,
     {bool isError = true, double margin = Dimensions.paddingSizeSmall}) {
   if (message != null && message.isNotEmpty) {
-    Get.showSnackbar(GetSnackBar(
-      backgroundColor: isError ? Colors.red : Colors.green,
-      message: message,
-      duration: const Duration(seconds: 2),
-      snackStyle: SnackStyle.FLOATING,
-      margin: EdgeInsets.only(
-          top: Dimensions.paddingSizeSmall,
-          left: Dimensions.paddingSizeSmall,
-          right: Dimensions.paddingSizeSmall,
-          bottom: margin),
-      borderRadius: Dimensions.radiusSmall,
-      isDismissible: true,
-      dismissDirection: DismissDirection.horizontal,
-    ));
+    ScaffoldMessenger.of(Get.context!).hideCurrentSnackBar();
+    ScaffoldMessenger.of(Get.context!).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: isError ? Colors.red : Colors.green,
+        behavior: SnackBarBehavior.floating,
+        margin: EdgeInsets.only(
+            top: Dimensions.paddingSizeSmall,
+            left: Dimensions.paddingSizeSmall,
+            right: Dimensions.paddingSizeSmall,
+            bottom: margin),
+        duration: const Duration(seconds: 2),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Dimensions.radiusSmall)),
+      ),
+    );
+    // Get.showSnackbar(GetSnackBar(
+    //   backgroundColor: isError ? Colors.red : Colors.green,
+    //   message: message,
+    //   duration: const Duration(seconds: 2),
+    //   snackStyle: SnackStyle.FLOATING,
+    //   margin: EdgeInsets.only(
+    //       top: Dimensions.paddingSizeSmall,
+    //       left: Dimensions.paddingSizeSmall,
+    //       right: Dimensions.paddingSizeSmall,
+    //       bottom: margin),
+    //   borderRadius: Dimensions.radiusSmall,
+    //   isDismissible: true,
+    //   dismissDirection: DismissDirection.horizontal,
+    // ));
   }
 }

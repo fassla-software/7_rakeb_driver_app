@@ -50,12 +50,24 @@ class ScheduleResponse {
 
   factory ScheduleResponse.fromJson(Map<String, dynamic> json) =>
       ScheduleResponse(
-        responseCode: json["response_code"],
+        responseCode: json["response_code"]?.toString(),
         message: json["message"],
-        totalSize: json["total_size"],
-        limit: json["limit"],
-        offset: json["offset"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        totalSize: json["total_size"] is int
+            ? json["total_size"]
+            : int.tryParse(json["total_size"]?.toString() ?? ''),
+        limit: json["limit"]?.toString(),
+        offset: json["offset"]?.toString(),
+        data: json["data"] == null
+            ? null
+            : json["data"] is List
+                ? Data(
+                    data: List<ScheduleTrip>.from(
+                      (json["data"] as List).map(
+                        (x) => ScheduleTrip.fromJson(x as Map<String, dynamic>),
+                      ),
+                    ),
+                  )
+                : Data.fromJson(json["data"]),
         errors: json["errors"] == null
             ? []
             : List<dynamic>.from(json["errors"]!.map((x) => x)),
