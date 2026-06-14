@@ -128,6 +128,10 @@ class _TripDetailsState extends State<TripDetails> {
                                 rideController.tripDetail!.pickupAddress!,
                             destinationAddress:
                                 rideController.tripDetail!.destinationAddress!,
+                            pickupCoords:
+                                rideController.tripDetail!.pickupCoordinates?.coordinates,
+                            destinationCoords:
+                                rideController.tripDetail!.destinationCoordinates?.coordinates,
                             extraOne: firstRoute,
                             extraTwo: secondRoute,
                             entrance: rideController.tripDetail!.entrance,

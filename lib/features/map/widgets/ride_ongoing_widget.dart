@@ -92,6 +92,10 @@ class _RideOngoingWidgetState extends State<RideOngoingWidget> {
                                   rideController.tripDetail!.pickupAddress!,
                               destinationAddress: rideController
                                   .tripDetail!.destinationAddress!,
+                              pickupCoords:
+                                  rideController.tripDetail!.pickupCoordinates?.coordinates,
+                              destinationCoords:
+                                  rideController.tripDetail!.destinationCoordinates?.coordinates,
                               extraOne: firstRoute,
                               extraTwo: secondRoute,
                               entrance:

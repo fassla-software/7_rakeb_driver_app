@@ -10,6 +10,7 @@ import 'package:ride_sharing_user_app/features/chat/controllers/chat_controller.
 import 'package:ride_sharing_user_app/features/dashboard/screens/dashboard_screen.dart';
 import 'package:ride_sharing_user_app/features/map/controllers/map_controller.dart';
 import 'package:ride_sharing_user_app/features/map/screens/map_screen.dart';
+import 'package:ride_sharing_user_app/features/map/widgets/route_widget.dart';
 import 'package:ride_sharing_user_app/features/ride/controllers/ride_controller.dart';
 import 'package:ride_sharing_user_app/features/schedule/controllers/schedule_controller.dart';
 import 'package:ride_sharing_user_app/features/schedule/domain/models/accept_schedule_%20model.dart';
@@ -87,6 +88,7 @@ class AcceptScheduleCard extends StatelessWidget {
             iconColor: Colors.green,
             address: schedule.coordinate?.pickupAddress ?? 'No pickup address',
             label: 'from'.tr,
+            coords: schedule.coordinate?.pickupCoordinates?.coordinates,
           ),
 
           const SizedBox(height: 8),
@@ -97,6 +99,7 @@ class AcceptScheduleCard extends StatelessWidget {
             address: schedule.coordinate?.destinationAddress ??
                 'No destination address',
             label: 'to'.tr,
+            coords: schedule.coordinate?.destinationCoordinates?.coordinates,
           ),
 
           const SizedBox(height: 16),
@@ -342,6 +345,7 @@ class AcceptScheduleCard extends StatelessWidget {
     required Color iconColor,
     required String address,
     required String label,
+    List<double>? coords,
   }) {
     return Row(
       children: [
@@ -362,14 +366,19 @@ class AcceptScheduleCard extends StatelessWidget {
                   color: Colors.grey[600],
                 ),
               ),
-              Text(
-                address,
-                style: textRegular.copyWith(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+              FutureBuilder<String>(
+                future: RouteWidget.getAreaName(coords, address),
+                builder: (context, snapshot) {
+                  return Text(
+                    snapshot.data ?? address,
+                    style: textRegular.copyWith(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  );
+                },
               ),
             ],
           ),

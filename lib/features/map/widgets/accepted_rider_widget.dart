@@ -259,6 +259,10 @@ class _RideAcceptedWidgetState extends State<RideAcceptedWidget> {
                           destinationAddress:
                               rideController.tripDetail?.destinationAddress ??
                                   '',
+                          pickupCoords:
+                              rideController.tripDetail?.pickupCoordinates?.coordinates,
+                          destinationCoords:
+                              rideController.tripDetail?.destinationCoordinates?.coordinates,
                         ),
                       ),
                       const SizedBox(height: Dimensions.paddingSizeDefault),

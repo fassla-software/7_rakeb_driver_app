@@ -134,6 +134,8 @@ class ParcelRequestCardWidget extends StatelessWidget {
                 fromCard: true,
                 pickupAddress: rideRequest.pickupAddress!,
                 destinationAddress: rideRequest.destinationAddress!,
+                pickupCoords: rideRequest.pickupCoordinates?.coordinates,
+                destinationCoords: rideRequest.destinationCoordinates?.coordinates,
                 extraOne: firstRoute,
                 extraTwo: secondRoute,
                 entrance: rideRequest.entrance ?? '',

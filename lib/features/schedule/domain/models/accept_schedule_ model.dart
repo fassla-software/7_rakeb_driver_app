@@ -422,9 +422,11 @@ class ScheduleTrip {
         isScheduled: json["is_scheduled"],
         mapScreenshot: json["map_screenshot"],
         tripCancellationReason: json["trip_cancellation_reason"],
-        coordinate: json["coordinate"] == null
-            ? null
-            : Coordinate.fromJson(json["coordinate"]),
+        coordinate: json["coordinate"] != null
+            ? Coordinate.fromJson(json["coordinate"])
+            : (json["pickup_address"] != null || json["destination_address"] != null)
+                ? Coordinate.fromJson(json)
+                : null,
         customer: json["customer"] == null
             ? null
             : Customer.fromJson(json["customer"]),
@@ -570,7 +572,7 @@ class Coordinate {
       );
 
   factory Coordinate.fromJson(Map<String, dynamic> json) => Coordinate(
-        id: json["id"],
+        id: json["id"] is int ? json["id"] : int.tryParse(json["id"]?.toString() ?? ''),
         tripRequestId: json["trip_request_id"],
         pickupCoordinates: json["pickup_coordinates"] == null
             ? null

@@ -285,6 +285,10 @@ class _PaymentReceivedScreenState extends State<PaymentReceivedScreen>
                           '${finalFareController.finalFare!.pickupAddress}',
                       destinationAddress:
                           '${finalFareController.finalFare!.destinationAddress}',
+                      pickupCoords:
+                          finalFareController.finalFare!.pickupCoordinates?.coordinates,
+                      destinationCoords:
+                          finalFareController.finalFare!.destinationCoordinates?.coordinates,
                       extraOne: firstRoute,
                       extraTwo: secondRoute,
                       entrance: finalFareController.finalFare?.entrance ?? '',
