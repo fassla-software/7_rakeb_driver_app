@@ -63,8 +63,13 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
-  String? deviceToken = await FirebaseMessaging.instance.getToken();
-  log("fcm token: $deviceToken");
+  String? deviceToken;
+  try {
+    deviceToken = await FirebaseMessaging.instance.getToken();
+    log("fcm token: $deviceToken");
+  } catch (e) {
+    log("Failed to get FCM token: $e");
+  }
   runApp(MyApp(languages: languages, notificationData: remoteMessage?.data));
 
   // Upload cached files on app start

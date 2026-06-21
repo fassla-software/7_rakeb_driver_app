@@ -491,10 +491,13 @@ class _AdditionalSignUpScreen2State extends State<AdditionalSignUpScreen2> {
                                     if (authController.isParcelShare) {
                                       services.add('parcel');
                                     }
-                                    String? deviceToken =
-                                        await FirebaseMessaging.instance
-                                            .getToken();
-                                    log("fcm token: $deviceToken");
+                                    String? deviceToken;
+                                    try {
+                                      deviceToken = await FirebaseMessaging.instance.getToken();
+                                      log("fcm token: $deviceToken");
+                                    } catch (e) {
+                                      log("Failed to get FCM token during signup: $e");
+                                    }
                                     SignUpBody signUpBody = SignUpBody(
                                         email:
                                             authController.emailController.text,

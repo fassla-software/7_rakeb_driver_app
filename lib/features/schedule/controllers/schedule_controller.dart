@@ -1,3 +1,4 @@
+import 'package:ride_sharing_user_app/features/dashboard/screens/dashboard_screen.dart';
 import 'package:get/get.dart';
 import 'package:ride_sharing_user_app/common_widgets/snackbar_widget.dart';
 import 'package:ride_sharing_user_app/data/api_checker.dart';
@@ -80,6 +81,20 @@ class ScheduleController extends GetxController {
     if (response.statusCode == 200) {
       await getSchedules();
      // Get.find<RideController>().getPendingRideRequestList(1);
+    } else {
+      String? message;
+      if (response.body != null && response.body is Map) {
+        if (response.body['message'] != null) {
+          message = response.body['message'];
+        } else if (response.body['errors'] != null &&
+            response.body['errors'] is List &&
+            response.body['errors'].isNotEmpty) {
+          message = response.body['errors'][0]['message'];
+        }
+      }
+      message ??= response.statusText;
+      SnackBarWidget(message ?? 'something_went_wrong'.tr, isError: true);
+      Get.offAll(() => const DashboardScreen());
     }
 
     _loadingTripId = null;

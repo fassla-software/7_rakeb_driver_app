@@ -115,10 +115,12 @@ class ScheduleCard extends StatelessWidget {
                             controller
                                 .acceptScheduleTrip(schedule.id!)
                                 .then((value) {
-                              SnackBarWidget(
-                                  "schedule_trip_accepted_and_added_to_your_list"
-                                      .tr,
-                                  isError: false);
+                              if (value.statusCode == 200) {
+                                SnackBarWidget(
+                                    "schedule_trip_accepted_and_added_to_your_list"
+                                        .tr,
+                                    isError: false);
+                              }
                             });
                           },
                           icon: const Icon(Icons.check_circle,
