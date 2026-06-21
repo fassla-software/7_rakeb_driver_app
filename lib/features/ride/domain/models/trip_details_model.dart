@@ -228,7 +228,12 @@ class TripDetail {
     otp = json['otp'];
     riseRequestCount = json['rise_request_count'];
     type = json['type'];
-    createdAt = json['created_at'];
+    createdAt = json['created_at'] != null
+        ? DateTime.parse(json['created_at'])
+            .toLocal()
+            .toString()
+            .replaceAll(' ', 'T')
+        : null;
     completed = json['completed'];
     entrance = json['entrance'];
     intermediateAddresses = json['intermediate_addresses'];
