@@ -450,9 +450,9 @@ class RideController extends GetxController implements GetxService {
           pendingRideRequestModel!.data!
               .addAll(PendingRideRequestModel.fromJson(response.body).data!);
         }
-        // pendingRideRequestModel!.data!.removeWhere((trip) =>
-        //     trip.currentStatus == 'accepted' ||
-        //     trip.currentStatus == 'ongoing');
+        pendingRideRequestModel!.data!.removeWhere((trip) =>
+            trip.currentStatus == 'accepted' ||
+            trip.currentStatus == 'ongoing');
       }
 
       isLoading = false;
