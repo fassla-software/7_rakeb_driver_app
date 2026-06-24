@@ -479,7 +479,11 @@ class RideController extends GetxController implements GetxService {
 
             List<TripDetail> scheduledTrips = [];
             for (var item in scheduledList) {
-              scheduledTrips.add(TripDetail.fromJson(item));
+              final trip = TripDetail.fromJson(item);
+              // Only include scheduled trips that are still pending and not accepted by any driver
+              if (trip.currentStatus == 'pending' && trip.acceptedBy == null) {
+                scheduledTrips.add(trip);
+              }
             }
 
             if (pendingRideRequestModel == null) {

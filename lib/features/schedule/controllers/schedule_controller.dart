@@ -80,6 +80,9 @@ class ScheduleController extends GetxController {
 
     if (response.statusCode == 200) {
       await getSchedules();
+      await getAcceptedSchedules();
+      setWalletTypeIndex(1);
+      Get.find<RiderMapController>().setRideCurrentState(RideState.initial);
       Get.find<RideController>().getPendingRideRequestList(1);
     } else {
       String? message;
