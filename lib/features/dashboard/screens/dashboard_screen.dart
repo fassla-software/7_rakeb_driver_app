@@ -27,7 +27,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
     if (widget.initialScreen != null) {
-      Get.find<BottomMenuController>().setTabIndex(widget.initialScreen!);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Get.find<BottomMenuController>().setTabIndex(widget.initialScreen!);
+      });
     }
   }
 

@@ -72,6 +72,26 @@ class TripDetail {
   double? dueAmount;
   String? returnTime;
   ParcelRefund? parcelRefund;
+  Driver? driver;
+  double? discountActualFare;
+  double? totalDistance;
+  String? acceptedBy;
+  dynamic discount;
+  bool? driverReview;
+  bool? isScheduled;
+  bool? canAccept;
+  dynamic coupon;
+  String? parcelCompleteTime;
+  PickupCoordinates? startCoordinates;
+  PickupCoordinates? dropCoordinates;
+  PickupCoordinates? driverAcceptCoordinates;
+  PickupCoordinates? intermediateCoordinates;
+  bool? isReached1;
+  bool? isReached2;
+  double? waitingFee;
+  String? waitedBy;
+  String? delayedBy;
+  String? delayTime;
 
   TripDetail(
       {this.id,
@@ -132,7 +152,27 @@ class TripDetail {
       this.returnFee,
       this.dueAmount,
       this.returnTime,
-      this.parcelRefund});
+      this.parcelRefund,
+      this.driver,
+      this.discountActualFare,
+      this.totalDistance,
+      this.acceptedBy,
+      this.discount,
+      this.driverReview,
+      this.isScheduled,
+      this.canAccept,
+      this.coupon,
+      this.parcelCompleteTime,
+      this.startCoordinates,
+      this.dropCoordinates,
+      this.driverAcceptCoordinates,
+      this.intermediateCoordinates,
+      this.isReached1,
+      this.isReached2,
+      this.waitingFee,
+      this.waitedBy,
+      this.delayedBy,
+      this.delayTime});
 
   TripDetail.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -272,11 +312,45 @@ class TripDetail {
     if (json['return_fee'] != null) {
       returnFee = json['return_fee'].toDouble();
     }
-    dueAmount = json['due_amount'].toDouble();
+    dueAmount = json['due_amount'] != null ? json['due_amount'].toDouble() : 0.0;
     returnTime = json['return_time'];
     parcelRefund = json['parcel_refund'] != null
         ? ParcelRefund.fromJson(json['parcel_refund'])
         : null;
+    driver = json['driver'] != null ? Driver.fromJson(json['driver']) : null;
+    if (json['discount_actual_fare'] != null) {
+      discountActualFare = json['discount_actual_fare'].toDouble();
+    }
+    if (json['total_distance'] != null) {
+      totalDistance = json['total_distance'].toDouble();
+    }
+    acceptedBy = json['accepted_by'];
+    discount = json['discount'];
+    driverReview = json['driver_review'];
+    isScheduled = json['is_scheduled'];
+    canAccept = json['can_accept'];
+    coupon = json['coupon'];
+    parcelCompleteTime = json['parcel_complete_time'];
+    startCoordinates = json['start_coordinates'] != null
+        ? PickupCoordinates.fromJson(json['start_coordinates'])
+        : null;
+    dropCoordinates = json['drop_coordinates'] != null
+        ? PickupCoordinates.fromJson(json['drop_coordinates'])
+        : null;
+    driverAcceptCoordinates = json['driver_accept_coordinates'] != null
+        ? PickupCoordinates.fromJson(json['driver_accept_coordinates'])
+        : null;
+    intermediateCoordinates = json['intermediate_coordinates'] != null
+        ? PickupCoordinates.fromJson(json['intermediate_coordinates'])
+        : null;
+    isReached1 = json['is_reached_1'];
+    isReached2 = json['is_reached_2'];
+    if (json['waiting_fee'] != null) {
+      waitingFee = json['waiting_fee'].toDouble();
+    }
+    waitedBy = json['waited_by'];
+    delayedBy = json['delayed_by'];
+    delayTime = json['delay_time']?.toString();
   }
 }
 
@@ -599,5 +673,35 @@ class Attachments {
 
   Attachments.fromJson(Map<String, dynamic> json) {
     file = json['file'];
+  }
+}
+
+class Driver {
+  String? id;
+  String? userLevelId;
+  String? firstName;
+  String? lastName;
+  String? email;
+  String? phone;
+  String? profileImage;
+
+  Driver({
+    this.id,
+    this.userLevelId,
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.phone,
+    this.profileImage,
+  });
+
+  Driver.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    userLevelId = json['user_level_id'];
+    firstName = json['first_name'];
+    lastName = json['last_name'];
+    email = json['email'];
+    phone = json['phone'];
+    profileImage = json['profile_image'];
   }
 }

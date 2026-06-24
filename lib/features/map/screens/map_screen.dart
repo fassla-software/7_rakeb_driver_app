@@ -262,6 +262,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                       )),
                   Positioned(
                       child: Align(
+                        
                     alignment: Alignment.centerLeft,
                     child: GestureDetector(
                       onTap: () {

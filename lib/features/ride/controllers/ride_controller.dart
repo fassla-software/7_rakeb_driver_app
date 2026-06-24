@@ -22,6 +22,7 @@ import 'package:ride_sharing_user_app/features/ride/domain/models/pending_ride_r
 import 'package:ride_sharing_user_app/features/ride/domain/models/remaining_distance_model.dart';
 import 'package:ride_sharing_user_app/features/ride/domain/models/trip_details_model.dart';
 import 'package:ride_sharing_user_app/features/ride/domain/services/ride_service_interface.dart';
+import 'package:ride_sharing_user_app/features/schedule/domain/service/schedule_service_interface.dart';
 import 'package:ride_sharing_user_app/features/trip/controllers/trip_controller.dart';
 import 'package:ride_sharing_user_app/features/trip/screens/payment_received_screen.dart';
 import 'package:ride_sharing_user_app/helper/display_helper.dart';
@@ -459,6 +460,40 @@ class RideController extends GetxController implements GetxService {
             (pendingRideRequestModel?.totalSize ?? 0) - removedCount;
         if (pendingRideRequestModel!.totalSize! < 0) {
           pendingRideRequestModel?.totalSize = 0;
+        }
+      }
+
+      if (offset == 1) {
+        try {
+          final scheduledResponse =
+              await Get.find<ScheduleServiceInterface>().getAllScheduleTrips();
+          if (scheduledResponse.statusCode == 200 &&
+              scheduledResponse.body != null) {
+            List<dynamic> scheduledList = [];
+            var dataPart = scheduledResponse.body['data'];
+            if (dataPart is List) {
+              scheduledList = dataPart;
+            } else if (dataPart is Map && dataPart['data'] != null) {
+              scheduledList = dataPart['data'];
+            }
+
+            List<TripDetail> scheduledTrips = [];
+            for (var item in scheduledList) {
+              scheduledTrips.add(TripDetail.fromJson(item));
+            }
+
+            if (pendingRideRequestModel == null) {
+              pendingRideRequestModel = PendingRideRequestModel(
+                  data: [], totalSize: 0, offset: '1', limit: '10');
+            }
+            pendingRideRequestModel!.data ??= [];
+            pendingRideRequestModel!.data!.addAll(scheduledTrips);
+            pendingRideRequestModel!.totalSize =
+                (pendingRideRequestModel!.totalSize ?? 0) +
+                    scheduledTrips.length;
+          }
+        } catch (e) {
+          print("Error fetching/merging scheduled trips: $e");
         }
       }
 

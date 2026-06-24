@@ -80,7 +80,7 @@ class ScheduleController extends GetxController {
 
     if (response.statusCode == 200) {
       await getSchedules();
-     // Get.find<RideController>().getPendingRideRequestList(1);
+      Get.find<RideController>().getPendingRideRequestList(1);
     } else {
       String? message;
       if (response.body != null && response.body is Map) {
@@ -108,9 +108,9 @@ class ScheduleController extends GetxController {
 
     final response = await scheduleService.cancelScheduleTrip(tripId);
 
-    // if (response.statusCode == 200) {
-    //   Get.find<RideController>().getPendingRideRequestList(1);
-    // }
+    if (response.statusCode == 200) {
+      Get.find<RideController>().getPendingRideRequestList(1);
+    }
 
     _loadingTripId = null;
     update();

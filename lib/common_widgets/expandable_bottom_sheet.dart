@@ -200,6 +200,7 @@ class ExpandableBottomSheetState extends State<ExpandableBottomSheet>
                           key: _headerKey,
                           child: widget.persistentHeader ?? Container()),
                       Container(
+                        
                         key: _contentKey,
                         child: widget.expandableContent,
                       ),

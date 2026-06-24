@@ -136,9 +136,7 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                                     Dimensions.paddingSizeExtraSmall),
                               ),
                               child: Text(
-                                DateTime.parse(rideRequest.createdAt ?? '')
-                                            .day ==
-                                        DateTime.now().day
+                                !(rideRequest.isScheduled ?? false)
                                     ? "ride_request".tr
                                     : "schedule_trip".tr,
                                 style: textRegular.copyWith(
@@ -428,11 +426,7 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                                                         radius: Dimensions
                                                             .paddingSizeSmall,
                                                         onPressed: () async {
-                                                          DateTime.parse(rideRequest.createdAt ??
-                                                                          '')
-                                                                      .day ==
-                                                                  DateTime.now()
-                                                                      .day
+                                                          !(rideRequest.isScheduled ?? false)
                                                               ? Get.find<
                                                                       RideController>()
                                                                   .tripAcceptOrRejected(
@@ -495,6 +489,8 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                                                                   if (value
                                                                           .statusCode ==
                                                                       200) {
+                                                                    Get.find<RiderMapController>()
+                                                                        .setRideCurrentState(RideState.initial);
                                                                     await Get.find<
                                                                             RideController>()
                                                                         .getPendingRideRequestList(
@@ -531,7 +527,7 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                         .then((value) {
                       if (value.statusCode == 200) {
                         Get.find<RideController>().getPendingRideRequestList(1);
-                        if (fromList) {
+                        if (!fromList) {
                           Get.find<RiderMapController>()
                               .setRideCurrentState(RideState.initial);
                         }
@@ -604,9 +600,7 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                                   Dimensions.paddingSizeExtraSmall),
                             ),
                             child: Text(
-                                DateTime.parse(rideRequest.createdAt ?? '')
-                                            .day ==
-                                        DateTime.now().day
+                                !(rideRequest.isScheduled ?? false)
                                     ? "ride_request".tr
                                     : "schedule_trip".tr,
                                 style: textRegular.copyWith(
@@ -722,11 +716,7 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                                             buttonText: 'accept'.tr,
                                             radius: Dimensions.paddingSizeSmall,
                                             onPressed: () async {
-                                              DateTime.parse(rideRequest
-                                                                  .createdAt ??
-                                                              '')
-                                                          .day ==
-                                                      DateTime.now().day
+                                               !(rideRequest.isScheduled ?? false)
                                                   ? Get.find<RideController>()
                                                       .tripAcceptOrRejected(
                                                           rideRequest.id!,
@@ -789,6 +779,8 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                                                       .then((value) async {
                                                       if (value.statusCode ==
                                                           200) {
+                                                        Get.find<RiderMapController>()
+                                                            .setRideCurrentState(RideState.initial);
                                                         await Get.find<
                                                                 RideController>()
                                                             .getPendingRideRequestList(
