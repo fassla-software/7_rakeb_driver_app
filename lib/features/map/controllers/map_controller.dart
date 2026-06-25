@@ -248,11 +248,15 @@ class RiderMapController extends GetxController implements GetxService {
       );
       double bearing = Geolocator.bearingBetween(
           from.latitude, from.longitude, to.latitude, to.longitude);
-      mapController!.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
+      mapController!
+          .moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
         bearing: bearing,
         target: centerBounds,
         zoom: 16,
-      )));
+      )))
+          .catchError((e) {
+        debugPrint('Error moving camera: $e');
+      });
       setMapPosition(mapController, bounds, centerBounds, bearing,
           padding: 0.5);
     } catch (e) {
@@ -332,9 +336,17 @@ class RiderMapController extends GetxController implements GetxService {
   Future<void> setMapPosition(GoogleMapController? controller,
       LatLngBounds? bounds, LatLng centerBounds, double bearing,
       {double padding = 0.5}) async {
-    controller?.moveCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(target: _initialPosition, zoom: AppConstants.mapZoom),
-    ));
+    try {
+      controller
+          ?.moveCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(target: _initialPosition, zoom: AppConstants.mapZoom),
+      ))
+          .catchError((e) {
+        debugPrint('Error moving camera: $e');
+      });
+    } catch (e) {
+      debugPrint('Error moving camera: $e');
+    }
     update();
   }
 
@@ -356,11 +368,15 @@ class RiderMapController extends GetxController implements GetxService {
       );
       double bearing = Geolocator.bearingBetween(startingPoint.latitude,
           startingPoint.longitude, endingPoint.latitude, endingPoint.longitude);
-      mapController!.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
+      mapController!
+          .moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
         bearing: bearing,
         target: centerBounds,
         zoom: 16,
-      )));
+      )))
+          .catchError((e) {
+        debugPrint('Error moving camera: $e');
+      });
       setMapPosition(mapController, bounds, centerBounds, bearing,
           padding: 0.5);
     } catch (e) {

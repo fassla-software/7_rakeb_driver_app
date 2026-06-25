@@ -200,7 +200,6 @@ class ExpandableBottomSheetState extends State<ExpandableBottomSheet>
                           key: _headerKey,
                           child: widget.persistentHeader ?? Container()),
                       Container(
-                        
                         key: _contentKey,
                         child: widget.expandableContent,
                       ),
@@ -268,6 +267,7 @@ class ExpandableBottomSheetState extends State<ExpandableBottomSheet>
   }
 
   void _positionOutOfBounds() {
+    _positionOffset ??= _maxOffset;
     if (_positionOffset! < _minOffset) {
       //the extend is larger than contentHeight
       _callCallbacks = false;

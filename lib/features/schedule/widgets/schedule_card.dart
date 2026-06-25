@@ -8,10 +8,12 @@ import 'package:ride_sharing_user_app/features/schedule/domain/models/accept_sch
 import 'package:ride_sharing_user_app/util/dimensions.dart';
 import 'package:ride_sharing_user_app/util/styles.dart';
 
+import '../../ride/controllers/ride_controller.dart';
+
 class ScheduleCard extends StatelessWidget {
   final ScheduleTrip schedule;
 
-  const ScheduleCard({Key? key, required this.schedule}) : super(key: key);
+  const ScheduleCard({super.key, required this.schedule});
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,9 @@ class ScheduleCard extends StatelessWidget {
                     ),
                     builder: (context, snapshot) {
                       return Text(
-                        snapshot.data ?? schedule.coordinate?.pickupAddress ?? 'No pickup address',
+                        snapshot.data ??
+                            schedule.coordinate?.pickupAddress ??
+                            'No pickup address',
                         style: textRegular,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -70,11 +74,14 @@ class ScheduleCard extends StatelessWidget {
                   child: FutureBuilder<String>(
                     future: RouteWidget.getAreaName(
                       schedule.coordinate?.destinationCoordinates?.coordinates,
-                      schedule.coordinate?.destinationAddress ?? 'No destination address',
+                      schedule.coordinate?.destinationAddress ??
+                          'No destination address',
                     ),
                     builder: (context, snapshot) {
                       return Text(
-                        snapshot.data ?? schedule.coordinate?.destinationAddress ?? 'No destination address',
+                        snapshot.data ??
+                            schedule.coordinate?.destinationAddress ??
+                            'No destination address',
                         style: textRegular,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -112,16 +119,19 @@ class ScheduleCard extends StatelessWidget {
                           color: Theme.of(context).primaryColor, size: 40.0)
                       : ElevatedButton.icon(
                           onPressed: () {
-                            controller
-                                .acceptScheduleTrip(schedule.id!)
-                                .then((value) {
-                              if (value.statusCode == 200) {
-                                SnackBarWidget(
-                                    "schedule_trip_accepted_and_added_to_your_list"
-                                        .tr,
-                                    isError: false);
-                              }
-                            });
+                            controller.acceptScheduleTrip(schedule.id!).then(
+                              (value) async {
+                                if (value.statusCode == 200) {
+                                  SnackBarWidget(
+                                      "schedule_trip_accepted_and_added_to_your_list"
+                                          .tr,
+                                      isError: false);
+                                  await controller.getSchedules();
+                                  await controller.getAcceptedSchedules();
+                                  Get.find<RideController>().getPendingRideRequestList(1);
+                                }
+                              },
+                            );
                           },
                           icon: const Icon(Icons.check_circle,
                               color: Colors.white),

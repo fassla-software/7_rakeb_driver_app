@@ -8,7 +8,6 @@ import 'package:ride_sharing_user_app/features/schedule/controllers/schedule_con
 import 'package:ride_sharing_user_app/features/schedule/screens/schedule_screen.dart';
 import 'package:ride_sharing_user_app/helper/date_converter.dart';
 import 'package:ride_sharing_user_app/helper/display_helper.dart';
-import 'package:ride_sharing_user_app/helper/pusher_helper.dart';
 import 'package:ride_sharing_user_app/util/dimensions.dart';
 import 'package:ride_sharing_user_app/util/images.dart';
 import 'package:ride_sharing_user_app/util/styles.dart';
@@ -168,7 +167,8 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                       pickupAddress: rideRequest.pickupAddress!,
                       destinationAddress: rideRequest.destinationAddress!,
                       pickupCoords: rideRequest.pickupCoordinates?.coordinates,
-                      destinationCoords: rideRequest.destinationCoordinates?.coordinates,
+                      destinationCoords:
+                          rideRequest.destinationCoordinates?.coordinates,
                       extraOne: firstRoute,
                       extraTwo: secondRoute,
                       entrance: rideRequest.entrance ?? '',
@@ -426,7 +426,9 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                                                         radius: Dimensions
                                                             .paddingSizeSmall,
                                                         onPressed: () async {
-                                                          !(rideRequest.isScheduled ?? false)
+                                                          !(rideRequest
+                                                                      .isScheduled ??
+                                                                  false)
                                                               ? Get.find<
                                                                       RideController>()
                                                                   .tripAcceptOrRejected(
@@ -444,6 +446,15 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                                                                     Get.find<
                                                                             AuthController>()
                                                                         .saveRideCreatedTime();
+                                                                    if (Get.isRegistered<
+                                                                        ScheduleController>()) {
+                                                                      Get.find<
+                                                                              ScheduleController>()
+                                                                          .getSchedules();
+                                                                      Get.find<
+                                                                              ScheduleController>()
+                                                                          .getAcceptedSchedules();
+                                                                    }
                                                                     if (fromList) {
                                                                       Get.find<
                                                                               RideController>()
@@ -489,8 +500,10 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                                                                   if (value
                                                                           .statusCode ==
                                                                       200) {
-                                                                    Get.find<RiderMapController>()
-                                                                        .setRideCurrentState(RideState.initial);
+                                                                    Get.find<
+                                                                            RiderMapController>()
+                                                                        .setRideCurrentState(
+                                                                            RideState.initial);
                                                                     await Get.find<
                                                                             RideController>()
                                                                         .getPendingRideRequestList(
@@ -631,7 +644,8 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                     pickupAddress: rideRequest.pickupAddress!,
                     destinationAddress: rideRequest.destinationAddress!,
                     pickupCoords: rideRequest.pickupCoordinates?.coordinates,
-                    destinationCoords: rideRequest.destinationCoordinates?.coordinates,
+                    destinationCoords:
+                        rideRequest.destinationCoordinates?.coordinates,
                     extraOne: firstRoute,
                     extraTwo: secondRoute,
                     entrance: rideRequest.entrance ?? '',
@@ -649,9 +663,14 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                         horizontal: Dimensions.paddingSizeDefault,
                         vertical: Dimensions.paddingSizeDefault,
                       ),
-                      child: rideController.pendingRideRequestModel!
+                      child: ((index != null &&
+                                  rideController.pendingRideRequestModel != null &&
+                                  rideController.pendingRideRequestModel!.data != null &&
+                                  index! < rideController.pendingRideRequestModel!.data!.length)
+                              ? rideController.pendingRideRequestModel!
                                       .data![index!].id ==
-                                  rideController.onPressedTripId &&
+                                  rideController.onPressedTripId
+                              : rideRequest.id == rideController.onPressedTripId) &&
                               rideController.accepting
                           ? SpinKitCircle(
                               color: Theme.of(context).primaryColor, size: 40.0)
@@ -716,7 +735,8 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                                             buttonText: 'accept'.tr,
                                             radius: Dimensions.paddingSizeSmall,
                                             onPressed: () async {
-                                               !(rideRequest.isScheduled ?? false)
+                                              !(rideRequest.isScheduled ??
+                                                      false)
                                                   ? Get.find<RideController>()
                                                       .tripAcceptOrRejected(
                                                           rideRequest.id!,
@@ -728,6 +748,15 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                                                         Get.find<
                                                                 AuthController>()
                                                             .saveRideCreatedTime();
+                                                        if (Get.isRegistered<
+                                                            ScheduleController>()) {
+                                                          Get.find<
+                                                                  ScheduleController>()
+                                                              .getSchedules();
+                                                          Get.find<
+                                                                  ScheduleController>()
+                                                              .getAcceptedSchedules();
+                                                        }
                                                         if (fromList) {
                                                           Get.find<
                                                                   RideController>()
@@ -779,12 +808,19 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                                                       .then((value) async {
                                                       if (value.statusCode ==
                                                           200) {
-                                                        Get.find<RiderMapController>()
-                                                            .setRideCurrentState(RideState.initial);
+                                                        Get.find<
+                                                                RiderMapController>()
+                                                            .setRideCurrentState(
+                                                                RideState
+                                                                    .initial);
                                                         await Get.find<
                                                                 RideController>()
                                                             .getPendingRideRequestList(
                                                                 1);
+                                                        await controller
+                                                            .getSchedules();
+                                                        await controller
+                                                            .getAcceptedSchedules();
 
                                                         Get.offAll(() =>
                                                             const DashboardScreen(

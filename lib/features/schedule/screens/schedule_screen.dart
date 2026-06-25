@@ -11,8 +11,6 @@ import 'package:ride_sharing_user_app/features/schedule/widgets/schedule_card.da
 import 'package:ride_sharing_user_app/localization/localization_controller.dart';
 import '../controllers/schedule_controller.dart';
 import 'package:ride_sharing_user_app/util/dimensions.dart';
-import 'package:ride_sharing_user_app/util/styles.dart';
-
 import 'package:ride_sharing_user_app/features/profile/controllers/profile_controller.dart';
 
 class ScheduleScreenMenu extends GetView<ScheduleController> {
@@ -96,63 +94,105 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       })),
                   controller.scheduleTypeIndex == 0
                       ? SliverFillRemaining(
-                          child: controller.isLoading
-                              ? SpinKitCircle(
-                                  color: Theme.of(context).primaryColor,
-                                  size: 40.0)
-                              : controller.schedules.isEmpty
-                                  ? const NoDataWidget(title: 'no_trip_found')
-                                  : Column(
-                                      children: [
-                                        Expanded(
-                                          child: ListView.builder(
-                                            padding: const EdgeInsets.all(
-                                                Dimensions.paddingSizeDefault),
-                                            itemCount:
-                                                controller.schedules.length,
-                                            itemBuilder: (context, index) {
-                                              final schedule =
-                                                  controller.schedules[index];
-                                              return ScheduleCard(
-                                                  schedule: schedule);
-                                            },
-                                          ),
+                          child: RefreshIndicator(
+                            onRefresh: () async {
+                              await controller.getSchedules();
+                            },
+                            child: controller.isLoading
+                                ? SpinKitCircle(
+                                    color: Theme.of(context).primaryColor,
+                                    size: 40.0)
+                                : controller.schedules.isEmpty
+                                    ? SingleChildScrollView(
+                                        physics:
+                                            const AlwaysScrollableScrollPhysics(),
+                                        child: Container(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.7,
+                                          alignment: Alignment.center,
+                                          child: const NoDataWidget(
+                                              title: 'no_trip_found'),
                                         ),
-                                        SizedBox(
-                                          height: Dimensions.paddingSizeOver,
-                                        )
-                                      ],
-                                    ),
+                                      )
+                                    : Column(
+                                        children: [
+                                          Expanded(
+                                            child: ListView.builder(
+                                              physics:
+                                                  const AlwaysScrollableScrollPhysics(),
+                                              padding: const EdgeInsets.all(
+                                                  Dimensions
+                                                      .paddingSizeDefault),
+                                              itemCount:
+                                                  controller.schedules.length,
+                                              itemBuilder: (context, index) {
+                                                final schedule =
+                                                    controller.schedules[index];
+                                                return ScheduleCard(
+                                                    schedule: schedule);
+                                              },
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: Dimensions.paddingSizeOver,
+                                          )
+                                        ],
+                                      ),
+                          ),
                         )
                       : SliverFillRemaining(
-                          child: controller.isAcceptingLoading
-                              ? SpinKitCircle(
-                                  color: Theme.of(context).primaryColor,
-                                  size: 40.0)
-                              : controller.acceptedSchedules.isEmpty
-                                  ? const NoDataWidget(title: 'no_trip_found')
-                                  : Column(
-                                      children: [
-                                        Expanded(
-                                          child: ListView.builder(
-                                            padding: const EdgeInsets.all(
-                                                Dimensions.paddingSizeDefault),
-                                            itemCount: controller
-                                                .acceptedSchedules.length,
-                                            itemBuilder: (context, index) {
-                                              final acceptingSchedule =
-                                                  controller
-                                                      .acceptedSchedules[index];
-                                              return AcceptScheduleCard(
-                                                  schedule: acceptingSchedule);
-                                            },
-                                          ),
+                          child: RefreshIndicator(
+                            onRefresh: () async {
+                              await controller.getAcceptedSchedules();
+                            },
+                            child: controller.isAcceptingLoading
+                                ? SpinKitCircle(
+                                    color: Theme.of(context).primaryColor,
+                                    size: 40.0)
+                                : controller.acceptedSchedules.isEmpty
+                                    ? SingleChildScrollView(
+                                        physics:
+                                            const AlwaysScrollableScrollPhysics(),
+                                        child: Container(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.7,
+                                          alignment: Alignment.center,
+                                          child: const NoDataWidget(
+                                              title: 'no_trip_found'),
                                         ),
-                                        SizedBox(
-                                          height: Dimensions.paddingSizeOver,
-                                        )
-                                      ],
-                                    ),
+                                      )
+                                    : Column(
+                                        children: [
+                                          Expanded(
+                                            child: ListView.builder(
+                                              physics:
+                                                  const AlwaysScrollableScrollPhysics(),
+                                              padding: const EdgeInsets.all(
+                                                  Dimensions
+                                                      .paddingSizeDefault),
+                                              itemCount: controller
+                                                  .acceptedSchedules.length,
+                                              itemBuilder: (context, index) {
+                                                final acceptingSchedule =
+                                                    controller
+                                                            .acceptedSchedules[
+                                                        index];
+                                                return AcceptScheduleCard(
+                                                    schedule:
+                                                        acceptingSchedule);
+                                              },
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: Dimensions.paddingSizeOver,
+                                          )
+                                        ],
+                                      ),
+                          ),
                         ),
                 ],
               ),

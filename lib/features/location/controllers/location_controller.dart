@@ -70,22 +70,30 @@ class LocationController extends GetxController implements GetxService {
               location.latitude.toString(), location.longitude.toString());
         }
         _locationSubscription =
-            Geolocator.getPositionStream().listen((newLocalData) {
+            Geolocator.getPositionStream().listen((newLocalData) async {
           if (mapController != null) {
-            mapController.moveCamera(CameraUpdate.newCameraPosition(
-                CameraPosition(
-                    bearing: 192.8334901395799,
-                    target:
-                        LatLng(newLocalData.latitude, newLocalData.longitude),
-                    tilt: 0,
-                    zoom: 16)));
+            try {
+              await mapController.moveCamera(CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                      bearing: 192.8334901395799,
+                      target:
+                          LatLng(newLocalData.latitude, newLocalData.longitude),
+                      tilt: 0,
+                      zoom: 16)));
+            } catch (e) {
+              debugPrint('Error moving camera in stream: $e');
+            }
             Get.find<RiderMapController>().updateMarkerAndCircle(
                 LatLng(newLocalData.latitude, newLocalData.longitude));
           }
         });
         if (isAnimate) {
-          _mapController?.moveCamera(CameraUpdate.newCameraPosition(
-              CameraPosition(target: _initialPosition, zoom: 16)));
+          try {
+            await _mapController?.moveCamera(CameraUpdate.newCameraPosition(
+                CameraPosition(target: _initialPosition, zoom: 16)));
+          } catch (e) {
+            debugPrint('Error moving camera animate: $e');
+          }
         }
       } catch (e) {
         if (kDebugMode) {

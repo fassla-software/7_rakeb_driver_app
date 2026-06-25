@@ -39,31 +39,90 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     _findingCurrentRoute();
   }
 
-  _findingCurrentRoute() {
+  _findingCurrentRoute() async {
     Get.find<RideController>().updateRoute(false, notify: false);
-    Get.find<RiderMapController>().setSheetHeight(
-        Get.find<RiderMapController>().currentRideState == RideState.initial
-            ? 1360
-            : 450,
-        false);
-    Get.find<RideController>().getPendingRideRequestList(1);
-    if (Get.find<RideController>().ongoingTrip != null &&
+    final hasOngoing = Get.find<RideController>().ongoingTrip != null &&
         Get.find<RideController>().ongoingTrip!.isNotEmpty &&
         (Get.find<RideController>().ongoingTrip![0].currentStatus ==
                 'ongoing' ||
+            // Get.find<RideController>().ongoingTrip![0].currentStatus ==
+            //     'accepted' ||
+            // Get.find<RideController>().ongoingTrip![0].currentStatus ==
+            //     'scheduled_assigned' ||
             Get.find<RideController>().ongoingTrip![0].currentStatus ==
-                'accepted' ||
+                'driver_schedule_accept' ||
             (Get.find<RideController>().ongoingTrip![0].currentStatus ==
                     'completed' &&
                 Get.find<RideController>().ongoingTrip![0].paymentStatus ==
-                    'unpaid'))) {
-      // Get.find<RideController>().getCurrentRideStatus(froDetails: true, isUpdate: false);
-      Get.find<RiderMapController>().setMarkersInitialPosition();
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        print("Bottom sheet state: ${key.currentState}");
-        key.currentState?.expand();
-      });
+                    'unpaid'));
+    if (Get.find<RiderMapController>().currentRideState != RideState.pending &&
+        !hasOngoing) {
+      Get.find<RiderMapController>()
+          .setRideCurrentState(RideState.initial, notify: false);
     }
+    Get.find<RideController>()
+        .getCurrentRideStatus(
+            froDetails: true, isUpdate: false, fromMapScreen: true)
+        .then((response) {
+      if (!mounted) return;
+
+      bool hasOngoing = false;
+      if (response.statusCode == 200 &&
+          Get.find<RideController>().tripDetail != null) {
+        final currentStatus =
+            Get.find<RideController>().tripDetail!.currentStatus;
+        final paymentStatus =
+            Get.find<RideController>().tripDetail!.paymentStatus;
+        if (currentStatus == 'accepted' ||
+            currentStatus == 'ongoing' ||
+            // currentStatus == 'driver_schedule_accept' ||
+            (currentStatus == 'completed' && paymentStatus == 'unpaid')) {
+          hasOngoing = true;
+          Get.find<RiderMapController>().setSheetHeight(450, true);
+          Get.find<RiderMapController>().setMarkersInitialPosition();
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            key.currentState?.expand();
+          });
+        }
+      }
+
+      if (!hasOngoing) {
+        if (Get.find<RiderMapController>().currentRideState !=
+            RideState.pending) {
+          Get.find<RiderMapController>()
+              .setRideCurrentState(RideState.initial, notify: false);
+          Get.find<RiderMapController>().setSheetHeight(0, false);
+        }
+
+        Get.find<RideController>()
+            .getPendingRideRequestList(1)
+            .then((value) async {
+          if (!mounted) return;
+          if (value.statusCode == 200) {
+            final rideController = Get.find<RideController>();
+            if (rideController.getPendingRideRequestModel != null &&
+                rideController.getPendingRideRequestModel!.data != null &&
+                rideController.getPendingRideRequestModel!.data!.isNotEmpty) {
+              Get.find<RiderMapController>()
+                  .setRideCurrentState(RideState.pending, notify: true);
+              Get.find<RiderMapController>().setSheetHeight(450, true);
+              rideController.tripDetail =
+                  rideController.getPendingRideRequestModel!.data![0];
+              rideController.update();
+              Get.find<RiderMapController>().setMarkersInitialPosition();
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                key.currentState?.expand();
+              });
+            }
+          }
+        });
+      } else {
+        Get.find<RiderMapController>().setMarkersInitialPosition();
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          key.currentState?.expand();
+        });
+      }
+    });
     getCurrentLocation();
   }
 
@@ -96,6 +155,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   }
 
   void updateMarkerAndCircle(Position? newLocalData, Uint8List imageData) {
+    if (!mounted) return;
     LatLng latLng = LatLng(newLocalData!.latitude, newLocalData.longitude);
     setState(() {
       marker = Marker(
@@ -112,21 +172,35 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
 
   void getCurrentLocation() async {
     try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        return;
+      }
       Uint8List imageData = await getMarker();
-      var location = await Geolocator.getCurrentPosition();
+      Position? location = await Geolocator.getLastKnownPosition();
+      location ??= await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.low);
       updateMarkerAndCircle(location, imageData);
       if (_locationSubscription != null) {
         _locationSubscription!.cancel();
       }
 
       _locationSubscription =
-          Geolocator.getPositionStream().listen((newLocalData) {
-        if (_controller != null) {
-          _controller!.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
-              bearing: 192.8334901395799,
-              target: LatLng(newLocalData.latitude, newLocalData.longitude),
-              tilt: 0,
-              zoom: 14)));
+          Geolocator.getPositionStream().listen((newLocalData) async {
+        if (!mounted) return;
+        if (_mapController != null) {
+          try {
+            await _mapController!.moveCamera(CameraUpdate.newCameraPosition(
+                CameraPosition(
+                    bearing: 192.8334901395799,
+                    target:
+                        LatLng(newLocalData.latitude, newLocalData.longitude),
+                    tilt: 0,
+                    zoom: 14)));
+          } catch (e) {
+            debugPrint('Error moving camera: $e');
+          }
           updateMarkerAndCircle(newLocalData, imageData);
         }
       });
@@ -161,11 +235,8 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                 return Stack(children: [
                   Padding(
                     padding: EdgeInsets.only(
-                      bottom: riderMapController.sheetHeight -
-                          (Get.find<RiderMapController>().currentRideState ==
-                                  RideState.initial
-                              ? 80
-                              : 20),
+                      bottom: (riderMapController.sheetHeight - 20)
+                          .clamp(0.0, double.infinity),
                     ),
                     child: GoogleMap(
                       style: Get.isDarkMode
@@ -262,7 +333,6 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                       )),
                   Positioned(
                       child: Align(
-                        
                     alignment: Alignment.centerLeft,
                     child: GestureDetector(
                       onTap: () {
@@ -331,7 +401,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                                   const SizedBox(
                                       width: Dimensions.paddingSizeSmall),
                                   Text(
-                                    '${rideController.pendingRideRequestModel?.totalSize ?? 0} ${'more_request'.tr}',
+                                    '${rideController.getPendingRideRequestModel?.totalSize ?? 0} ${'more_request'.tr}',
                                     style: textRegular.copyWith(
                                         color: Colors.white),
                                   ),

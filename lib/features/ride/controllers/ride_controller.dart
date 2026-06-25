@@ -98,16 +98,40 @@ class RideController extends GetxController implements GetxService {
       getResult = false;
       isLoading = false;
       if (response.body['data'] != null) {
-        tripDetail = TripDetailsModel.fromJson(response.body).data!;
-        currentRideStatus = tripDetail!.currentStatus!;
-        polyline = tripDetail!.encodedPolyline!;
+        final tempTripDetail = TripDetailsModel.fromJson(response.body).data!;
+        final tempStatus = tempTripDetail.currentStatus!;
+        if (tempStatus == 'accepted' || tempStatus == 'ongoing') {
+          tripDetail = tempTripDetail;
+          currentRideStatus = tempStatus;
+          polyline = tripDetail!.encodedPolyline!;
+          ongoingTrip = [tripDetail!];
+        } else {
+          ongoingTrip = [];
+          currentRideStatus = tempStatus;
+          if (Get.find<RiderMapController>().currentRideState !=
+              RideState.pending) {
+            tripDetail = tempTripDetail;
+            if (tripDetail?.encodedPolyline != null) {
+              polyline = tripDetail!.encodedPolyline!;
+            }
+          }
+        }
         if (Get.find<AuthController>().getZoneId() != '') {
           if (Get.find<RideController>().currentRideStatus == 'fresh') {
-            Get.find<RiderMapController>()
-                .setRideCurrentState(RideState.initial);
-            Get.offNamed(RouteHelper.getHomeRoute());
-          } else if (Get.find<RideController>().currentRideStatus ==
-              'accepted') {
+            if (Get.find<RiderMapController>().currentRideState !=
+                RideState.pending) {
+              Get.find<RiderMapController>()
+                  .setRideCurrentState(RideState.initial);
+            }
+            if (!fromMapScreen) {
+              Get.offNamed(RouteHelper.getHomeRoute());
+            }
+          } else if (Get.find<RideController>().currentRideStatus == 'accepted'
+              // || Get.find<RideController>().currentRideStatus ==
+              //     'scheduled_assigned' ||
+              // Get.find<RideController>().currentRideStatus ==
+              //     'driver_schedule_accept'
+              ) {
             Get.find<RiderMapController>()
                 .setRideCurrentState(RideState.accepted);
             Get.find<RideController>()
@@ -131,28 +155,56 @@ class RideController extends GetxController implements GetxService {
               Get.find<RideController>().currentRideStatus == 'cancelled') {
             Get.find<RideController>()
                 .getFinalFare(Get.find<RideController>().tripDetail!.id!);
-            Get.offAll(() => const PaymentReceivedScreen());
+            if (!fromMapScreen) {
+              Get.offAll(() => const PaymentReceivedScreen());
+            }
           }
         } else {
-          Get.to(() => const AccessLocationScreen());
+          if (!fromMapScreen) {
+            Get.to(() => const AccessLocationScreen());
+          }
         }
       }
     } else if (response.statusCode == 403) {
       isLoading = false;
       getResult = false;
-      if (Get.find<AuthController>().getZoneId() != '') {
-        if (!fromRefresh) {
-          Get.offNamed(RouteHelper.getHomeRoute());
+      if (!fromMapScreen) {
+        if (Get.find<AuthController>().getZoneId() != '') {
+          if (!fromRefresh) {
+            Get.offNamed(RouteHelper.getHomeRoute());
+          }
+        } else {
+          Get.to(() => const AccessLocationScreen());
         }
-      } else {
-        Get.to(() => const AccessLocationScreen());
+      }
+    } else if (response.statusCode == 404) {
+      isLoading = false;
+      getResult = false;
+      currentRideStatus = 'fresh';
+      ongoingTrip = [];
+      if (Get.find<RiderMapController>().currentRideState !=
+          RideState.pending) {
+        Get.find<RiderMapController>().setRideCurrentState(RideState.initial);
+      }
+      if (!fromMapScreen) {
+        if (Get.find<AuthController>().getZoneId() != '') {
+          Get.offNamed(RouteHelper.getHomeRoute());
+        } else {
+          Get.to(() => const AccessLocationScreen());
+        }
       }
     } else {
       print("ddddddddddddddd${response.statusCode}");
       // getResult = false;
       // isLoading = false;
       // Get.offNamed(RouteHelper.getHomeRoute());
-      Get.to(() => const AccessLocationScreen());
+      if (Get.find<AuthController>().getZoneId() != '') {
+        if (!fromMapScreen) {
+          Get.offNamed(RouteHelper.getHomeRoute());
+        }
+      } else {
+        Get.to(() => const AccessLocationScreen());
+      }
     }
     update();
     return response;
@@ -436,30 +488,34 @@ class RideController extends GetxController implements GetxService {
     Response response = await rideServiceInterface
         .getPendingRideRequestList(offset, limit: limit);
     if (response.statusCode == 200) {
-      pendingRideRequestModel?.data = [];
-      pendingRideRequestModel?.totalSize = 0;
-      pendingRideRequestModel?.offset = '1';
       if (response.body['data'] != null && response.body['data'] != '') {
         if (offset == 1) {
           pendingRideRequestModel =
               PendingRideRequestModel.fromJson(response.body);
         } else {
-          pendingRideRequestModel!.totalSize =
+          pendingRideRequestModel ??= PendingRideRequestModel(
+              data: [], totalSize: 0, offset: '1', limit: '10');
+          pendingRideRequestModel?.totalSize =
               PendingRideRequestModel.fromJson(response.body).totalSize;
-          pendingRideRequestModel!.offset =
+          pendingRideRequestModel?.offset =
               PendingRideRequestModel.fromJson(response.body).offset;
-          pendingRideRequestModel!.data!
-              .addAll(PendingRideRequestModel.fromJson(response.body).data!);
+          pendingRideRequestModel?.data
+              ?.addAll(PendingRideRequestModel.fromJson(response.body).data!);
         }
         int initialLength = pendingRideRequestModel!.data!.length;
-        pendingRideRequestModel?.data
-            ?.removeWhere((trip) => trip.currentStatus != 'pending');
+        pendingRideRequestModel?.data?.removeWhere((trip) =>
+            trip.currentStatus != 'pending' && trip.canAccept != true);
         int removedCount =
             initialLength - pendingRideRequestModel!.data!.length;
         pendingRideRequestModel?.totalSize =
             (pendingRideRequestModel?.totalSize ?? 0) - removedCount;
         if (pendingRideRequestModel!.totalSize! < 0) {
           pendingRideRequestModel?.totalSize = 0;
+        }
+      } else {
+        if (offset == 1) {
+          pendingRideRequestModel = PendingRideRequestModel(
+              data: [], totalSize: 0, offset: '1', limit: '10');
         }
       }
 
@@ -478,27 +534,30 @@ class RideController extends GetxController implements GetxService {
             }
 
             List<TripDetail> scheduledTrips = [];
-            for (var item in scheduledList) {
-              final trip = TripDetail.fromJson(item);
-              // Only include scheduled trips that are still pending and not accepted by any driver
-              if (trip.currentStatus == 'pending' && trip.acceptedBy == null) {
-                scheduledTrips.add(trip);
-              }
-            }
+            // for (var item in scheduledList) {
+            //   final trip = TripDetail.fromJson(item);
+            //   // Only include scheduled trips that are pending or can be accepted by the driver
+            //   if ((trip.currentStatus == 'pending' || trip.canAccept == true) &&
+            //       trip.acceptedBy == null) {
+            //     scheduledTrips.add(trip);
+            //   }
+            // }
 
-            if (pendingRideRequestModel == null) {
-              pendingRideRequestModel = PendingRideRequestModel(
-                  data: [], totalSize: 0, offset: '1', limit: '10');
-            }
+            pendingRideRequestModel ??= PendingRideRequestModel(
+                data: [], totalSize: 0, offset: '1', limit: '10');
             pendingRideRequestModel!.data ??= [];
             pendingRideRequestModel!.data!.addAll(scheduledTrips);
-            pendingRideRequestModel!.totalSize =
-                (pendingRideRequestModel!.totalSize ?? 0) +
-                    scheduledTrips.length;
           }
         } catch (e) {
           print("Error fetching/merging scheduled trips: $e");
         }
+      }
+
+      // Sync totalSize with the actual length of the filtered list
+      if (pendingRideRequestModel != null &&
+          pendingRideRequestModel!.data != null) {
+        pendingRideRequestModel!.totalSize =
+            pendingRideRequestModel!.data!.length;
       }
 
       isLoading = false;

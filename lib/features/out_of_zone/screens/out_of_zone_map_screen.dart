@@ -190,11 +190,20 @@ class _OutOfZoneMapScreenState extends State<OutOfZoneMapScreen> {
                     index: 5,
                     icon: Images.currentLocation,
                     onTap: () async {
-                      _mapController?.moveCamera(
-                          CameraUpdate.newCameraPosition(CameraPosition(
-                        target: LatLng(location!.latitude, location!.longitude),
-                        zoom: 12,
-                      )));
+                      try {
+                        _mapController
+                            ?.moveCamera(
+                                CameraUpdate.newCameraPosition(CameraPosition(
+                          target:
+                              LatLng(location!.latitude, location!.longitude),
+                          zoom: 12,
+                        )))
+                            .catchError((e) {
+                          debugPrint('Error moving camera: $e');
+                        });
+                      } catch (e) {
+                        debugPrint('Error moving camera: $e');
+                      }
                     },
                   );
                 }),
@@ -218,24 +227,46 @@ class _OutOfZoneMapScreenState extends State<OutOfZoneMapScreen> {
       LatLng centerBounds, double bearing,
       {double padding = 0.2}) async {
     bool keepZoomingOut = true;
-    while (keepZoomingOut) {
-      final LatLngBounds screenBounds = await controller!.getVisibleRegion();
-      if (fits(bounds!, screenBounds)) {
-        keepZoomingOut = false;
-        final double zoomLevel = await controller.getZoomLevel() - padding;
-        controller.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
-          target: centerBounds,
-          zoom: zoomLevel,
-          bearing: bearing,
-        )));
+    int iterations = 0;
+    const int maxIterations = 40;
+    while (keepZoomingOut && iterations < maxIterations) {
+      iterations++;
+      try {
+        final LatLngBounds screenBounds = await controller!.getVisibleRegion();
+        if (fits(bounds!, screenBounds)) {
+          keepZoomingOut = false;
+          final double zoomLevel = await controller.getZoomLevel() - padding;
+          try {
+            await controller
+                .moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
+              target: centerBounds,
+              zoom: zoomLevel,
+              bearing: bearing,
+            )));
+          } catch (e) {
+            debugPrint('Error moving camera: $e');
+          }
+          break;
+        } else {
+          // Zooming out by 0.1 zoom level per iteration
+          final double zoomLevel = await controller.getZoomLevel() - 0.1;
+          if (zoomLevel <= 0) {
+            break;
+          }
+          try {
+            await controller
+                .moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
+              target: centerBounds,
+              zoom: zoomLevel,
+            )));
+          } catch (e) {
+            debugPrint('Error moving camera: $e');
+            break; // Break if moving camera fails to prevent infinite loop
+          }
+        }
+      } catch (e) {
+        debugPrint('Error in zoomToFit region fetch or logic: $e');
         break;
-      } else {
-        // Zooming out by 0.1 zoom level per iteration
-        final double zoomLevel = await controller.getZoomLevel() - 0.1;
-        controller.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
-          target: centerBounds,
-          zoom: zoomLevel,
-        )));
       }
     }
   }

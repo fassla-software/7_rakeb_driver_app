@@ -271,7 +271,8 @@ class AcceptScheduleCard extends StatelessWidget {
                                 .acceptOrRejectTrip(schedule.id!, "accepted")
                                 .then((value) async {
                               if (value.statusCode == 200) {
-                                await controller.getAcceptedSchedules();
+                                Get.find<RideController>()
+                                    .getPendingRideRequestList(1);
                                 Get.find<AuthController>()
                                     .saveRideCreatedTime();
                                 Get.find<RiderMapController>()
@@ -281,6 +282,8 @@ class AcceptScheduleCard extends StatelessWidget {
                                 Get.find<RideController>().remainingDistance(
                                     schedule.id!,
                                     mapBound: true);
+                                await controller.getSchedules();
+                                await controller.getAcceptedSchedules();
                                 Get.to(() => const MapScreen());
                                 PusherHelper().customerCouponAppliedOrRemoved(
                                     schedule.id!);

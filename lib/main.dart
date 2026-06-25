@@ -57,8 +57,11 @@ Future<void> main() async {
       await FirebaseMessaging.instance.getInitialMessage();
 
   await NotificationHelper.initialize(flutterLocalNotificationsPlugin);
-  await FirebaseMessaging.instance.requestPermission();
-
+  try {
+    await FirebaseMessaging.instance.requestPermission();
+  } catch (e) {
+    log("Firebase permission request skipped (already running): $e");
+  }
   FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
@@ -173,8 +176,36 @@ class MyApp extends StatelessWidget {
                                                                   '1',
                                                               fromHomeScreen:
                                                                   true);
-                                                  if (res.statusCode == 403 ||
-                                                      rideController.tripDetail
+                                                  if (res.statusCode == 403) {
+                                                    Response pendingRes =
+                                                        await rideController
+                                                            .getRideDetailBeforeAccept(
+                                                                rideController
+                                                                        .rideId ??
+                                                                    '1');
+                                                    if (pendingRes.statusCode ==
+                                                        200) {
+                                                      Get.find<
+                                                              RiderMapController>()
+                                                          .getPickupToDestinationPolyline();
+                                                      Get.find<
+                                                              RiderMapController>()
+                                                          .setRideCurrentState(
+                                                              RideState
+                                                                  .pending);
+                                                      Get.find<
+                                                              RiderMapController>()
+                                                          .setSheetHeight(
+                                                              450, true);
+                                                    } else {
+                                                      Get.find<
+                                                              RiderMapController>()
+                                                          .setRideCurrentState(
+                                                              RideState
+                                                                  .initial);
+                                                    }
+                                                  } else if (rideController
+                                                              .tripDetail
                                                               ?.currentStatus ==
                                                           'returning' ||
                                                       rideController.tripDetail
