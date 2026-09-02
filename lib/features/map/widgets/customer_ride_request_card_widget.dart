@@ -469,25 +469,28 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                                                                           Get.find<RideController>().updateRoute(
                                                                               false,
                                                                               notify: true);
-                                                                          Get.to(() =>
+                                                                          Get.off(() =>
                                                                               const MapScreen());
                                                                         }
                                                                       });
                                                                     } else {
-                                                                      Get.dialog(
-                                                                          const BidAcceptingDialogueWidget(),
-                                                                          barrierDismissible:
-                                                                              false);
-                                                                      await Future.delayed(const Duration(
-                                                                          seconds:
-                                                                              5));
-                                                                      Get.back();
                                                                       Get.find<
-                                                                              RiderMapController>()
-                                                                          .setRideCurrentState(
-                                                                              RideState.accepted);
-                                                                      Get.to(() =>
-                                                                          const MapScreen());
+                                                                              RideController>()
+                                                                          .getRideDetails(rideRequest
+                                                                              .id!)
+                                                                          .then(
+                                                                              (value) async {
+                                                                        if (value.statusCode ==
+                                                                            200) {
+                                                                          Get.find<RiderMapController>()
+                                                                              .setRideCurrentState(RideState.accepted);
+                                                                          Get.find<RideController>().updateRoute(
+                                                                              false,
+                                                                              notify: true);
+                                                                          Get.find<RiderMapController>()
+                                                                              .setMarkersInitialPosition();
+                                                                        }
+                                                                      });
                                                                     }
                                                                   }
                                                                 })
@@ -664,13 +667,21 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                         vertical: Dimensions.paddingSizeDefault,
                       ),
                       child: ((index != null &&
-                                  rideController.pendingRideRequestModel != null &&
-                                  rideController.pendingRideRequestModel!.data != null &&
-                                  index! < rideController.pendingRideRequestModel!.data!.length)
-                              ? rideController.pendingRideRequestModel!
-                                      .data![index!].id ==
-                                  rideController.onPressedTripId
-                              : rideRequest.id == rideController.onPressedTripId) &&
+                                      rideController.pendingRideRequestModel !=
+                                          null &&
+                                      rideController
+                                              .pendingRideRequestModel!.data !=
+                                          null &&
+                                      index! <
+                                          rideController
+                                              .pendingRideRequestModel!
+                                              .data!
+                                              .length)
+                                  ? rideController.pendingRideRequestModel!
+                                          .data![index!].id ==
+                                      rideController.onPressedTripId
+                                  : rideRequest.id ==
+                                      rideController.onPressedTripId) &&
                               rideController.accepting
                           ? SpinKitCircle(
                               color: Theme.of(context).primaryColor, size: 40.0)
@@ -779,26 +790,37 @@ class CustomerRideRequestCardWidget extends StatelessWidget {
                                                                       false,
                                                                       notify:
                                                                           true);
-                                                              Get.to(() =>
+                                                              Get.off(() =>
                                                                   const MapScreen());
                                                             }
                                                           });
                                                         } else {
-                                                          Get.dialog(
-                                                              const BidAcceptingDialogueWidget(),
-                                                              barrierDismissible:
-                                                                  false);
-                                                          await Future.delayed(
-                                                              const Duration(
-                                                                  seconds: 5));
-                                                          Get.back();
                                                           Get.find<
-                                                                  RiderMapController>()
-                                                              .setRideCurrentState(
-                                                                  RideState
-                                                                      .accepted);
-                                                          Get.to(() =>
-                                                              const MapScreen());
+                                                                  RideController>()
+                                                              .getRideDetails(
+                                                                  rideRequest
+                                                                      .id!)
+                                                              .then(
+                                                                  (value) async {
+                                                            if (value
+                                                                    .statusCode ==
+                                                                200) {
+                                                              Get.find<
+                                                                      RiderMapController>()
+                                                                  .setRideCurrentState(
+                                                                      RideState
+                                                                          .accepted);
+                                                              Get.find<
+                                                                      RideController>()
+                                                                  .updateRoute(
+                                                                      false,
+                                                                      notify:
+                                                                          true);
+                                                              Get.find<
+                                                                      RiderMapController>()
+                                                                  .setMarkersInitialPosition();
+                                                            }
+                                                          });
                                                         }
                                                       }
                                                     })

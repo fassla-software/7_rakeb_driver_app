@@ -381,10 +381,17 @@ class RideController extends GetxController implements GetxService {
       showCustomSnackBar('otp_verified_successfully'.tr, isError: false);
       isPinVerificationLoading = false;
       Future.delayed(const Duration(seconds: 12)).then((value) async {
-        imageFile =
-            await Get.find<RiderMapController>().mapController!.takeSnapshot();
-        if (imageFile != null) {
-          uploadScreenShots(tripDetail!.id!, XFile.fromData(imageFile!));
+        try {
+          final mapCtrl = Get.find<RiderMapController>().mapController;
+          if (mapCtrl != null && tripDetail != null && tripDetail!.id != null) {
+            final snapshot = await mapCtrl.takeSnapshot();
+            if (snapshot != null) {
+              imageFile = snapshot;
+              uploadScreenShots(tripDetail!.id!, XFile.fromData(snapshot));
+            }
+          }
+        } catch (e) {
+          debugPrint('Failed to take map snapshot: $e');
         }
       });
       PusherHelper().tripCancelAfterOngoing(tripDetail!.id!);

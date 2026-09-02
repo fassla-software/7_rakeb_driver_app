@@ -1,8 +1,4 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ride_sharing_user_app/common_widgets/expandable_bottom_sheet.dart';
@@ -123,7 +119,8 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
         });
       }
     });
-    getCurrentLocation();
+    Get.find<LocationController>()
+        .getCurrentLocation(mapController: _mapController, isAnimate: false);
   }
 
   @override
@@ -138,77 +135,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   void dispose() {
     _mapController?.dispose();
     WidgetsBinding.instance.removeObserver(this);
-    if (_locationSubscription != null) {
-      _locationSubscription!.cancel();
-    }
     super.dispose();
-  }
-
-  StreamSubscription? _locationSubscription;
-  Marker? marker;
-  GoogleMapController? _controller;
-
-  Future<Uint8List> getMarker() async {
-    ByteData byteData =
-        await DefaultAssetBundle.of(context).load(Images.carTop);
-    return byteData.buffer.asUint8List();
-  }
-
-  void updateMarkerAndCircle(Position? newLocalData, Uint8List imageData) {
-    if (!mounted) return;
-    LatLng latLng = LatLng(newLocalData!.latitude, newLocalData.longitude);
-    setState(() {
-      marker = Marker(
-          markerId: const MarkerId("home"),
-          position: latLng,
-          rotation: newLocalData.heading,
-          draggable: false,
-          zIndex: 2,
-          flat: true,
-          anchor: const Offset(0.5, 0.5),
-          icon: BitmapDescriptor.fromBytes(imageData));
-    });
-  }
-
-  void getCurrentLocation() async {
-    try {
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied ||
-          permission == LocationPermission.deniedForever) {
-        return;
-      }
-      Uint8List imageData = await getMarker();
-      Position? location = await Geolocator.getLastKnownPosition();
-      location ??= await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.low);
-      updateMarkerAndCircle(location, imageData);
-      if (_locationSubscription != null) {
-        _locationSubscription!.cancel();
-      }
-
-      _locationSubscription =
-          Geolocator.getPositionStream().listen((newLocalData) async {
-        if (!mounted) return;
-        if (_mapController != null) {
-          try {
-            await _mapController!.moveCamera(CameraUpdate.newCameraPosition(
-                CameraPosition(
-                    bearing: 192.8334901395799,
-                    target:
-                        LatLng(newLocalData.latitude, newLocalData.longitude),
-                    tilt: 0,
-                    zoom: 14)));
-          } catch (e) {
-            debugPrint('Error moving camera: $e');
-          }
-          updateMarkerAndCircle(newLocalData, imageData);
-        }
-      });
-    } on PlatformException catch (e) {
-      if (e.code == 'PERMISSION_DENIED') {
-        debugPrint("Permission Denied");
-      }
-    }
   }
 
   @override
